@@ -1,26 +1,23 @@
 package fr.chaffotm.gamebook.elementary.service;
 
 import fr.chaffotm.gamebook.elementary.model.StoryDefinition;
-import fr.chaffotm.gamebook.elementary.model.mapper.StoryMapper;
-import fr.chaffotm.gamebook.elementary.model.resource.Story;
 import fr.chaffotm.gamebook.elementary.repository.StoryDefinitionRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 @ApplicationScoped
-public class StoryService {
+public class StoryDefinitionService {
 
     private final StoryDefinitionRepository repository;
 
     @Inject
-    public StoryService(final StoryDefinitionRepository repository) {
+    public StoryDefinitionService(final StoryDefinitionRepository repository) {
         this.repository = repository;
     }
 
-    public Story getStory() {
-        final StoryDefinition story = repository.getStoryDefinition();
-        return StoryMapper.map(story);
+    public StoryDefinition getStoryDefinition() {
+        return repository.getStoryDefinition();
     }
 
 }

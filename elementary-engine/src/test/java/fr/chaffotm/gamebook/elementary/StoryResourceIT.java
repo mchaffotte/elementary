@@ -19,6 +19,6 @@ public class StoryResourceIT {
                 .post("/graphql")
             .then()
                 .statusCode(200)
-                .body(is("{\"data\":{\"story\":{\"name\":\"Murder at the Opera\"}}}"));
+                .body(is("{\"data\":{\"story\":{\"name\":\"Murder at 20,000 Feet\"}}}"));
     }
 }
