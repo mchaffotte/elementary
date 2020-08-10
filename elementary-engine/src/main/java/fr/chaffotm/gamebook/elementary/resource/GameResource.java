@@ -19,8 +19,8 @@ public class GameResource {
     }
 
     @Mutation
-    public Game startStory()  {
-        return service.startStory();
+    public Game startGame()  {
+        return service.startGame();
     }
 
     @Mutation

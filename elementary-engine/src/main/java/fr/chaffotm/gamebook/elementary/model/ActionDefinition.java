@@ -1,24 +1,7 @@
 package fr.chaffotm.gamebook.elementary.model;
 
-public class ActionDefinition {
+public interface ActionDefinition {
 
-    private String description;
+    ActionInstance toInstance(GameContext context);
 
-    private int nextSectionId;
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getNextSectionId() {
-        return nextSectionId;
-    }
-
-    public void setNextSectionId(int nextSectionId) {
-        this.nextSectionId = nextSectionId;
-    }
 }

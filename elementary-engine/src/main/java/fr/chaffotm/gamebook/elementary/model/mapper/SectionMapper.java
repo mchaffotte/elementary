@@ -1,22 +1,22 @@
 package fr.chaffotm.gamebook.elementary.model.mapper;
 
+import fr.chaffotm.gamebook.elementary.model.ActionInstance;
+import fr.chaffotm.gamebook.elementary.model.SectionInstance;
 import fr.chaffotm.gamebook.elementary.model.resource.Action;
 import fr.chaffotm.gamebook.elementary.model.resource.Section;
-import fr.chaffotm.gamebook.elementary.model.ActionDefinition;
-import fr.chaffotm.gamebook.elementary.model.SectionDefinition;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SectionMapper {
 
-    public static Section map(final SectionDefinition sectionDefinition) {
+    public static Section map(final SectionInstance sectionInstance) {
         final Section section = new Section();
-        section.setId(sectionDefinition.getId());
-        section.setParagraphs(sectionDefinition.getParagraphs());
+        section.setId(sectionInstance.getId());
+        section.setParagraphs(sectionInstance.getParagraphs());
         final List<Action> actions = new ArrayList<>();
-        for (ActionDefinition choice : sectionDefinition.getActions()) {
-            actions.add(new Action(choice.getDescription(), choice.getNextSectionId()));
+        for (ActionInstance action : sectionInstance.getActions()) {
+            actions.add(new Action(action.getNextId(), action.getDescription()));
         }
         section.setActions(actions);
         return section;

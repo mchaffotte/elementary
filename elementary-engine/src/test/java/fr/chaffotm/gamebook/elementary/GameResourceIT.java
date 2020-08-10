@@ -15,11 +15,11 @@ public class GameResourceIT {
     public void playGame() {
         given()
             .when()
-                .body("{\"query\":\"mutation startStory {\\n  startStory {\\n    section {\\n      id\\n      paragraphs\\n      actions {\\n        id\\n        description\\n      }\\n    }\\n  }\\n}\\n\",\"variables\":null,\"operationName\":\"startStory\"}")
+                .body("{\"query\":\"mutation startGame {\\n  startGame {\\n    section {\\n      id\\n      paragraphs\\n      actions {\\n        id\\n        description\\n      }\\n    }\\n  }\\n}\\n\",\"variables\":null,\"operationName\":\"startGame\"}")
                 .post("/graphql")
             .then()
                 .statusCode(200)
-                .body(is("{\"data\":{\"startStory\":{\"section\":{\"id\":0,\"paragraphs\":[\"You are on the long-haul flight 78455 to Papeete.\",\"It's dark outside. Almost all of the passengers are sleeping.\",\"It is at this moment that a cry is heard at the front of the plane.\"],\"actions\":[{\"id\":254,\"description\":\"If you want to call the flight attendant\"},{\"id\":191,\"description\":\"Or to rush to the front of the plane\"}]}}}}"));
+                .body(is("{\"data\":{\"startGame\":{\"section\":{\"id\":0,\"paragraphs\":[\"You are on the long-haul flight 78455 to Papeete.\",\"It's dark outside. Almost all of the passengers are sleeping.\",\"It is at this moment that a cry is heard at the front of the plane.\"],\"actions\":[{\"id\":254,\"description\":\"If you want to call the flight attendant\"},{\"id\":191,\"description\":\"Or to rush to the front of the plane\"}]}}}}"));
 
         given()
             .when()
@@ -27,6 +27,6 @@ public class GameResourceIT {
                 .post("/graphql")
             .then()
                 .statusCode(200)
-                .body(is("{\"data\":{\"turnTo\":{\"section\":{\"id\":254,\"paragraphs\":[\"\"Stay on your seat\" said the flight attendant.\"]}}}}"));
+                .body(is("{\"data\":{\"turnTo\":{\"section\":{\"id\":254,\"paragraphs\":[\"\\\"Stay on your seat\\\" said the flight attendant.\"]}}}}"));
     }
 }

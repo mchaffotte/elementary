@@ -2,6 +2,7 @@ package fr.chaffotm.gamebook.elementary.repository;
 
 import fr.chaffotm.gamebook.elementary.model.ActionDefinition;
 import fr.chaffotm.gamebook.elementary.model.SectionDefinition;
+import fr.chaffotm.gamebook.elementary.model.SimpleActionDefinition;
 import fr.chaffotm.gamebook.elementary.model.StoryDefinition;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -16,15 +17,12 @@ public class StoryDefinitionRepository {
         definition = buildDefault();
     }
 
-    private ActionDefinition build(String description, int nextSectionId) {
-        ActionDefinition action = new ActionDefinition();
-        action.setDescription(description);
-        action.setNextSectionId(nextSectionId);
-        return action;
+    private ActionDefinition buildSimpleAction(final String description, final int nextId) {
+        return  new SimpleActionDefinition(nextId, description);
     }
 
     private StoryDefinition buildDefault() {
-        SectionDefinition analyzeArrow = new SectionDefinition();
+        final SectionDefinition analyzeArrow = new SectionDefinition();
         analyzeArrow.setId(254);
         analyzeArrow.setParagraphs(
                 List.of(
@@ -43,8 +41,8 @@ public class StoryDefinitionRepository {
         );
         prologue.setActions(
                 List.of(
-                        build("If you want to call the flight attendant", 254),
-                        build("Or to rush to the front of the plane", 191)
+                        buildSimpleAction("If you want to call the flight attendant", 254),
+                        buildSimpleAction("Or to rush to the front of the plane", 191)
                 )
         );
 
