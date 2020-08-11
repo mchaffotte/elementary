@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -22,7 +23,7 @@ public class TestActionDefinitionTest {
     public void toInstanceShouldChooseTheFirstOption() {
         final List<Option> options = List.of(new Option(6, 458), new Option(12, 486));
         final TestActionDefinition actionDefinition = new TestActionDefinition(options);
-        final GameContext context = new GameContext(die);
+        final GameContext context = new GameContext(die, null);
         final ActionInstance expected = new ActionInstance(458);
         when(die.roll()).thenReturn(6);
 
@@ -36,7 +37,7 @@ public class TestActionDefinitionTest {
     public void toInstanceShouldChooseTheSecondOption() {
         final List<Option> options = List.of(new Option(6, 458), new Option(12, 486));
         final TestActionDefinition actionDefinition = new TestActionDefinition(options);
-        final GameContext context = new GameContext(die);
+        final GameContext context = new GameContext(die, null);
         final ActionInstance expected = new ActionInstance(486);
         when(die.roll()).thenReturn(7);
 
@@ -50,11 +51,28 @@ public class TestActionDefinitionTest {
     public void toInstanceShouldChooseNoOption() {
         final List<Option> options = List.of(new Option(6, 458), new Option(12, 486));
         final TestActionDefinition actionDefinition = new TestActionDefinition(options);
-        final GameContext context = new GameContext(die);
+        final GameContext context = new GameContext(die, null);
         when(die.roll()).thenReturn(13);
 
         ActionInstance actionInstance = actionDefinition.toInstance(context);
 
         assertThat(actionInstance).isNull();
     }
+
+    @Test
+    @DisplayName("toInstance should add the bonus and choose the second option")
+    public void toInstanceShouldAddBonusAndChooseTheSecondOption() {
+        final List<Option> options = List.of(new Option(6, 458), new Option(12, 486));
+        final TestActionDefinition actionDefinition = new TestActionDefinition(options, new SkillBonus("observation"));
+        final Character character = new Character();
+        character.setSkills(Set.of(new Skill("observation", 1)));
+        final GameContext context = new GameContext(die, character);
+        final ActionInstance expected = new ActionInstance(486);
+        when(die.roll()).thenReturn(6);
+
+        ActionInstance actionInstance = actionDefinition.toInstance(context);
+
+        assertThat(actionInstance).isEqualTo(expected);
+    }
+
 }

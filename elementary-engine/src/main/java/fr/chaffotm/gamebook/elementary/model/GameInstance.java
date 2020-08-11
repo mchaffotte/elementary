@@ -2,16 +2,19 @@ package fr.chaffotm.gamebook.elementary.model;
 
 public class GameInstance {
 
-    private StoryDefinition story;
+    private final GameContext context;
+
+    private final StoryDefinition story;
 
     private SectionInstance section;
 
-    public StoryDefinition getStory() {
-        return story;
+    public GameInstance(final StoryDefinition story) {
+        this.story = story;
+        this.context = new GameContext(new Die(12), story.getCharacter());
     }
 
-    public void setStory(StoryDefinition story) {
-        this.story = story;
+    public StoryDefinition getStory() {
+        return story;
     }
 
     public SectionInstance getSection() {
@@ -22,4 +25,7 @@ public class GameInstance {
         this.section = section;
     }
 
+    public GameContext getContext() {
+        return context;
+    }
 }

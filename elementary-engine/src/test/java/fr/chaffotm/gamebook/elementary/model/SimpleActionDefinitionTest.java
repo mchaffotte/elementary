@@ -11,7 +11,7 @@ public class SimpleActionDefinitionTest {
     @DisplayName("toInstance should copy definition to instance")
     public void toInstanceShouldCopyDefinitionToInstance() {
         final ActionDefinition actionDefinition = new SimpleActionDefinition(125, "If you want to enter in the cockpit");
-        final GameContext context = new GameContext(new Die(12));
+        final GameContext context = new GameContext(new Die(12), null);
         final ActionInstance expected = new ActionInstance(125, "If you want to enter in the cockpit");
 
         final ActionInstance actionInstance = actionDefinition.toInstance(context);

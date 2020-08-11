@@ -8,6 +8,8 @@ public class StoryDefinition {
 
     private String name;
 
+    private Character character;
+
     private SectionDefinition prologue;
 
     private Map<Integer, SectionDefinition> sections;
@@ -18,6 +20,14 @@ public class StoryDefinition {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Character getCharacter() {
+        return character;
+    }
+
+    public void setCharacter(Character character) {
+        this.character = character;
     }
 
     public SectionDefinition getPrologue() {

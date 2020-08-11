@@ -15,22 +15,18 @@ public class GameService {
 
     private final SectionService sectionService;
 
-    private final GameContext context;
-
     private GameInstance game;
 
     @Inject
     public GameService(final StoryDefinitionService storyService, final SectionService sectionService) {
         this.storyService = storyService;
         this.sectionService = sectionService;
-        this.context = new GameContext(new Die(12));
     }
 
     public Game startGame() {
         final StoryDefinition story = storyService.getStoryDefinition();
-        game = new GameInstance();
-        game.setStory(story);
-        final SectionInstance instance = sectionService.evaluate(story.getPrologue(), context);
+        game = new GameInstance(story);
+        final SectionInstance instance = sectionService.evaluate(story.getPrologue(), game.getContext());
         game.setSection(instance);
         return GameMapper.map(game);
     }
@@ -55,7 +51,7 @@ public class GameService {
         if (sectionDefinition == null) {
             throw new IllegalArgumentException("Cannot reach that section");
         }
-        final SectionInstance instance = sectionService.evaluate(sectionDefinition, context);
+        final SectionInstance instance = sectionService.evaluate(sectionDefinition, game.getContext());
         game.setSection(instance);
         return GameMapper.map(game);
     }

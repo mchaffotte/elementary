@@ -1,12 +1,11 @@
 package fr.chaffotm.gamebook.elementary.repository;
 
-import fr.chaffotm.gamebook.elementary.model.ActionDefinition;
-import fr.chaffotm.gamebook.elementary.model.SectionDefinition;
-import fr.chaffotm.gamebook.elementary.model.SimpleActionDefinition;
-import fr.chaffotm.gamebook.elementary.model.StoryDefinition;
+import fr.chaffotm.gamebook.elementary.model.*;
+import fr.chaffotm.gamebook.elementary.model.Character;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.List;
+import java.util.Set;
 
 @ApplicationScoped
 public class StoryDefinitionRepository {
@@ -46,8 +45,13 @@ public class StoryDefinitionRepository {
                 )
         );
 
+        final Character passenger256 = new Character();
+        passenger256.setName("256");
+        passenger256.setSkills(Set.of(new Skill("intuition", 1)));
+
         final StoryDefinition storyDefinition = new StoryDefinition();
         storyDefinition.setName("Murder at 20,000 Feet");
+        storyDefinition.setCharacter(passenger256);
         storyDefinition.setPrologue(prologue);
         storyDefinition.setSections(
                 List.of(
