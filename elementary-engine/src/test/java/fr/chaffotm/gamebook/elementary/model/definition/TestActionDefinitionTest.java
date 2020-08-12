@@ -1,5 +1,8 @@
-package fr.chaffotm.gamebook.elementary.model;
+package fr.chaffotm.gamebook.elementary.model.definition;
 
+import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
+import fr.chaffotm.gamebook.elementary.service.Die;
+import fr.chaffotm.gamebook.elementary.service.GameContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

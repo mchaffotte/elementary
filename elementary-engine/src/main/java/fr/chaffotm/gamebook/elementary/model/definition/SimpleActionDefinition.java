@@ -1,4 +1,7 @@
-package fr.chaffotm.gamebook.elementary.model;
+package fr.chaffotm.gamebook.elementary.model.definition;
+
+import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
+import fr.chaffotm.gamebook.elementary.service.GameContext;
 
 public class SimpleActionDefinition implements ActionDefinition {
 

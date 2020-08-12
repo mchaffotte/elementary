@@ -1,6 +1,6 @@
 package fr.chaffotm.gamebook.elementary.service;
 
-import fr.chaffotm.gamebook.elementary.model.StoryDefinition;
+import fr.chaffotm.gamebook.elementary.model.definition.StoryDefinition;
 import fr.chaffotm.gamebook.elementary.model.mapper.StoryMapper;
 import fr.chaffotm.gamebook.elementary.model.resource.Story;
 import fr.chaffotm.gamebook.elementary.repository.StoryDefinitionRepository;

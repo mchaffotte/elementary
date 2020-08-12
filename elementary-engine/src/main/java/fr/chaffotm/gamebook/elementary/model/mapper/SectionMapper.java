@@ -1,7 +1,7 @@
 package fr.chaffotm.gamebook.elementary.model.mapper;
 
-import fr.chaffotm.gamebook.elementary.model.ActionInstance;
-import fr.chaffotm.gamebook.elementary.model.SectionInstance;
+import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
+import fr.chaffotm.gamebook.elementary.model.instance.SectionInstance;
 import fr.chaffotm.gamebook.elementary.model.resource.Action;
 import fr.chaffotm.gamebook.elementary.model.resource.Section;
 

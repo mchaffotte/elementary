@@ -1,8 +1,8 @@
 package fr.chaffotm.gamebook.elementary.service;
 
-import fr.chaffotm.gamebook.elementary.model.SectionDefinition;
-import fr.chaffotm.gamebook.elementary.model.SimpleActionDefinition;
-import fr.chaffotm.gamebook.elementary.model.StoryDefinition;
+import fr.chaffotm.gamebook.elementary.model.definition.SectionDefinition;
+import fr.chaffotm.gamebook.elementary.model.definition.SimpleActionDefinition;
+import fr.chaffotm.gamebook.elementary.model.definition.StoryDefinition;
 import fr.chaffotm.gamebook.elementary.model.resource.Action;
 import fr.chaffotm.gamebook.elementary.model.resource.Game;
 import fr.chaffotm.gamebook.elementary.model.resource.Section;

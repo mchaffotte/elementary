@@ -1,4 +1,4 @@
-package fr.chaffotm.gamebook.elementary.model;
+package fr.chaffotm.gamebook.elementary.service;
 
 import java.util.Random;
 

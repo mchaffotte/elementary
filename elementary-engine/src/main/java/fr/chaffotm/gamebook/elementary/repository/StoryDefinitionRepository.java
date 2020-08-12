@@ -1,7 +1,7 @@
 package fr.chaffotm.gamebook.elementary.repository;
 
-import fr.chaffotm.gamebook.elementary.model.*;
-import fr.chaffotm.gamebook.elementary.model.Character;
+import fr.chaffotm.gamebook.elementary.model.definition.*;
+import fr.chaffotm.gamebook.elementary.model.definition.Character;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.List;

@@ -1,4 +1,4 @@
-package fr.chaffotm.gamebook.elementary.model;
+package fr.chaffotm.gamebook.elementary.model.definition;
 
 import java.util.Optional;
 import java.util.Set;

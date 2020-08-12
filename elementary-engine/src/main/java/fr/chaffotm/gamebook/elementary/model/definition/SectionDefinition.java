@@ -1,5 +1,6 @@
-package fr.chaffotm.gamebook.elementary.model;
+package fr.chaffotm.gamebook.elementary.model.definition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SectionDefinition {
@@ -8,7 +9,13 @@ public class SectionDefinition {
 
     private List<String> paragraphs;
 
+    private List<Event> events;
+
     private List<ActionDefinition> actions;
+
+    public SectionDefinition() {
+        events = new ArrayList<>();
+    }
 
     public int getId() {
         return id;
@@ -24,6 +31,14 @@ public class SectionDefinition {
 
     public void setParagraphs(List<String> paragraphs) {
         this.paragraphs = paragraphs;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 
     public List<ActionDefinition> getActions() {

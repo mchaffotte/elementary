@@ -1,4 +1,4 @@
-package fr.chaffotm.gamebook.elementary.model;
+package fr.chaffotm.gamebook.elementary.model.instance;
 
 import java.util.Objects;
 
@@ -34,4 +34,8 @@ public class ActionInstance {
                 Objects.equals(description, that.description);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(description, nextId);
+    }
 }

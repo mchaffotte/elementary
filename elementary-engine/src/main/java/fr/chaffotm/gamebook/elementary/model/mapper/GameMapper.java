@@ -1,6 +1,6 @@
 package fr.chaffotm.gamebook.elementary.model.mapper;
 
-import fr.chaffotm.gamebook.elementary.model.GameInstance;
+import fr.chaffotm.gamebook.elementary.model.instance.GameInstance;
 import fr.chaffotm.gamebook.elementary.model.resource.Game;
 
 public class GameMapper {

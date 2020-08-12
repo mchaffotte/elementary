@@ -1,6 +1,10 @@
 package fr.chaffotm.gamebook.elementary.service;
 
-import fr.chaffotm.gamebook.elementary.model.*;
+import fr.chaffotm.gamebook.elementary.model.definition.SectionDefinition;
+import fr.chaffotm.gamebook.elementary.model.definition.StoryDefinition;
+import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
+import fr.chaffotm.gamebook.elementary.model.instance.GameInstance;
+import fr.chaffotm.gamebook.elementary.model.instance.SectionInstance;
 import fr.chaffotm.gamebook.elementary.model.mapper.GameMapper;
 import fr.chaffotm.gamebook.elementary.model.resource.Game;
 

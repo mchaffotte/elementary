@@ -1,6 +1,10 @@
 package fr.chaffotm.gamebook.elementary.service;
 
-import fr.chaffotm.gamebook.elementary.model.*;
+import fr.chaffotm.gamebook.elementary.model.definition.ActionDefinition;
+import fr.chaffotm.gamebook.elementary.model.definition.Event;
+import fr.chaffotm.gamebook.elementary.model.definition.SectionDefinition;
+import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
+import fr.chaffotm.gamebook.elementary.model.instance.SectionInstance;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
@@ -21,6 +25,9 @@ public class SectionService {
             }
         }
         instance.setActions(actions);
+        for (Event event : definition.getEvents()) {
+            event.execute(context);
+        }
         return instance;
     }
 

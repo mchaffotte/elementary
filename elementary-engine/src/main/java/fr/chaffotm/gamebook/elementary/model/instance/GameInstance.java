@@ -1,4 +1,8 @@
-package fr.chaffotm.gamebook.elementary.model;
+package fr.chaffotm.gamebook.elementary.model.instance;
+
+import fr.chaffotm.gamebook.elementary.model.definition.StoryDefinition;
+import fr.chaffotm.gamebook.elementary.service.Die;
+import fr.chaffotm.gamebook.elementary.service.GameContext;
 
 public class GameInstance {
 
