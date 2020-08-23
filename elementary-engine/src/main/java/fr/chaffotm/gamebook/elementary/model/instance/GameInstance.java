@@ -6,7 +6,7 @@ import fr.chaffotm.gamebook.elementary.service.GameContext;
 
 public class GameInstance {
 
-    private final GameContext context;
+    private GameContext context;
 
     private final StoryDefinition story;
 
@@ -31,5 +31,9 @@ public class GameInstance {
 
     public GameContext getContext() {
         return context;
+    }
+
+    public void setContext(GameContext context) {
+        this.context = context;
     }
 }

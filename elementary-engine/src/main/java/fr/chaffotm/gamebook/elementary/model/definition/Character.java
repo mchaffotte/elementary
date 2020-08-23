@@ -1,5 +1,6 @@
 package fr.chaffotm.gamebook.elementary.model.definition;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -8,6 +9,18 @@ public class Character {
     private String name;
 
     private Set<Skill> skills;
+
+    public Character() {
+        skills = new HashSet<>();
+    }
+
+    public Character(final Character character) {
+        name = character.name;
+        skills = new HashSet<>();
+        for (Skill skill : character.skills) {
+            skills.add(new Skill(skill));
+        }
+    }
 
     public String getName() {
         return name;

@@ -1,5 +1,6 @@
 package fr.chaffotm.gamebook.elementary.service;
 
+import fr.chaffotm.gamebook.elementary.model.definition.Event;
 import fr.chaffotm.gamebook.elementary.model.definition.SectionDefinition;
 import fr.chaffotm.gamebook.elementary.model.definition.StoryDefinition;
 import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
@@ -30,8 +31,10 @@ public class GameService {
     public Game startGame() {
         final StoryDefinition story = storyService.getStoryDefinition();
         game = new GameInstance(story);
-        final SectionInstance instance = sectionService.evaluate(story.getPrologue(), game.getContext());
+        final GameContext context = new GameContext(game.getContext());
+        final SectionInstance instance = sectionService.evaluate(story.getPrologue(), context);
         game.setSection(instance);
+        game.setContext(context);
         return GameMapper.map(game);
     }
 
@@ -44,10 +47,10 @@ public class GameService {
             throw new IllegalArgumentException("Cannot reach that section");
         }
         final SectionInstance section = game.getSection();
-        final Optional<ActionInstance> nextSection = section.getActions().stream()
+        final Optional<ActionInstance> optionalAction = section.getActions().stream()
                 .filter(action -> action.getNextId() == id)
                 .findFirst();
-        if (nextSection.isEmpty()) {
+        if (optionalAction.isEmpty()) {
             throw new IllegalArgumentException("Cannot reach that section");
         }
         final StoryDefinition story = game.getStory();
@@ -55,8 +58,19 @@ public class GameService {
         if (sectionDefinition == null) {
             throw new IllegalArgumentException("Cannot reach that section");
         }
-        final SectionInstance instance = sectionService.evaluate(sectionDefinition, game.getContext());
+        final GameContext context = new GameContext(game.getContext());
+        final Event event = optionalAction.get().getEvent();
+        if (event != null) {
+            event.execute(context);
+        }
+        final SectionInstance instance = sectionService.evaluate(sectionDefinition, context);
         game.setSection(instance);
+        game.setContext(context);
         return GameMapper.map(game);
     }
+
+    protected GameInstance getGame() {
+        return game;
+    }
+
 }

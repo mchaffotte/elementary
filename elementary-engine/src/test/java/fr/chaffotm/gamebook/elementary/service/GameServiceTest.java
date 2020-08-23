@@ -1,8 +1,7 @@
 package fr.chaffotm.gamebook.elementary.service;
 
-import fr.chaffotm.gamebook.elementary.model.definition.SectionDefinition;
-import fr.chaffotm.gamebook.elementary.model.definition.SimpleActionDefinition;
-import fr.chaffotm.gamebook.elementary.model.definition.StoryDefinition;
+import fr.chaffotm.gamebook.elementary.model.definition.*;
+import fr.chaffotm.gamebook.elementary.model.definition.Character;
 import fr.chaffotm.gamebook.elementary.model.resource.Action;
 import fr.chaffotm.gamebook.elementary.model.resource.Game;
 import fr.chaffotm.gamebook.elementary.model.resource.Section;
@@ -14,8 +13,7 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -27,12 +25,18 @@ public class GameServiceTest {
     @InjectMock
     StoryDefinitionService storyService;
 
-    private StoryDefinition buildDefault() {
+    private StoryDefinition buildStory(final Event sectionEvent, final Event actionEvent, final Event nextSectionEvent) {
         final SectionDefinition prologue = new SectionDefinition();
+        if (sectionEvent != null) {
+            prologue.setEvents(List.of(sectionEvent));
+        }
         prologue.setParagraphs(List.of("Prologue 1", "Prologue 2"));
-        prologue.setActions(List.of(new SimpleActionDefinition(2)));
+        prologue.setActions(List.of(new SimpleActionDefinition(2, null, actionEvent)));
         final SectionDefinition section2 = new SectionDefinition();
         section2.setId(2);
+        if (nextSectionEvent != null) {
+            section2.setEvents(List.of(nextSectionEvent));
+        }
         section2.setParagraphs(List.of("Section 2"));
         section2.setActions(List.of(new SimpleActionDefinition(4)));
 
@@ -40,6 +44,7 @@ public class GameServiceTest {
         definition.setName("Test");
         definition.setPrologue(prologue);
         definition.setSections(List.of(section2));
+        definition.setCharacter(new Character());
         return definition;
     }
 
@@ -56,7 +61,7 @@ public class GameServiceTest {
     @Test
     @DisplayName("startGame should return the prologue")
     public void startGameShouldReturnThePrologue() {
-        when(storyService.getStoryDefinition()).thenReturn(buildDefault());
+        when(storyService.getStoryDefinition()).thenReturn(buildStory(null, null, null));
 
         final Game game = service.startGame();
 
@@ -68,7 +73,7 @@ public class GameServiceTest {
     @Test
     @DisplayName("turnTo should throw an exception if section is not reachable")
     public void turnToShouldThrowAnExceptionIfSectionIsNotReachable() {
-        when(storyService.getStoryDefinition()).thenReturn(buildDefault());
+        when(storyService.getStoryDefinition()).thenReturn(buildStory(null, null, null));
         service.startGame();
 
         assertThatIllegalArgumentException()
@@ -79,7 +84,7 @@ public class GameServiceTest {
     @Test
     @DisplayName("turnTo should go to new section")
     public void turnToShouldGoToNewSection() {
-        when(storyService.getStoryDefinition()).thenReturn(buildDefault());
+        when(storyService.getStoryDefinition()).thenReturn(buildStory(null, null, null));
         service.startGame();
 
         Game game = service.turnTo(2);
@@ -92,13 +97,45 @@ public class GameServiceTest {
     @Test
     @DisplayName("turnTo should throw an exception if section does not exist")
     public void turnToShouldThrowAnExceptionIfSectionDoesNotExist() {
-        when(storyService.getStoryDefinition()).thenReturn(buildDefault());
+        when(storyService.getStoryDefinition()).thenReturn(buildStory(null, null, null));
         service.startGame();
         service.turnTo(2);
 
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> service.turnTo(4))
                 .withMessage("Cannot reach that section");
+    }
+
+    @Test
+    @DisplayName("startGame should throw an exception if section is not reachable")
+    public void startGameShouldThrowAnExceptionIfSectionIsNotReachable2() {
+        when(storyService.getStoryDefinition()).thenReturn(buildStory(new AddClueAndFailEvent("Z"), null, null));
+
+        assertThatIllegalStateException()
+                .isThrownBy(() -> service.startGame());
+        assertThat(service.getGame().getContext().hasClue("Z")).isFalse();
+    }
+
+    @Test
+    @DisplayName("turnTo should throw an exception if action event throws an exception")
+    public void turnToShouldThrowAnExceptionIfActionEventThrowsAnException() {
+    when(storyService.getStoryDefinition()).thenReturn(buildStory(null, new AddClueAndFailEvent("Z"), null));
+        service.startGame();
+
+        assertThatIllegalStateException()
+                .isThrownBy(() -> service.turnTo(2));
+        assertThat(service.getGame().getContext().hasClue("Z")).isFalse();
+    }
+
+    @Test
+    @DisplayName("turnTo should throw an exception if section is not reachable")
+    public void turnToShouldThrowAnExceptionIfNextSectionEventThrowsAnException() {
+        when(storyService.getStoryDefinition()).thenReturn(buildStory(null, null, new AddClueAndFailEvent("Z")));
+        service.startGame();
+
+        assertThatIllegalStateException()
+                .isThrownBy(() -> service.turnTo(2));
+        assertThat(service.getGame().getContext().hasClue("Z")).isFalse();
     }
 
 }

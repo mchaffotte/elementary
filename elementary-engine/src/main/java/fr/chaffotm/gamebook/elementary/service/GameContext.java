@@ -21,6 +21,12 @@ public class GameContext {
         this.clues = new HashSet<>();
     }
 
+    public GameContext(final GameContext context) {
+        this.die = context.die;
+        this.character = new Character(context.character);
+        this.clues = new HashSet<>(context.clues);
+    }
+
     public Die getDie() {
         return die;
     }
@@ -41,4 +47,10 @@ public class GameContext {
         clues.add(clue);
     }
 
+    @Override
+    public String toString() {
+        return "GameContext{" +
+                "clues=" + clues +
+                '}';
+    }
 }
