@@ -7,6 +7,7 @@ import fr.chaffotm.gamebook.elementary.model.resource.Game;
 import fr.chaffotm.gamebook.elementary.model.resource.Section;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +25,11 @@ public class GameServiceTest {
 
     @InjectMock
     StoryDefinitionService storyService;
+
+    @BeforeEach
+    public void setUp() {
+        service.stopGame();
+    }
 
     private StoryDefinition buildStory(final Event sectionEvent, final Event actionEvent, final Event nextSectionEvent) {
         final SectionDefinition prologue = new SectionDefinition();
@@ -51,8 +57,6 @@ public class GameServiceTest {
     @Test
     @DisplayName("turnTo should throw an exception if the game is not started")
     public void turnToShouldThrowAnExceptionIfTheGameIsNotStarted() {
-        service.removeGame();
-
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> service.turnTo(485))
                 .withMessage("Cannot reach that section");
@@ -68,6 +72,17 @@ public class GameServiceTest {
         Section section = game.getSection();
         assertThat(section.getActions())
                 .containsExactly(new Action(2, null));
+    }
+
+    @Test
+    @DisplayName("startGame should return an exception if another game is already in progress")
+    public void startGameShouldThrowAnExceptionIfAnotherGameIsAlreadyInProgress() {
+        when(storyService.getStoryDefinition()).thenReturn(buildStory(null, null, null));
+        service.startGame();
+
+        assertThatIllegalStateException()
+                .isThrownBy(() -> service.startGame())
+                .withMessage("Another game is already in progress");
     }
 
     @Test
@@ -113,7 +128,7 @@ public class GameServiceTest {
 
         assertThatIllegalStateException()
                 .isThrownBy(() -> service.startGame());
-        assertThat(service.getGame().getContext().hasClue("Z")).isFalse();
+        assertThat(service.getGameInstance().getContext().hasClue("Z")).isFalse();
     }
 
     @Test
@@ -124,7 +139,7 @@ public class GameServiceTest {
 
         assertThatIllegalStateException()
                 .isThrownBy(() -> service.turnTo(2));
-        assertThat(service.getGame().getContext().hasClue("Z")).isFalse();
+        assertThat(service.getGameInstance().getContext().hasClue("Z")).isFalse();
     }
 
     @Test
@@ -135,7 +150,15 @@ public class GameServiceTest {
 
         assertThatIllegalStateException()
                 .isThrownBy(() -> service.turnTo(2));
-        assertThat(service.getGame().getContext().hasClue("Z")).isFalse();
+        assertThat(service.getGameInstance().getContext().hasClue("Z")).isFalse();
+    }
+
+    @Test
+    @DisplayName("getGame should throw an exception if no game is started")
+    public void getGameShouldThrowAnExceptionIfNoGameIsStarted() {
+        assertThatIllegalStateException()
+                .isThrownBy(() -> service.getGame())
+                .withMessage("Not found");
     }
 
 }

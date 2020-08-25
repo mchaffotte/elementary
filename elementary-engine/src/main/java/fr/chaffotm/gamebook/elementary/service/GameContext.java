@@ -47,10 +47,4 @@ public class GameContext {
         clues.add(clue);
     }
 
-    @Override
-    public String toString() {
-        return "GameContext{" +
-                "clues=" + clues +
-                '}';
-    }
 }

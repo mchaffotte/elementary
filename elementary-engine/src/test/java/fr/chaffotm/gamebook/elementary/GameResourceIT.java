@@ -15,11 +15,28 @@ public class GameResourceIT {
     public void playGame() {
         given()
             .when()
+                .body("{\"query\":\"mutation stopGame {\\n  stopGame\\n}\",\"variables\":null,\"operationName\":\"stopGame\"}")
+                .post("/graphql")
+            .then()
+                .statusCode(200)
+                .body(is("{\"data\":{\"stopGame\":true}}"));
+
+
+        given()
+            .when()
                 .body("{\"query\":\"mutation startGame {\\n  startGame {\\n    section {\\n      id\\n      paragraphs\\n      actions {\\n        id\\n        description\\n      }\\n    }\\n  }\\n}\\n\",\"variables\":null,\"operationName\":\"startGame\"}")
                 .post("/graphql")
             .then()
                 .statusCode(200)
                 .body(is("{\"data\":{\"startGame\":{\"section\":{\"id\":0,\"paragraphs\":[\"You are on the long-haul flight 78455 to Papeete.\",\"It's dark outside. Almost all of the passengers are sleeping.\",\"It is at this moment that a cry is heard at the front of the plane.\"],\"actions\":[{\"id\":254,\"description\":\"If you want to call the flight attendant\"},{\"id\":191,\"description\":\"Or to rush to the front of the plane\"}]}}}}"));
+
+        given()
+            .when()
+                .body("{\"query\":\"query getGame {\\n  game {\\n    section {\\n      id\\n      paragraphs\\n      actions {\\n        id\\n        description\\n      }\\n    }\\n  }\\n}\",\"variables\":null,\"operationName\":\"getGame\"}")
+                .post("/graphql")
+            .then()
+                .statusCode(200)
+                .body(is("{\"data\":{\"game\":{\"section\":{\"id\":0,\"paragraphs\":[\"You are on the long-haul flight 78455 to Papeete.\",\"It's dark outside. Almost all of the passengers are sleeping.\",\"It is at this moment that a cry is heard at the front of the plane.\"],\"actions\":[{\"id\":254,\"description\":\"If you want to call the flight attendant\"},{\"id\":191,\"description\":\"Or to rush to the front of the plane\"}]}}}}"));
 
         given()
             .when()

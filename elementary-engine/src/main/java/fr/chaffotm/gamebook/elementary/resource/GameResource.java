@@ -5,6 +5,7 @@ import fr.chaffotm.gamebook.elementary.service.GameService;
 import org.eclipse.microprofile.graphql.GraphQLApi;
 import org.eclipse.microprofile.graphql.Mutation;
 import org.eclipse.microprofile.graphql.Name;
+import org.eclipse.microprofile.graphql.Query;
 
 import javax.inject.Inject;
 
@@ -18,6 +19,11 @@ public class GameResource {
         this.service = service;
     }
 
+    @Query
+    public Game getGame()  {
+        return service.getGame();
+    }
+
     @Mutation
     public Game startGame()  {
         return service.startGame();
@@ -27,4 +33,10 @@ public class GameResource {
     public Game turnTo(@Name("sectionId") final int id)  {
         return service.turnTo(id);
     }
+
+    @Mutation
+    public boolean stopGame()  {
+        return service.stopGame();
+    }
+
 }

@@ -29,17 +29,21 @@ public class GameService {
     }
 
     public Game startGame() {
+        if (game != null) {
+            throw new IllegalStateException("Another game is already in progress");
+        }
         final StoryDefinition story = storyService.getStoryDefinition();
         game = new GameInstance(story);
         final GameContext context = new GameContext(game.getContext());
         final SectionInstance instance = sectionService.evaluate(story.getPrologue(), context);
         game.setSection(instance);
         game.setContext(context);
-        return GameMapper.map(game);
+        return getGame();
     }
 
-    public void removeGame() {
+    public boolean stopGame() {
         this.game = null;
+        return true;
     }
 
     public Game turnTo(final int id) {
@@ -66,10 +70,18 @@ public class GameService {
         final SectionInstance instance = sectionService.evaluate(sectionDefinition, context);
         game.setSection(instance);
         game.setContext(context);
+        return getGame();
+    }
+
+    public Game getGame() {
+        final GameInstance game = getGameInstance();
+        if (game == null) {
+            throw new IllegalStateException("Not found");
+        }
         return GameMapper.map(game);
     }
 
-    protected GameInstance getGame() {
+    protected GameInstance getGameInstance() {
         return game;
     }
 
