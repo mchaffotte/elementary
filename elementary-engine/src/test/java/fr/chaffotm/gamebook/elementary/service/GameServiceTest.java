@@ -118,7 +118,7 @@ public class GameServiceTest {
 
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> service.turnTo(4))
-                .withMessage("Cannot reach that section");
+                .withMessage("Section does not exist");
     }
 
     @Test

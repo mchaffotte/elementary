@@ -14,6 +14,9 @@ import java.util.List;
 public class SectionService {
 
     public SectionInstance evaluate(final SectionDefinition definition, final GameContext context) {
+        if (definition == null) {
+            throw new IllegalArgumentException("Section does not exist");
+        }
         final SectionInstance instance = new SectionInstance();
         instance.setId(definition.getId());
         instance.setParagraphs(definition.getParagraphs());

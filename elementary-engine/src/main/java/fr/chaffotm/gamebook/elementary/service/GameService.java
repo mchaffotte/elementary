@@ -57,17 +57,14 @@ public class GameService {
         if (optionalAction.isEmpty()) {
             throw new IllegalArgumentException("Cannot reach that section");
         }
-        final StoryDefinition story = game.getStory();
-        final SectionDefinition sectionDefinition = story.getSection(id);
-        if (sectionDefinition == null) {
-            throw new IllegalArgumentException("Cannot reach that section");
-        }
         final GameContext context = new GameContext(game.getContext());
         final Event event = optionalAction.get().getEvent();
         if (event != null) {
             event.execute(context);
         }
-        final SectionInstance instance = sectionService.evaluate(sectionDefinition, context);
+        final StoryDefinition story = game.getStory();
+        final SectionDefinition definition = story.getSection(id);
+        final SectionInstance instance = sectionService.evaluate(definition, context);
         game.setSection(instance);
         game.setContext(context);
         return getGame();

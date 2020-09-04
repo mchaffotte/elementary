@@ -12,8 +12,7 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+import static org.assertj.core.api.Assertions.*;
 
 @QuarkusTest
 public class SectionServiceTest {
@@ -67,6 +66,14 @@ public class SectionServiceTest {
         SectionInstance instance = service.evaluate(definition, new GameContext(null, null));
 
         assertThat(instance).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("turnTo should throw an exception if definition is null")
+    public void evaluateShouldThrowAnExceptionIfDefinitionIsNull() {
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> service.evaluate(null, new GameContext(null, null)))
+                .withMessage("Section does not exist");
     }
 
 }
