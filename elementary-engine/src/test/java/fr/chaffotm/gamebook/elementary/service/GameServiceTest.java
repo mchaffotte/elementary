@@ -134,7 +134,7 @@ public class GameServiceTest {
     @Test
     @DisplayName("turnTo should throw an exception if action event throws an exception")
     public void turnToShouldThrowAnExceptionIfActionEventThrowsAnException() {
-    when(storyService.getStoryDefinition()).thenReturn(buildStory(null, new AddClueAndFailEvent("Z"), null));
+        when(storyService.getStoryDefinition()).thenReturn(buildStory(null, new AddClueAndFailEvent("Z"), null));
         service.startGame();
 
         assertThatIllegalStateException()

@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
 @QuarkusTest
 public class SectionServiceTest {
@@ -27,11 +28,41 @@ public class SectionServiceTest {
         definition.setId(7);
         definition.setParagraphs(List.of("Lorem ipsum dolor sit amet"));
         definition.setEvents(List.of(new ClueEvent("L")));
-        definition.setActions(List.of(new SimpleActionDefinition(2)));
+        definition.setActions(List.of(new NoAction(), new SimpleActionDefinition(2)));
         final SectionInstance expected = new SectionInstance();
         expected.setId(7);
         expected.setParagraphs(List.of("Lorem ipsum dolor sit amet"));
         expected.setActions(List.of(new ActionInstance(2)));
+
+        SectionInstance instance = service.evaluate(definition, new GameContext(null, null));
+
+        assertThat(instance).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("evaluate should throw an exception if no action is possible while definition contains actions")
+    public void evaluateShouldThrowAnExceptionIfNoActionIsPossibleWhileDefinitionContainsActions() {
+        final SectionDefinition definition = new SectionDefinition();
+        definition.setId(7);
+        definition.setParagraphs(List.of("Lorem ipsum dolor sit amet"));
+        definition.setActions(List.of(new NoAction()));
+
+        assertThatIllegalStateException()
+                .isThrownBy(() -> service.evaluate(definition, new GameContext(null, null)))
+                .withMessage("No action is possible");
+    }
+
+    @Test
+    @DisplayName("evaluate should construct a section instance without actions")
+    public void evaluateShouldConstructASectionInstanceWithoutActions() {
+        final SectionDefinition definition = new SectionDefinition();
+        definition.setId(7);
+        definition.setParagraphs(List.of("Lorem ipsum dolor sit amet"));
+        definition.setActions(List.of());
+        final SectionInstance expected = new SectionInstance();
+        expected.setId(7);
+        expected.setParagraphs(List.of("Lorem ipsum dolor sit amet"));
+        expected.setActions(List.of());
 
         SectionInstance instance = service.evaluate(definition, new GameContext(null, null));
 

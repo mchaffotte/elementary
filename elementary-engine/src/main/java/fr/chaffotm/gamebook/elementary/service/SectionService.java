@@ -24,6 +24,9 @@ public class SectionService {
                 actions.add(actionInstance);
             }
         }
+        if (actions.isEmpty() && !definition.getActions().isEmpty()) {
+            throw new IllegalStateException("No action is possible");
+        }
         instance.setActions(actions);
         for (Event event : definition.getEvents()) {
             event.execute(context);
