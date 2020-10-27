@@ -1,6 +1,7 @@
 package fr.chaffotm.gamebook.elementary.service;
 
 import fr.chaffotm.gamebook.elementary.model.definition.Character;
+import fr.chaffotm.gamebook.elementary.model.definition.Indication;
 import fr.chaffotm.gamebook.elementary.model.definition.Skill;
 
 import java.util.HashSet;
@@ -13,18 +14,18 @@ public class GameContext {
 
     private final Character character;
 
-    private final Set<String> clues;
+    private final Set<Indication> indications;
 
     public GameContext(final Die die, final Character character) {
         this.die = die;
         this.character = character;
-        this.clues = new HashSet<>();
+        this.indications = new HashSet<>();
     }
 
     public GameContext(final GameContext context) {
         this.die = context.die;
         this.character = new Character(context.character);
-        this.clues = new HashSet<>(context.clues);
+        this.indications = new HashSet<>(context.indications);
     }
 
     public Die getDie() {
@@ -39,12 +40,12 @@ public class GameContext {
         return optionalSkill.get().getValue();
     }
 
-    public boolean hasClue(final String clue) {
-        return clues.contains(clue);
+    public void addIndication(final Indication indication) {
+        indications.add(indication);
     }
 
-    public void addClue(final String clue) {
-        clues.add(clue);
+    public Set<Indication> getIndications() {
+        return indications;
     }
 
 }

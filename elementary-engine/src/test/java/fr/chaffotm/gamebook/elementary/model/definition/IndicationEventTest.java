@@ -6,17 +6,17 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ClueEventTest {
+public class IndicationEventTest {
 
     @Test
     @DisplayName("execute should add the clue in the context")
     public void executeShouldAddTheClueInTheContext() {
-        final Event event = new ClueEvent("V");
+        final Event event = new IndicationEvent(new Indication(IndicationType.CLUE, "V"));
         final GameContext context = new GameContext(null, null);
 
         event.execute(context);
 
-        assertThat(context.hasClue("V")).isTrue();
+        assertThat(context.getIndications()).contains(new Indication(IndicationType.CLUE, "V"));
     }
 
 }

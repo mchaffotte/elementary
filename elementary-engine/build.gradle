@@ -12,6 +12,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-smallrye-graphql'
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
     implementation 'io.quarkus:quarkus-resteasy'
+    implementation 'org.mvel:mvel2:2.4.10.Final'
 
     testImplementation 'org.assertj:assertj-core:3.17.2'
     testImplementation 'org.mockito:junit-jupiter:2.20.0'

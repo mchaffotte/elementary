@@ -128,7 +128,8 @@ public class GameServiceTest {
 
         assertThatIllegalStateException()
                 .isThrownBy(() -> service.startGame());
-        assertThat(service.getGameInstance().getContext().hasClue("Z")).isFalse();
+        assertThat(service.getGameInstance().getContext().getIndications())
+                .doesNotContain(new Indication(IndicationType.CLUE, "Z"));
     }
 
     @Test
@@ -139,7 +140,8 @@ public class GameServiceTest {
 
         assertThatIllegalStateException()
                 .isThrownBy(() -> service.turnTo(2));
-        assertThat(service.getGameInstance().getContext().hasClue("Z")).isFalse();
+        assertThat(service.getGameInstance().getContext().getIndications())
+                .doesNotContain(new Indication(IndicationType.CLUE, "Z"));
     }
 
     @Test
@@ -150,7 +152,8 @@ public class GameServiceTest {
 
         assertThatIllegalStateException()
                 .isThrownBy(() -> service.turnTo(2));
-        assertThat(service.getGameInstance().getContext().hasClue("Z")).isFalse();
+        assertThat(service.getGameInstance().getContext().getIndications())
+                .doesNotContain(new Indication(IndicationType.CLUE, "Z"));
     }
 
     @Test

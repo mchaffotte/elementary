@@ -1,8 +1,6 @@
 package fr.chaffotm.gamebook.elementary.service;
 
-import fr.chaffotm.gamebook.elementary.model.definition.ClueEvent;
-import fr.chaffotm.gamebook.elementary.model.definition.SectionDefinition;
-import fr.chaffotm.gamebook.elementary.model.definition.SimpleActionDefinition;
+import fr.chaffotm.gamebook.elementary.model.definition.*;
 import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
 import fr.chaffotm.gamebook.elementary.model.instance.SectionInstance;
 import io.quarkus.test.junit.QuarkusTest;
@@ -26,7 +24,7 @@ public class SectionServiceTest {
         final SectionDefinition definition = new SectionDefinition();
         definition.setId(7);
         definition.setParagraphs(List.of("Lorem ipsum dolor sit amet"));
-        definition.setEvents(List.of(new ClueEvent("L")));
+        definition.setEvents(List.of(new IndicationEvent(new Indication(IndicationType.CLUE, "L"))));
         definition.setActions(List.of(new NoAction(), new SimpleActionDefinition(2)));
         final SectionInstance expected = new SectionInstance();
         expected.setId(7);

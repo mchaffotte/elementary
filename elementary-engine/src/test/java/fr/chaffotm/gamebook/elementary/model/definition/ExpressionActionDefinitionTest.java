@@ -10,13 +10,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class ConditionActionDefinitionTest {
+public class ExpressionActionDefinitionTest {
 
     @Test
     @DisplayName("toInstance should not choose the path because the clue has not yet been found")
     public void toInstanceShouldNotChooseThePathBecauseTheClueHasNotYetBeenFound() {
-        final ClueCondition condition = new ClueCondition("A");
-        final ConditionActionDefinition actionDefinition = new ConditionActionDefinition(condition, 485);
+        final ExpressionActionDefinition actionDefinition = new ExpressionActionDefinition("clue.A", 485);
         final GameContext context = new GameContext(null, null);
 
         ActionInstance actionInstance = actionDefinition.toInstance(context);
@@ -27,10 +26,9 @@ public class ConditionActionDefinitionTest {
     @Test
     @DisplayName("toInstance should choose the path because the clue has been found")
     public void toInstanceShouldChooseThePathBecauseTheClueHasBeenFound() {
-        final ClueCondition condition = new ClueCondition("A");
-        final ConditionActionDefinition actionDefinition = new ConditionActionDefinition(condition, 485);
+        final ExpressionActionDefinition actionDefinition = new ExpressionActionDefinition("clue.A", 485);
         final GameContext context = new GameContext(null, null);
-        context.addClue("A");
+        context.addIndication(new Indication(IndicationType.CLUE, "A"));
 
         ActionInstance actionInstance = actionDefinition.toInstance(context);
 

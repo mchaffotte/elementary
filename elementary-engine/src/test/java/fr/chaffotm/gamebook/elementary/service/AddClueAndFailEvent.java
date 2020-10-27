@@ -1,6 +1,8 @@
 package fr.chaffotm.gamebook.elementary.service;
 
 import fr.chaffotm.gamebook.elementary.model.definition.Event;
+import fr.chaffotm.gamebook.elementary.model.definition.Indication;
+import fr.chaffotm.gamebook.elementary.model.definition.IndicationType;
 
 public class AddClueAndFailEvent implements Event {
 
@@ -12,7 +14,7 @@ public class AddClueAndFailEvent implements Event {
 
     @Override
     public void execute(GameContext gameContext) {
-        gameContext.addClue(clue);
+        gameContext.addIndication(new Indication(IndicationType.CLUE, clue));
         throw new IllegalStateException();
     }
 
