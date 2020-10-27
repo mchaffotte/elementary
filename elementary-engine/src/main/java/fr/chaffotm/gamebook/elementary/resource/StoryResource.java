@@ -18,7 +18,7 @@ public class StoryResource {
     }
 
     @Query
-    public Story getStory()  {
+    public Story getStory() {
         return service.getStory();
     }
 

@@ -1,7 +1,7 @@
 package fr.chaffotm.gamebook.elementary.model.definition;
 
-import fr.chaffotm.gamebook.elementary.service.Die;
 import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
+import fr.chaffotm.gamebook.elementary.service.Die;
 import fr.chaffotm.gamebook.elementary.service.GameContext;
 
 import java.util.List;

@@ -20,22 +20,22 @@ public class GameResource {
     }
 
     @Query
-    public Game getGame()  {
+    public Game getGame() {
         return service.getGame();
     }
 
     @Mutation
-    public Game startGame()  {
+    public Game startGame() {
         return service.startGame();
     }
 
     @Mutation
-    public Game turnTo(@Name("sectionId") final int id)  {
+    public Game turnTo(@Name("sectionId") final int id) {
         return service.turnTo(id);
     }
 
     @Mutation
-    public boolean stopGame()  {
+    public boolean stopGame() {
         return service.stopGame();
     }
 

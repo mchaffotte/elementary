@@ -1,7 +1,7 @@
 package fr.chaffotm.gamebook.elementary.service;
 
-import fr.chaffotm.gamebook.elementary.model.definition.*;
 import fr.chaffotm.gamebook.elementary.model.definition.Character;
+import fr.chaffotm.gamebook.elementary.model.definition.*;
 import fr.chaffotm.gamebook.elementary.model.resource.Action;
 import fr.chaffotm.gamebook.elementary.model.resource.Game;
 import fr.chaffotm.gamebook.elementary.model.resource.Section;

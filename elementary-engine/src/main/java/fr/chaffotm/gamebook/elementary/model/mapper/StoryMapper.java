@@ -1,7 +1,7 @@
 package fr.chaffotm.gamebook.elementary.model.mapper;
 
-import fr.chaffotm.gamebook.elementary.model.resource.Story;
 import fr.chaffotm.gamebook.elementary.model.definition.StoryDefinition;
+import fr.chaffotm.gamebook.elementary.model.resource.Story;
 
 public class StoryMapper {
 

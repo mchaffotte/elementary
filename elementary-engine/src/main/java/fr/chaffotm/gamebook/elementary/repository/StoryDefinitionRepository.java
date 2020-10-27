@@ -1,7 +1,7 @@
 package fr.chaffotm.gamebook.elementary.repository;
 
-import fr.chaffotm.gamebook.elementary.model.definition.*;
 import fr.chaffotm.gamebook.elementary.model.definition.Character;
+import fr.chaffotm.gamebook.elementary.model.definition.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.List;
@@ -17,7 +17,7 @@ public class StoryDefinitionRepository {
     }
 
     private ActionDefinition buildSimpleAction(final String description, final int nextId) {
-        return  new SimpleActionDefinition(nextId, description);
+        return new SimpleActionDefinition(nextId, description);
     }
 
     private StoryDefinition buildDefault() {
