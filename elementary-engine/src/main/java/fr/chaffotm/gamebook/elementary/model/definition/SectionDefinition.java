@@ -11,10 +11,13 @@ public class SectionDefinition {
 
     private List<Event> events;
 
+    private ActionSelection selection;
+
     private List<ActionDefinition> actions;
 
     public SectionDefinition() {
         events = new ArrayList<>();
+        selection = ActionSelection.ALL;
     }
 
     public int getId() {
@@ -39,6 +42,14 @@ public class SectionDefinition {
 
     public void setEvents(List<Event> events) {
         this.events = events;
+    }
+
+    public ActionSelection getSelection() {
+        return selection;
+    }
+
+    public void setSelection(ActionSelection selection) {
+        this.selection = selection;
     }
 
     public List<ActionDefinition> getActions() {
