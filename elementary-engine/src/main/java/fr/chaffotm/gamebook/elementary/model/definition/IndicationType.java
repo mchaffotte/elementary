@@ -16,5 +16,10 @@ public enum IndicationType {
         public String toString() {
             return "decision";
         }
+    }, EVENT {
+        @Override
+        public String toString() {
+            return "event";
+        }
     }
 }

@@ -1,7 +1,8 @@
-package fr.chaffotm.gamebook.elementary.model.definition;
+package fr.chaffotm.gamebook.elementary.service.expression;
 
+import fr.chaffotm.gamebook.elementary.model.definition.Indication;
+import fr.chaffotm.gamebook.elementary.model.definition.IndicationType;
 import fr.chaffotm.gamebook.elementary.service.Die;
-import fr.chaffotm.gamebook.elementary.service.ExpressionEvaluator;
 import fr.chaffotm.gamebook.elementary.service.GameContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -101,7 +102,7 @@ public class ExpressionEvaluatorTest {
         final ExpressionEvaluator evaluator = new ExpressionEvaluator();
         final GameContext context = new GameContext(new Die(12), null);
 
-        boolean hasIndications = evaluator.evaluateIndications("clue.A || decision.45 || deduction.5", context);
+        boolean hasIndications = evaluator.evaluateIndications("clue.A || decision.45 || deduction.5 || event.4", context);
 
         assertThat(hasIndications).isFalse();
     }
