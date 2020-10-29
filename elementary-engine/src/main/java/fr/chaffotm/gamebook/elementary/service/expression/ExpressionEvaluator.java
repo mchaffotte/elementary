@@ -1,7 +1,8 @@
-package fr.chaffotm.gamebook.elementary.service;
+package fr.chaffotm.gamebook.elementary.service.expression;
 
 import fr.chaffotm.gamebook.elementary.model.definition.Indication;
 import fr.chaffotm.gamebook.elementary.model.definition.IndicationType;
+import fr.chaffotm.gamebook.elementary.service.GameContext;
 import org.mvel2.MVEL;
 
 import java.util.HashMap;
@@ -18,7 +19,6 @@ public class ExpressionEvaluator {
             final Map<String, Boolean> type = variables.get(indication.getType().toString());
             type.put(indication.getValue(), true);
         }
-        System.out.println(MVEL.eval(expression, variables));
         return MVEL.eval(expression, variables, Boolean.class);
     }
 

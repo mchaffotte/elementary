@@ -1,4 +1,4 @@
-package fr.chaffotm.gamebook.elementary.service;
+package fr.chaffotm.gamebook.elementary.service.expression;
 
 import java.util.HashMap;
 

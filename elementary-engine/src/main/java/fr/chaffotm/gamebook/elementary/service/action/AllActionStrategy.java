@@ -1,19 +1,18 @@
-package fr.chaffotm.gamebook.elementary.service;
+package fr.chaffotm.gamebook.elementary.service.action;
 
 import fr.chaffotm.gamebook.elementary.model.definition.ActionDefinition;
 import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
+import fr.chaffotm.gamebook.elementary.service.GameContext;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-public class OnlyOneActionStrategy implements ActionStrategy {
+public class AllActionStrategy implements ActionStrategy {
 
+    @Override
     public List<ActionInstance> getActionInstances(final List<ActionDefinition> actions, final GameContext context) {
         final List<ActionInstance> instances = new ArrayList<>();
-        final Iterator<ActionDefinition> iterator = actions.iterator();
-        while (iterator.hasNext() && instances.size() < 1) {
-            ActionDefinition action = iterator.next();
+        for (ActionDefinition action : actions) {
             ActionInstance instance = action.toInstance(context);
             if (instance != null) {
                 instances.add(instance);
@@ -21,4 +20,5 @@ public class OnlyOneActionStrategy implements ActionStrategy {
         }
         return instances;
     }
+
 }

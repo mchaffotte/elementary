@@ -5,6 +5,9 @@ import fr.chaffotm.gamebook.elementary.model.definition.Event;
 import fr.chaffotm.gamebook.elementary.model.definition.SectionDefinition;
 import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
 import fr.chaffotm.gamebook.elementary.model.instance.SectionInstance;
+import fr.chaffotm.gamebook.elementary.service.action.ActionStrategy;
+import fr.chaffotm.gamebook.elementary.service.action.AllActionStrategy;
+import fr.chaffotm.gamebook.elementary.service.action.FirstActionStrategy;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.List;
@@ -35,7 +38,7 @@ public class SectionService {
 
     private ActionStrategy getStrategy(ActionSelection selection) {
         if (selection == ActionSelection.FIRST) {
-            return new OnlyOneActionStrategy();
+            return new FirstActionStrategy();
         }
         return new AllActionStrategy();
     }

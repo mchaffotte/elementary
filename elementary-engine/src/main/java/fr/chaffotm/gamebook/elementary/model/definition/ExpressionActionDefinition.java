@@ -1,8 +1,8 @@
 package fr.chaffotm.gamebook.elementary.model.definition;
 
 import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
-import fr.chaffotm.gamebook.elementary.service.ExpressionEvaluator;
 import fr.chaffotm.gamebook.elementary.service.GameContext;
+import fr.chaffotm.gamebook.elementary.service.expression.ExpressionEvaluator;
 
 public class ExpressionActionDefinition implements ActionDefinition {
 
