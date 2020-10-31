@@ -6,9 +6,9 @@ import fr.chaffotm.gamebook.elementary.service.GameContext;
 
 public class GameInstance {
 
-    private GameContext context;
-
     private final StoryDefinition story;
+
+    private GameContext context;
 
     private SectionInstance section;
 

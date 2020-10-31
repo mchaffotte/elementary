@@ -8,10 +8,11 @@ import fr.chaffotm.gamebook.elementary.model.instance.GameInstance;
 import fr.chaffotm.gamebook.elementary.model.instance.SectionInstance;
 import fr.chaffotm.gamebook.elementary.model.mapper.GameMapper;
 import fr.chaffotm.gamebook.elementary.model.resource.Game;
+import fr.chaffotm.gamebook.elementary.repository.GameRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.Optional;
+import java.util.List;
 
 @ApplicationScoped
 public class GameService {
@@ -20,66 +21,72 @@ public class GameService {
 
     private final SectionService sectionService;
 
-    private GameInstance game;
+    private final GameRepository gameRepository;
 
     @Inject
-    public GameService(final StoryDefinitionService storyService, final SectionService sectionService) {
+    public GameService(final StoryDefinitionService storyService, final SectionService sectionService, final GameRepository gameRepository) {
         this.storyService = storyService;
         this.sectionService = sectionService;
+        this.gameRepository = gameRepository;
     }
 
     public Game startGame() {
-        if (game != null) {
+        if (gameRepository.getGame() != null) {
             throw new IllegalStateException("Another game is already in progress");
         }
         final StoryDefinition story = storyService.getStoryDefinition();
-        game = new GameInstance(story);
+        final GameInstance game = new GameInstance(story);
         final GameContext context = new GameContext(game.getContext());
-        final SectionInstance instance = sectionService.evaluate(story.getPrologue(), context);
-        game.setSection(instance);
-        game.setContext(context);
-        return getGame();
+        return turnTo(game, null, story.getPrologue(), context);
     }
 
     public boolean stopGame() {
-        this.game = null;
+        gameRepository.removeGame();
         return true;
     }
 
     public Game turnTo(final int id) {
+        final GameInstance game = gameRepository.getGame();
         if (game == null) {
             throw new IllegalArgumentException("Cannot reach that section");
         }
         final SectionInstance section = game.getSection();
-        final Optional<ActionInstance> optionalAction = section.getActions().stream()
-                .filter(action -> action.getNextId() == id)
-                .findFirst();
-        if (optionalAction.isEmpty()) {
-            throw new IllegalArgumentException("Cannot reach that section");
+        final ActionInstance instance = getActionInstance(section.getActions(), id);
+        final StoryDefinition story = game.getStory();
+        final SectionDefinition prologue = story.getPrologue();
+        final Event event = instance.getEvent();
+        if (id == prologue.getId()) {
+            final GameContext context = new GameContext(game.getContext().getDie(), story.getCharacter());
+            return turnTo(game, event, prologue, context);
         }
         final GameContext context = new GameContext(game.getContext());
-        final Event event = optionalAction.get().getEvent();
+        return turnTo(game, event, story.getSection(id), context);
+    }
+
+    private ActionInstance getActionInstance(final List<ActionInstance> actions, final int id) {
+        return actions.stream()
+                .filter(action -> action.getNextId() == id)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Cannot reach that section"));
+    }
+
+    private Game turnTo(final GameInstance game, final Event event, final SectionDefinition section, final GameContext context) {
         if (event != null) {
             event.execute(context);
         }
-        final StoryDefinition story = game.getStory();
-        final SectionDefinition definition = story.getSection(id);
-        final SectionInstance instance = sectionService.evaluate(definition, context);
+        final SectionInstance instance = sectionService.evaluate(section, context);
         game.setSection(instance);
         game.setContext(context);
-        return getGame();
+        gameRepository.save(game);
+        return GameMapper.map(game);
     }
 
     public Game getGame() {
-        final GameInstance game = getGameInstance();
+        final GameInstance game = gameRepository.getGame();
         if (game == null) {
             throw new IllegalStateException("Not found");
         }
         return GameMapper.map(game);
-    }
-
-    protected GameInstance getGameInstance() {
-        return game;
     }
 
 }
