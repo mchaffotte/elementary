@@ -1,7 +1,9 @@
 package fr.chaffotm.gamebook.elementary.service.expression;
 
-import fr.chaffotm.gamebook.elementary.model.definition.Indication;
-import fr.chaffotm.gamebook.elementary.model.definition.IndicationType;
+import fr.chaffotm.gamebook.elementary.model.builder.CharacterBuilder;
+import fr.chaffotm.gamebook.elementary.model.entity.CharacterEntity;
+import fr.chaffotm.gamebook.elementary.model.instance.Indication;
+import fr.chaffotm.gamebook.elementary.model.instance.IndicationType;
 import fr.chaffotm.gamebook.elementary.service.Die;
 import fr.chaffotm.gamebook.elementary.service.GameContext;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +22,7 @@ public class ExpressionEvaluatorTest {
         final GameContext context = new GameContext(new Die(12), null);
         context.addIndication(new Indication(IndicationType.CLUE, "1"));
 
-        boolean hasClues = evaluator.evaluateIndications("clue.1", context);
+        boolean hasClues = evaluator.evaluateIndications("clue.1", context, null);
 
         assertThat(hasClues).isTrue();
     }
@@ -32,7 +34,7 @@ public class ExpressionEvaluatorTest {
         final GameContext context = new GameContext(new Die(12), null);
         context.addIndication(new Indication(IndicationType.CLUE, "1"));
 
-        boolean hasClues = evaluator.evaluateIndications("!clue.1", context);
+        boolean hasClues = evaluator.evaluateIndications("!clue.1", context, null);
 
         assertThat(hasClues).isFalse();
     }
@@ -44,8 +46,8 @@ public class ExpressionEvaluatorTest {
         final GameContext context = new GameContext(new Die(12), null);
 
         assertThatExceptionOfType(PropertyAccessException.class)
-                .isThrownBy(() -> evaluator.evaluateIndications("place.1", context))
-                .withMessageContaining("could not access: place");
+                .isThrownBy(() -> evaluator.evaluateIndications("place.1", context, null))
+                .withMessageContaining("unresolvable property or identifier: place");
     }
 
     @Test
@@ -55,7 +57,7 @@ public class ExpressionEvaluatorTest {
         final GameContext context = new GameContext(new Die(12), null);
         context.addIndication(new Indication(IndicationType.CLUE, "A"));
 
-        boolean hasClues = evaluator.evaluateIndications("clue.1 || clue.A", context);
+        boolean hasClues = evaluator.evaluateIndications("clue.1 || clue.A", context, null);
 
         assertThat(hasClues).isTrue();
     }
@@ -67,7 +69,7 @@ public class ExpressionEvaluatorTest {
         final GameContext context = new GameContext(new Die(12), null);
         context.addIndication(new Indication(IndicationType.CLUE, "A"));
 
-        boolean hasClues = evaluator.evaluateIndications("clue.A && clue.1", context);
+        boolean hasClues = evaluator.evaluateIndications("clue.A && clue.1", context, null);
 
         assertThat(hasClues).isFalse();
     }
@@ -79,7 +81,7 @@ public class ExpressionEvaluatorTest {
         final GameContext context = new GameContext(new Die(12), null);
         context.addIndication(new Indication(IndicationType.CLUE, "A"));
 
-        boolean hasClues = evaluator.evaluateIndications("clue.A || clue.1 && clue.C", context);
+        boolean hasClues = evaluator.evaluateIndications("clue.A || clue.1 && clue.C", context, null);
 
         assertThat(hasClues).isTrue();
     }
@@ -91,7 +93,7 @@ public class ExpressionEvaluatorTest {
         final GameContext context = new GameContext(new Die(12), null);
         context.addIndication(new Indication(IndicationType.CLUE, "A"));
 
-        boolean hasClues = evaluator.evaluateIndications("(clue.A || clue.1) && clue.C", context);
+        boolean hasClues = evaluator.evaluateIndications("(clue.A || clue.1) && clue.C", context, null);
 
         assertThat(hasClues).isFalse();
     }
@@ -102,9 +104,35 @@ public class ExpressionEvaluatorTest {
         final ExpressionEvaluator evaluator = new ExpressionEvaluator();
         final GameContext context = new GameContext(new Die(12), null);
 
-        boolean hasIndications = evaluator.evaluateIndications("clue.A || decision.45 || deduction.5 || event.4", context);
+        boolean hasIndications = evaluator.evaluateIndications("clue.A || decision.45 || deduction.5 || event.4", context, null);
 
         assertThat(hasIndications).isFalse();
+    }
+
+    @Test
+    @DisplayName("evaluateSkills should return the value of the skill")
+    public void evaluateSkillsShouldReturnTheValueOfTheSkill() {
+        final ExpressionEvaluator evaluator = new ExpressionEvaluator();
+        final CharacterEntity character = new CharacterBuilder("John")
+                .skill("observation", 1).build();
+        final GameContext context = new GameContext(null, character);
+
+        int value = evaluator.evaluateSkills("skill.observation", context);
+
+        assertThat(value).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("evaluateSkills should throw an exception if skill does not exist")
+    public void evaluateSkillsShouldThrowAnExceptionIfSkillDoesNotExist() {
+        final ExpressionEvaluator evaluator = new ExpressionEvaluator();
+        final CharacterEntity character = new CharacterBuilder("John")
+                .skill("athletics", 1).build();
+        final GameContext context = new GameContext(null, character);
+
+        assertThatExceptionOfType(PropertyAccessException.class)
+                .isThrownBy(() -> evaluator.evaluateSkills("skill.intuition", context))
+                .withCause(new IllegalStateException("Skill \"intuition\" does not exist."));
     }
 
 }

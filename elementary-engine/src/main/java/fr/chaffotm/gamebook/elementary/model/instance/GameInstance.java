@@ -1,23 +1,23 @@
 package fr.chaffotm.gamebook.elementary.model.instance;
 
-import fr.chaffotm.gamebook.elementary.model.definition.StoryDefinition;
+import fr.chaffotm.gamebook.elementary.model.entity.StoryEntity;
 import fr.chaffotm.gamebook.elementary.service.Die;
 import fr.chaffotm.gamebook.elementary.service.GameContext;
 
 public class GameInstance {
 
-    private final StoryDefinition story;
+    private final StoryEntity story;
 
     private GameContext context;
 
     private SectionInstance section;
 
-    public GameInstance(final StoryDefinition story) {
+    public GameInstance(final StoryEntity story) {
         this.story = story;
         this.context = new GameContext(new Die(12), story.getCharacter());
     }
 
-    public StoryDefinition getStory() {
+    public StoryEntity getStory() {
         return story;
     }
 

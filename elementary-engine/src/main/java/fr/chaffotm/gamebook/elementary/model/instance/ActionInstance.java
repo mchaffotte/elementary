@@ -1,6 +1,6 @@
 package fr.chaffotm.gamebook.elementary.model.instance;
 
-import fr.chaffotm.gamebook.elementary.model.definition.Event;
+import fr.chaffotm.gamebook.elementary.model.entity.EventEntity;
 
 import java.util.Objects;
 
@@ -8,20 +8,20 @@ public class ActionInstance {
 
     private final String description;
 
-    private final int nextId;
+    private final int nextReference;
 
-    private final Event event;
+    private final EventEntity event;
 
-    public ActionInstance(final int nextId) {
-        this(nextId, null);
+    public ActionInstance(final int nextReference) {
+        this(nextReference, null);
     }
 
-    public ActionInstance(final int nextId, final String description) {
-        this(nextId, description, null);
+    public ActionInstance(final int nextReference, final String description) {
+        this(nextReference, description, null);
     }
 
-    public ActionInstance(final int nextId, final String description, final Event event) {
-        this.nextId = nextId;
+    public ActionInstance(final int nextReference, final String description, final EventEntity event) {
+        this.nextReference = nextReference;
         this.description = description;
         this.event = event;
     }
@@ -30,11 +30,11 @@ public class ActionInstance {
         return description;
     }
 
-    public int getNextId() {
-        return nextId;
+    public int getNextReference() {
+        return nextReference;
     }
 
-    public Event getEvent() {
+    public EventEntity getEvent() {
         return event;
     }
 
@@ -43,13 +43,22 @@ public class ActionInstance {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ActionInstance that = (ActionInstance) o;
-        return nextId == that.nextId &&
+        return nextReference == that.nextReference &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(event, that.event);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(description, nextId, event);
+        return Objects.hash(description, nextReference, event);
+    }
+
+    @Override
+    public String toString() {
+        return "ActionInstance{" +
+                "description='" + description + '\'' +
+                ", nextReference=" + nextReference +
+                ", event=" + event +
+                '}';
     }
 }
