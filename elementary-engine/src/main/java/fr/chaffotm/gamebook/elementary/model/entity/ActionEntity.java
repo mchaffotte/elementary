@@ -19,6 +19,13 @@ public class ActionEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JoinTable(name = "option_action",
+            joinColumns=@JoinColumn(name="action_id"),
+            inverseJoinColumns = @JoinColumn(name = "option_id"),
+            uniqueConstraints = @UniqueConstraint(name="uk_action_option", columnNames = {"option_id"}),
+            foreignKey = @ForeignKey(name = "fk_option_action_id"),
+            inverseForeignKey = @ForeignKey(name = "fk_action_option_id")
+    )
     private List<OptionEntity> options = new ArrayList<>();
 
     public Long getId() {

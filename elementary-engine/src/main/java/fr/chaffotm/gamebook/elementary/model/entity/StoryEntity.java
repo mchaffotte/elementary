@@ -17,6 +17,7 @@ public class StoryEntity {
     @GeneratedValue(generator = "storySeq")
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
@@ -30,6 +31,13 @@ public class StoryEntity {
     @OneToMany(
             cascade = CascadeType.ALL,
             orphanRemoval = true
+    )
+    @JoinTable(name = "section_story",
+            joinColumns=@JoinColumn(name="story_id"),
+            inverseJoinColumns = @JoinColumn(name = "section_id"),
+            uniqueConstraints = @UniqueConstraint(name="uk_story_section", columnNames = {"section_id"}),
+            foreignKey = @ForeignKey(name = "fk_section_story_id"),
+            inverseForeignKey = @ForeignKey(name = "fk_story_section_id")
     )
     private Set<SectionEntity> sections = new HashSet<>();
 

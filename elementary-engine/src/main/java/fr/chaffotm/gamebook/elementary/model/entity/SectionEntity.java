@@ -23,9 +23,9 @@ public class SectionEntity {
 
     private int reference;
 
-    @Column(name = "paragraph")
+    @Column(name = "content", nullable = false)
     @ElementCollection
-    @CollectionTable(name = "paragraphs",
+    @CollectionTable(name = "paragraph",
             joinColumns = @JoinColumn(name = "section_id"),
             foreignKey = @ForeignKey(name = "fk_section_paragraph")
     )
@@ -35,6 +35,13 @@ public class SectionEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JoinTable(name = "event_section",
+            joinColumns=@JoinColumn(name="section_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id"),
+            uniqueConstraints = @UniqueConstraint(name="uk_section_event", columnNames = {"event_id"}),
+            foreignKey = @ForeignKey(name = "fk_event_section_id"),
+            inverseForeignKey = @ForeignKey(name = "fk_section_event_id")
+    )
     private List<EventEntity> events = new ArrayList<>();
 
     private ActionSelection selection;
@@ -42,6 +49,13 @@ public class SectionEntity {
     @OneToMany(
             cascade = CascadeType.ALL,
             orphanRemoval = true
+    )
+    @JoinTable(name = "action_section",
+            joinColumns=@JoinColumn(name="section_id"),
+            inverseJoinColumns = @JoinColumn(name = "action_id"),
+            uniqueConstraints = @UniqueConstraint(name="uk_section_action", columnNames = {"action_id"}),
+            foreignKey = @ForeignKey(name = "fk_action_section_id"),
+            inverseForeignKey = @ForeignKey(name = "fk_section_action_id")
     )
     private List<ActionEntity> actions = new ArrayList<>();
 

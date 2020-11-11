@@ -12,6 +12,7 @@ public class SkillEntity {
     @GeneratedValue(generator = "skillSeq")
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     private int value;

@@ -13,6 +13,7 @@ public class EventEntity {
     @GeneratedValue(generator = "eventSeq")
     private Long id;
 
+    @Column(nullable = false)
     private String type;
 
     @OneToMany(

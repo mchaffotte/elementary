@@ -11,6 +11,7 @@ public class ParameterEntity {
     @GeneratedValue(generator = "parameterSeq")
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     private String value;

@@ -39,7 +39,7 @@ public class GameResourceIT {
 
         given()
             .when()
-                .body("{\"query\":\"mutation turnTo {\\n  turnTo(sectionId: 254) {\\n    section {\\n      id\\n      paragraphs\\n    actions {\\n        id\\n        description\\n      }\\n    }\\n  }\\n}\",\"variables\":null,\"operationName\":\"turnTo\"}")
+                .body("{\"query\":\"mutation turnTo {\\n  turnTo(nextReference: 254) {\\n    section {\\n      id\\n      paragraphs\\n    actions {\\n        id\\n        description\\n      }\\n    }\\n  }\\n}\",\"variables\":null,\"operationName\":\"turnTo\"}")
                 .post("/graphql")
             .then()
                 .statusCode(200)

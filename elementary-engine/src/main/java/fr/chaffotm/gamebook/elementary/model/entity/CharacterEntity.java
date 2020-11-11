@@ -18,6 +18,7 @@ public class CharacterEntity {
     @JoinColumn(name = "story_id", foreignKey = @ForeignKey(name = "fk_character_story"))
     private StoryEntity story;
 
+    @Column(nullable = false)
     private String name;
 
     @OneToMany(

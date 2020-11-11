@@ -3,6 +3,7 @@ package fr.chaffotm.gamebook.elementary.model.entity;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "option")
 public class OptionEntity {
 
     @Id
@@ -14,6 +15,7 @@ public class OptionEntity {
 
     private String description;
 
+    @Column(name = "next_reference", nullable = false)
     private int nextReference;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

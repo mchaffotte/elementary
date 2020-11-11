@@ -30,8 +30,8 @@ public class GameResource {
     }
 
     @Mutation
-    public Game turnTo(@Name("sectionId") final int id) {
-        return service.turnTo(id);
+    public Game turnTo(final int nextReference) {
+        return service.turnTo(nextReference);
     }
 
     @Mutation
