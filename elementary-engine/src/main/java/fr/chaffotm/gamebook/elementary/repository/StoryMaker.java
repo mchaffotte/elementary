@@ -1,11 +1,10 @@
 package fr.chaffotm.gamebook.elementary.repository;
 
 import fr.chaffotm.gamebook.elementary.model.builder.*;
-import fr.chaffotm.gamebook.elementary.model.entity.StoryEntity;
 
 public class StoryMaker {
 
-    public StoryEntity buildDefault() {
+    public StoryContext buildDefault() {
         return new StoryBuilder("Trapped")
                 .character(new CharacterBuilder("John Doe")
                         .skill("intuition", 1)

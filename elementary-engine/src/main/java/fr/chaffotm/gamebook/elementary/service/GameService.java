@@ -1,5 +1,6 @@
 package fr.chaffotm.gamebook.elementary.service;
 
+import fr.chaffotm.gamebook.elementary.model.entity.CharacterEntity;
 import fr.chaffotm.gamebook.elementary.model.entity.EventEntity;
 import fr.chaffotm.gamebook.elementary.model.entity.SectionEntity;
 import fr.chaffotm.gamebook.elementary.model.entity.StoryEntity;
@@ -42,7 +43,8 @@ public class GameService {
             throw new IllegalStateException("Another game is already in progress");
         }
         final StoryEntity story = storyService.getStoryEntity();
-        final GameInstance game = new GameInstance(story);
+        final CharacterEntity character = storyService.getCharacter(story);
+        final GameInstance game = new GameInstance(story, character);
         final GameContext context = new GameContext(game.getContext());
         return turnTo(game, null, story.getPrologue(), context);
     }
@@ -63,7 +65,8 @@ public class GameService {
         final SectionEntity prologue = story.getPrologue();
         final EventEntity event = instance.getEvent();
         if (reference == prologue.getReference()) {
-            final GameContext context = new GameContext(game.getContext().getDie(), story.getCharacter());
+            final CharacterEntity character = storyService.getCharacter(story);
+            final GameContext context = new GameContext(game.getContext().getDie(), character);
             return turnTo(game, event, prologue, context);
         }
         final GameContext context = new GameContext(game.getContext());

@@ -1,5 +1,7 @@
 package fr.chaffotm.gamebook.elementary.repository;
 
+import fr.chaffotm.gamebook.elementary.model.builder.StoryContext;
+import fr.chaffotm.gamebook.elementary.model.entity.CharacterEntity;
 import fr.chaffotm.gamebook.elementary.model.entity.SectionEntity;
 import fr.chaffotm.gamebook.elementary.model.entity.StoryEntity;
 
@@ -12,6 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.util.List;
 
 @ApplicationScoped
 public class StoryEntityRepository {
@@ -26,8 +29,15 @@ public class StoryEntityRepository {
     @PostConstruct
     @Transactional
     public void populate() {
-        final StoryEntity story = new StoryMaker().buildDefault();
+        final StoryContext context = new StoryMaker().buildDefault();
+        final StoryEntity story = context.getStory();
+        final List<SectionEntity> sections = context.getSections();
         em.persist(story);
+        em.persist(context.getCharacter());
+        for (SectionEntity section : sections) {
+            section.setStory(story);
+            em.persist(section);
+        }
     }
 
     public StoryEntity getStory() {
@@ -45,4 +55,9 @@ public class StoryEntityRepository {
         query.setParameter("reference", reference);
         return query.getSingleResult();
     }
+
+    public CharacterEntity getCharacter(StoryEntity story) {
+        return em.find(CharacterEntity.class, story.getId());
+    }
+
 }

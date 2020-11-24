@@ -4,27 +4,25 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity(name = "Action")
 @Table(name = "action")
 public class ActionEntity {
 
     @Id
-    @SequenceGenerator(name = "actionSeq", sequenceName = "action_id_seq", allocationSize = 1, initialValue = 1)
+    @SequenceGenerator(name = "actionSeq", sequenceName = "action_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "actionSeq")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "section_id", foreignKey = @ForeignKey(name = "fk_action_section_id"))
+    private SectionEntity section;
 
     private String expression;
 
     @OneToMany(
+            mappedBy = "action",
             cascade = CascadeType.ALL,
             orphanRemoval = true
-    )
-    @JoinTable(name = "option_action",
-            joinColumns=@JoinColumn(name="action_id"),
-            inverseJoinColumns = @JoinColumn(name = "option_id"),
-            uniqueConstraints = @UniqueConstraint(name="uk_action_option", columnNames = {"option_id"}),
-            foreignKey = @ForeignKey(name = "fk_option_action_id"),
-            inverseForeignKey = @ForeignKey(name = "fk_action_option_id")
     )
     private List<OptionEntity> options = new ArrayList<>();
 
@@ -34,6 +32,14 @@ public class ActionEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public SectionEntity getSection() {
+        return section;
+    }
+
+    public void setSection(SectionEntity section) {
+        this.section = section;
     }
 
     public String getExpression() {
@@ -54,5 +60,6 @@ public class ActionEntity {
 
     public void addOption(final OptionEntity option) {
         options.add(option);
+        option.setAction(this);
     }
 }

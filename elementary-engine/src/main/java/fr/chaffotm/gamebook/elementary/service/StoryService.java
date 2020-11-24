@@ -1,5 +1,6 @@
 package fr.chaffotm.gamebook.elementary.service;
 
+import fr.chaffotm.gamebook.elementary.model.entity.CharacterEntity;
 import fr.chaffotm.gamebook.elementary.model.entity.SectionEntity;
 import fr.chaffotm.gamebook.elementary.model.entity.StoryEntity;
 import fr.chaffotm.gamebook.elementary.model.mapper.StoryMapper;
@@ -30,5 +31,9 @@ public class StoryService {
 
     public SectionEntity getSection(final StoryEntity story, int reference) {
         return repository.getSection(story, reference);
+    }
+
+    public CharacterEntity getCharacter(final StoryEntity story) {
+        return repository.getCharacter(story);
     }
 }

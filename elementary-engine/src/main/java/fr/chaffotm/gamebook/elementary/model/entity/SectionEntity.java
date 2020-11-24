@@ -6,20 +6,27 @@ import java.util.List;
 
 @Entity(name = "Section")
 @Table(name = "section",
-        uniqueConstraints = @UniqueConstraint(name = "uk_story_reference", columnNames = {"story_id", "reference"})
-)
+        uniqueConstraints = {
+            @UniqueConstraint(name = "uk_story_section", columnNames = {"story_id", "reference"}),
+            @UniqueConstraint(name = "uk_prologue_story_section", columnNames = {"prologue_story_id", "reference"})
+        })
 @NamedQuery(name = "getSection",
         query = "SELECT s FROM Section s WHERE s.story=:story AND s.reference=:reference")
+@EntityListeners(ReadOnlyEntityListener.class)
 public class SectionEntity {
 
     @Id
-    @SequenceGenerator(name = "sectionSeq", sequenceName = "section_id_seq", allocationSize = 1, initialValue = 1)
+    @SequenceGenerator(name = "sectionSeq", sequenceName = "section_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "sectionSeq")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "story_id", foreignKey = @ForeignKey(name = "fk_section_story"))
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "story_id", foreignKey = @ForeignKey(name = "fx_section_story"))
     private StoryEntity story;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prologue_story_id", foreignKey = @ForeignKey(name = "fx_section_prologue_story"))
+    private StoryEntity prologueStory;
 
     private int reference;
 
@@ -32,30 +39,18 @@ public class SectionEntity {
     private List<String> paragraphs = new ArrayList<>();
 
     @OneToMany(
+            mappedBy = "section",
             cascade = CascadeType.ALL,
             orphanRemoval = true
-    )
-    @JoinTable(name = "event_section",
-            joinColumns=@JoinColumn(name="section_id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id"),
-            uniqueConstraints = @UniqueConstraint(name="uk_section_event", columnNames = {"event_id"}),
-            foreignKey = @ForeignKey(name = "fk_event_section_id"),
-            inverseForeignKey = @ForeignKey(name = "fk_section_event_id")
     )
     private List<EventEntity> events = new ArrayList<>();
 
     private ActionSelection selection;
 
     @OneToMany(
+            mappedBy = "section",
             cascade = CascadeType.ALL,
             orphanRemoval = true
-    )
-    @JoinTable(name = "action_section",
-            joinColumns=@JoinColumn(name="section_id"),
-            inverseJoinColumns = @JoinColumn(name = "action_id"),
-            uniqueConstraints = @UniqueConstraint(name="uk_section_action", columnNames = {"action_id"}),
-            foreignKey = @ForeignKey(name = "fk_action_section_id"),
-            inverseForeignKey = @ForeignKey(name = "fk_section_action_id")
     )
     private List<ActionEntity> actions = new ArrayList<>();
 
@@ -73,6 +68,14 @@ public class SectionEntity {
 
     public void setStory(StoryEntity story) {
         this.story = story;
+    }
+
+    public StoryEntity getPrologueStory() {
+        return prologueStory;
+    }
+
+    public void setPrologueStory(StoryEntity prologueStory) {
+        this.prologueStory = prologueStory;
     }
 
     public int getReference() {
@@ -105,6 +108,7 @@ public class SectionEntity {
 
     public void addEvent(final EventEntity event) {
         events.add(event);
+        event.setSection(this);
     }
 
     public ActionSelection getSelection() {
@@ -125,5 +129,6 @@ public class SectionEntity {
 
     public void addAction(final ActionEntity action) {
         actions.add(action);
+        action.setSection(this);
     }
 }

@@ -3,14 +3,18 @@ package fr.chaffotm.gamebook.elementary.model.entity;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
+@Entity(name = "Skill")
 @Table(name = "skill")
 public class SkillEntity {
 
     @Id
-    @SequenceGenerator(name = "skillSeq", sequenceName = "skill_id_seq", allocationSize = 1, initialValue = 1)
+    @SequenceGenerator(name = "skillSeq", sequenceName = "skill_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "skillSeq")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "character_id", foreignKey = @ForeignKey(name = "fx_skill_character"))
+    private CharacterEntity character;
 
     @Column(nullable = false)
     private String name;
@@ -32,6 +36,14 @@ public class SkillEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public CharacterEntity getCharacter() {
+        return character;
+    }
+
+    public void setCharacter(CharacterEntity character) {
+        this.character = character;
     }
 
     public String getName() {

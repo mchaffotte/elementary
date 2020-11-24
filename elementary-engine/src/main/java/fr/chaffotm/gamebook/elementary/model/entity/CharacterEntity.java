@@ -5,27 +5,26 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-@Entity
+@Entity(name = "Character")
 @Table(name = "character")
 public class CharacterEntity {
 
     @Id
-    @SequenceGenerator(name = "characterSeq", sequenceName = "character_id_seq", allocationSize = 1, initialValue = 1)
-    @GeneratedValue(generator = "characterSeq")
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "story_id", foreignKey = @ForeignKey(name = "fk_character_story"))
+    @MapsId
+    @JoinColumn(name = "story_id", foreignKey = @ForeignKey(name = "fx_character_story"))
     private StoryEntity story;
 
     @Column(nullable = false)
     private String name;
 
     @OneToMany(
+            mappedBy = "character",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "character_id", foreignKey = @ForeignKey(name = "fk_character_skill_id"))
     private Set<SkillEntity> skills = new HashSet<>();
 
     public CharacterEntity() {
@@ -39,6 +38,7 @@ public class CharacterEntity {
             skills.add(new SkillEntity(skill));
         }
     }
+
 
     public Long getId() {
         return id;
@@ -72,13 +72,14 @@ public class CharacterEntity {
         this.skills = skills;
     }
 
+    public void addSkill(final SkillEntity skill) {
+        skills.add(skill);
+        skill.setCharacter(this);
+    }
+
     public Optional<SkillEntity> getSkill(final String name) {
         return skills.stream()
                 .filter(skill -> skill.getName().equals(name))
                 .findFirst();
-    }
-
-    public void addSkill(final SkillEntity skill) {
-        skills.add(skill);
     }
 }

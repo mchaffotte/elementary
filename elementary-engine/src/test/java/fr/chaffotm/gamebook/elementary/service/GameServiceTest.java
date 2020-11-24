@@ -38,11 +38,7 @@ public class GameServiceTest {
         service.stopGame();
     }
 
-    private StoryEntity buildStory(final EventEntity actionEvent, final EventEntity nextSectionEvent) {
-        final SectionEntity prologue = new SectionEntity();
-        prologue.setReference(0);
-        prologue.setParagraphs(List.of("Prologue 1", "Prologue 2"));
-        prologue.setActions(List.of(buildAction(2, null, actionEvent)));
+    private SectionEntity buildSection2(final EventEntity nextSectionEvent) {
         final SectionEntity section2 = new SectionEntity();
         section2.setReference(2);
         if (nextSectionEvent != null) {
@@ -50,12 +46,18 @@ public class GameServiceTest {
         }
         section2.setParagraphs(List.of("Section 2"));
         section2.setActions(List.of(buildAction(4, null, null), buildAction(0, null, null)));
+        return section2;
+    }
+
+    private StoryEntity buildStory(final EventEntity actionEvent) {
+        final SectionEntity prologue = new SectionEntity();
+        prologue.setReference(0);
+        prologue.setParagraphs(List.of("Prologue 1", "Prologue 2"));
+        prologue.setActions(List.of(buildAction(2, null, actionEvent)));
 
         final StoryEntity definition = new StoryEntity();
         definition.setName("Test");
         definition.setPrologue(prologue);
-        definition.addSection(section2);
-        definition.setCharacter(new CharacterEntity());
         return definition;
     }
 
@@ -80,7 +82,7 @@ public class GameServiceTest {
     private GameInstance buildGame(final StoryEntity story, ActionInstance action) {
         final SectionInstance section = new SectionInstance();
         section.setActions(List.of(action));
-        final GameInstance game = new GameInstance(story);
+        final GameInstance game = new GameInstance(story, new CharacterEntity());
         game.setSection(section);
         return game;
     }
@@ -106,7 +108,8 @@ public class GameServiceTest {
     @Test
     @DisplayName("startGame should return the prologue")
     public void startGameShouldReturnThePrologue() {
-        when(storyService.getStoryEntity()).thenReturn(buildStory(null, null));
+        when(storyService.getStoryEntity()).thenReturn(buildStory(null));
+        when(storyService.getCharacter(any())).thenReturn(new CharacterEntity());
 
         final Game game = service.startGame();
 
@@ -119,14 +122,14 @@ public class GameServiceTest {
     @DisplayName("startGame should throw an exception if prologue event throws an exception")
     public void startGameShouldThrowAnExceptionIfPrologueEventThrowsAnException() {
         final StoryEntity story = new StoryBuilder("Once upon a time")
-                .character(new CharacterEntity())
                 .prologue(new SectionBuilder(0)
                         .event(new EventBuilder("add-indication")
                                 .parameter("clue", "Q").build())
                         .event(new EventBuilder("unknown").build())
                         .build())
-                .build();
+                .build().getStory();
         when(storyService.getStoryEntity()).thenReturn(story);
+        when(storyService.getCharacter(any())).thenReturn(new CharacterEntity());
 
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> service.startGame());
@@ -136,9 +139,9 @@ public class GameServiceTest {
     @Test
     @DisplayName("startGame should return an exception if another game is already in progress")
     public void startGameShouldThrowAnExceptionIfAnotherGameIsAlreadyInProgress() {
-        final StoryEntity story = buildStory(null, null);
+        final StoryEntity story = buildStory(null);
         when(storyService.getStoryEntity()).thenReturn(story);
-        when(gameRepository.getGame()).thenReturn(new GameInstance(story));
+        when(gameRepository.getGame()).thenReturn(new GameInstance(story, new CharacterEntity()));
 
         assertThatIllegalStateException()
                 .isThrownBy(() -> service.startGame())
@@ -156,7 +159,8 @@ public class GameServiceTest {
     @Test
     @DisplayName("turnTo should throw an exception if section is not reachable")
     public void turnToShouldThrowAnExceptionIfSectionIsNotReachable() {
-        when(storyService.getStoryEntity()).thenReturn(buildStory(null, null));
+        when(storyService.getStoryEntity()).thenReturn(buildStory(null));
+        when(storyService.getCharacter(any())).thenReturn(new CharacterEntity());
         service.startGame();
 
         assertThatIllegalArgumentException()
@@ -167,9 +171,9 @@ public class GameServiceTest {
     @Test
     @DisplayName("turnTo should go to new section")
     public void turnToShouldGoToNewSection() {
-        final StoryEntity story = buildStory(null, null);
+        final StoryEntity story = buildStory(null);
         when(storyService.getStoryEntity()).thenReturn(story);
-        when(storyService.getSection(story, 2)).thenReturn(story.getSections().iterator().next());
+        when(storyService.getSection(story, 2)).thenReturn(buildSection2(null));
         final GameInstance instance = buildGame(story, 2);
         when(gameRepository.getGame()).thenReturn(instance);
 
@@ -182,9 +186,9 @@ public class GameServiceTest {
     @Test
     @DisplayName("turnTo should update context with action event")
     public void turnToShouldUpdateContextWithActionEvent() {
-        final StoryEntity story = buildStory(buildClueEvent("Z"), null);
+        final StoryEntity story = buildStory(buildClueEvent("Z"));
         when(storyService.getStoryEntity()).thenReturn(story);
-        when(storyService.getSection(story, 2)).thenReturn(story.getSections().iterator().next());
+        when(storyService.getSection(story, 2)).thenReturn(buildSection2(null));
         final GameInstance game = buildGame(story, 2, "Z");
         when(gameRepository.getGame()).thenReturn(game);
 
@@ -208,7 +212,7 @@ public class GameServiceTest {
                                         .event(new EventBuilder("unknown").build()).build())
                                 .build())
                         .build())
-                .build();
+                .build().getStory();
         when(storyService.getStoryEntity()).thenReturn(story);
         final GameInstance game = buildGame(story, new ActionInstance(2, null, null));
         when(gameRepository.getGame()).thenReturn(game);
@@ -224,9 +228,9 @@ public class GameServiceTest {
     public void turnToShouldUpdateContextWithNextSectionEvent() {
         final EventEntity event = new EventBuilder("add-indication")
                 .parameter("clue", "Z").build();
-        final StoryEntity story = buildStory(null, event);
+        final StoryEntity story = buildStory(null);
         when(storyService.getStoryEntity()).thenReturn(story);
-        when(storyService.getSection(story, 2)).thenReturn(story.getSections().iterator().next());
+        when(storyService.getSection(story, 2)).thenReturn(buildSection2(event));
         final GameInstance game = buildGame(story, 2);
         when(gameRepository.getGame()).thenReturn(game);
 
@@ -249,7 +253,7 @@ public class GameServiceTest {
                                 .parameter("clue", "Q").build())
                         .event(new EventBuilder("unknown").build())
                         .build())
-                .build();
+                .build().getStory();
         when(storyService.getStoryEntity()).thenReturn(story);
         final GameInstance game = buildGame(story, 2);
         when(gameRepository.getGame()).thenReturn(game);
@@ -263,7 +267,7 @@ public class GameServiceTest {
     @Test
     @DisplayName("turnTo should restart the game")
     public void turnToShouldRestartTheGame() {
-        final StoryEntity story = buildStory(null, null);
+        final StoryEntity story = buildStory(null);
         when(storyService.getStoryEntity()).thenReturn(story);
         final GameContext context = new GameContext(new Die(12), new CharacterEntity());
         context.addIndication(new Indication(IndicationType.CLUE, "A"));

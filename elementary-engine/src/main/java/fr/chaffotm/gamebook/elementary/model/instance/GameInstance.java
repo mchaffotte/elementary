@@ -1,5 +1,6 @@
 package fr.chaffotm.gamebook.elementary.model.instance;
 
+import fr.chaffotm.gamebook.elementary.model.entity.CharacterEntity;
 import fr.chaffotm.gamebook.elementary.model.entity.StoryEntity;
 import fr.chaffotm.gamebook.elementary.service.Die;
 import fr.chaffotm.gamebook.elementary.service.GameContext;
@@ -12,9 +13,9 @@ public class GameInstance {
 
     private SectionInstance section;
 
-    public GameInstance(final StoryEntity story) {
+    public GameInstance(final StoryEntity story, final CharacterEntity character) {
         this.story = story;
-        this.context = new GameContext(new Die(12), story.getCharacter());
+        this.context = new GameContext(new Die(12), character);
     }
 
     public StoryEntity getStory() {

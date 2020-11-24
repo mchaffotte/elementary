@@ -2,14 +2,18 @@ package fr.chaffotm.gamebook.elementary.model.entity;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "Option")
 @Table(name = "option")
 public class OptionEntity {
 
     @Id
-    @SequenceGenerator(name = "optionSeq", sequenceName = "option_id_seq", allocationSize = 1, initialValue = 1)
+    @SequenceGenerator(name = "optionSeq", sequenceName = "option_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "optionSeq")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "action_id", foreignKey = @ForeignKey(name = "fk_option_action_id"))
+    private ActionEntity action;
 
     private String expression;
 
@@ -28,6 +32,14 @@ public class OptionEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public ActionEntity getAction() {
+        return action;
+    }
+
+    public void setAction(ActionEntity action) {
+        this.action = action;
     }
 
     public String getExpression() {

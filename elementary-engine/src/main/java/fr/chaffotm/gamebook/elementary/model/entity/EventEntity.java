@@ -4,23 +4,27 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@Entity(name = "Event")
 @Table(name = "event")
 public class EventEntity {
 
     @Id
-    @SequenceGenerator(name = "eventSeq", sequenceName = "event_id_seq", allocationSize = 1, initialValue = 1)
+    @SequenceGenerator(name = "eventSeq", sequenceName = "event_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "eventSeq")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "section_id", foreignKey = @ForeignKey(name = "fk_event_section_id"))
+    private SectionEntity section;
 
     @Column(nullable = false)
     private String type;
 
     @OneToMany(
+            mappedBy = "event",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "event_id", foreignKey = @ForeignKey(name = "fk_event_parameter_id"))
     private Set<ParameterEntity> parameters = new HashSet<>();
 
     public Long getId() {
@@ -29,6 +33,14 @@ public class EventEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public SectionEntity getSection() {
+        return section;
+    }
+
+    public void setSection(SectionEntity section) {
+        this.section = section;
     }
 
     public String getType() {
@@ -50,5 +62,4 @@ public class EventEntity {
     public void addParameter(final ParameterEntity parameter) {
         parameters.add(parameter);
     }
-
 }
