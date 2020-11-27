@@ -1,10 +1,10 @@
 package fr.chaffotm.gamebook.elementary.service.action;
 
-import fr.chaffotm.gamebook.elementary.model.builder.ActionBuilder;
-import fr.chaffotm.gamebook.elementary.model.builder.CharacterBuilder;
-import fr.chaffotm.gamebook.elementary.model.builder.OptionBuilder;
-import fr.chaffotm.gamebook.elementary.model.entity.ActionEntity;
-import fr.chaffotm.gamebook.elementary.model.entity.CharacterEntity;
+import fr.chaffotm.gamebook.elementary.model.builder.ActionDefinitionBuilder;
+import fr.chaffotm.gamebook.elementary.model.builder.CharacterDefinitionBuilder;
+import fr.chaffotm.gamebook.elementary.model.builder.OptionDefinitionBuilder;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.ActionDefinition;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.CharacterDefinition;
 import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
 import fr.chaffotm.gamebook.elementary.model.instance.Indication;
 import fr.chaffotm.gamebook.elementary.model.instance.IndicationType;
@@ -30,7 +30,7 @@ public class ActionEvaluatorTest {
     @Test
     @DisplayName("toInstance should create an instance with reference and description")
     public void toInstanceShouldCopyDefinitionToInstance() {
-        final ActionEntity action = new ActionBuilder("If you want to enter in the cockpit", 125)
+        final ActionDefinition action = new ActionDefinitionBuilder("If you want to enter in the cockpit", 125)
                 .build();
         final GameContext context = new GameContext(new Die(12), null);
         final ActionEvaluator evaluator = new ActionEvaluator();
@@ -44,8 +44,8 @@ public class ActionEvaluatorTest {
     @Test
     @DisplayName("toInstance should not choose the path because the clue has not yet been found")
     public void toInstanceShouldNotChooseThePathBecauseTheClueHasNotYetBeenFound() {
-        final ActionEntity action = new ActionBuilder(
-                new OptionBuilder(485)
+        final ActionDefinition action = new ActionDefinitionBuilder(
+                new OptionDefinitionBuilder(485)
                         .expression("clue.A").build())
                 .build();
         final GameContext context = new GameContext(null, null);
@@ -59,8 +59,8 @@ public class ActionEvaluatorTest {
     @Test
     @DisplayName("toInstance should choose the path because the clue has been found")
     public void toInstanceShouldChooseThePathBecauseTheClueHasBeenFound() {
-        final ActionEntity action = new ActionBuilder(
-                new OptionBuilder(485)
+        final ActionDefinition action = new ActionDefinitionBuilder(
+                new OptionDefinitionBuilder(485)
                         .expression("clue.A").build())
                 .build();
         final GameContext context = new GameContext(null, null);
@@ -76,14 +76,14 @@ public class ActionEvaluatorTest {
     @Test
     @DisplayName("toInstance should choose the first option")
     public void toInstanceShouldChooseTheFirstOption() {
-        final ActionEntity action = new ActionBuilder(
-                new OptionBuilder(458)
+        final ActionDefinition action = new ActionDefinitionBuilder(
+                new OptionDefinitionBuilder(458)
                         .expression("value <= 6").build())
-                .option(new OptionBuilder(12)
+                .option(new OptionDefinitionBuilder(12)
                         .expression("value <= 12").build())
                 .expression("die.roll()")
                 .build();
-        final GameContext context = new GameContext(die, new CharacterEntity());
+        final GameContext context = new GameContext(die, new CharacterDefinition());
         context.addIndication(new Indication(IndicationType.CLUE, "A"));
         final ActionEvaluator evaluator = new ActionEvaluator();
         final ActionInstance expected = new ActionInstance(458);
@@ -97,14 +97,14 @@ public class ActionEvaluatorTest {
     @Test
     @DisplayName("toInstance should choose the second option")
     public void toInstanceShouldChooseTheSecondOption() {
-        final ActionEntity action = new ActionBuilder(
-                new OptionBuilder(458)
+        final ActionDefinition action = new ActionDefinitionBuilder(
+                new OptionDefinitionBuilder(458)
                         .expression("value <= 6").build())
-                .option(new OptionBuilder(12)
+                .option(new OptionDefinitionBuilder(12)
                         .expression("value <= 12").build())
                 .expression("die.roll()")
                 .build();
-        final GameContext context = new GameContext(die, new CharacterEntity());
+        final GameContext context = new GameContext(die, new CharacterDefinition());
         final ActionEvaluator evaluator = new ActionEvaluator();
         final ActionInstance expected = new ActionInstance(12);
         when(die.roll()).thenReturn(7);
@@ -117,14 +117,14 @@ public class ActionEvaluatorTest {
     @Test
     @DisplayName("toInstance should choose no option")
     public void toInstanceShouldChooseNoOption() {
-        final ActionEntity action = new ActionBuilder(
-                new OptionBuilder(458)
+        final ActionDefinition action = new ActionDefinitionBuilder(
+                new OptionDefinitionBuilder(458)
                         .expression("value <= 6").build())
-                .option(new OptionBuilder(12)
+                .option(new OptionDefinitionBuilder(12)
                         .expression("value <= 12").build())
                 .expression("die.roll()")
                 .build();
-        final GameContext context = new GameContext(die, new CharacterEntity());
+        final GameContext context = new GameContext(die, new CharacterDefinition());
         final ActionEvaluator evaluator = new ActionEvaluator();
         when(die.roll()).thenReturn(13);
 
@@ -136,14 +136,14 @@ public class ActionEvaluatorTest {
     @Test
     @DisplayName("toInstance should add the bonus and choose the second option")
     public void toInstanceShouldAddSKillAndChooseTheSecondOption() {
-        final ActionEntity action = new ActionBuilder(
-                new OptionBuilder(458)
+        final ActionDefinition action = new ActionDefinitionBuilder(
+                new OptionDefinitionBuilder(458)
                         .expression("value <= 6").build())
-                .option(new OptionBuilder(12)
+                .option(new OptionDefinitionBuilder(12)
                         .expression("value <= 12").build())
                 .expression("die.roll() + skill.observation")
                 .build();
-        final CharacterEntity character = new CharacterBuilder("John")
+        final CharacterDefinition character = new CharacterDefinitionBuilder("John")
                 .skill("observation", 1).build();
         final GameContext context = new GameContext(die, character);
         context.addIndication(new Indication(IndicationType.CLUE, "A"));
@@ -159,14 +159,14 @@ public class ActionEvaluatorTest {
     @Test
     @DisplayName("toInstance should add the bonus and choose the second option")
     public void toInstanceShouldAddBonusAndChooseTheSecondOption() {
-        final ActionEntity action = new ActionBuilder(
-                new OptionBuilder(458)
+        final ActionDefinition action = new ActionDefinitionBuilder(
+                new OptionDefinitionBuilder(458)
                         .expression("value <= 6").build())
-                .option(new OptionBuilder(12)
+                .option(new OptionDefinitionBuilder(12)
                         .expression("value <= 12").build())
                 .expression("die.roll() + skill.observation")
                 .build();
-        final GameContext context = new GameContext(die, new CharacterEntity());
+        final GameContext context = new GameContext(die, new CharacterDefinition());
         context.addIndication(new Indication(IndicationType.CLUE, "A"));
         final ActionEvaluator evaluator = new ActionEvaluator();
         when(die.roll()).thenReturn(6);

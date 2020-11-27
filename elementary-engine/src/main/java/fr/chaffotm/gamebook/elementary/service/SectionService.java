@@ -1,8 +1,8 @@
 package fr.chaffotm.gamebook.elementary.service;
 
-import fr.chaffotm.gamebook.elementary.model.entity.ActionSelection;
-import fr.chaffotm.gamebook.elementary.model.entity.EventEntity;
-import fr.chaffotm.gamebook.elementary.model.entity.SectionEntity;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.ActionSelection;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.EventDefinition;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.SectionDefinition;
 import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
 import fr.chaffotm.gamebook.elementary.model.instance.SectionInstance;
 import fr.chaffotm.gamebook.elementary.service.action.ActionStrategy;
@@ -23,7 +23,7 @@ public class SectionService {
         eventFactory = new EventFactory();
     }
 
-    public SectionInstance evaluate(final SectionEntity definition, final GameContext context) {
+    public SectionInstance evaluate(final SectionDefinition definition, final GameContext context) {
         if (definition == null) {
             throw new IllegalArgumentException("Section does not exist");
         }
@@ -38,7 +38,7 @@ public class SectionService {
         }
         instance.setActions(actions);
 
-        for (EventEntity event : definition.getEvents()) {
+        for (EventDefinition event : definition.getEvents()) {
             final EventCommand command = eventFactory.getEvent(event.getType());
             command.execute(context, event.getParameters());
         }

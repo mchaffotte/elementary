@@ -1,11 +1,11 @@
 package fr.chaffotm.gamebook.elementary.service;
 
-import fr.chaffotm.gamebook.elementary.model.builder.ActionBuilder;
-import fr.chaffotm.gamebook.elementary.model.builder.EventBuilder;
-import fr.chaffotm.gamebook.elementary.model.builder.OptionBuilder;
-import fr.chaffotm.gamebook.elementary.model.builder.SectionBuilder;
-import fr.chaffotm.gamebook.elementary.model.entity.ActionSelection;
-import fr.chaffotm.gamebook.elementary.model.entity.SectionEntity;
+import fr.chaffotm.gamebook.elementary.model.builder.ActionDefinitionBuilder;
+import fr.chaffotm.gamebook.elementary.model.builder.EventDefinitionBuilder;
+import fr.chaffotm.gamebook.elementary.model.builder.OptionDefinitionBuilder;
+import fr.chaffotm.gamebook.elementary.model.builder.SectionDefinitionBuilder;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.ActionSelection;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.SectionDefinition;
 import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
 import fr.chaffotm.gamebook.elementary.model.instance.SectionInstance;
 import io.quarkus.test.junit.QuarkusTest;
@@ -26,11 +26,11 @@ public class SectionServiceTest {
     @Test
     @DisplayName("evaluate should construct a section instance")
     public void evaluateShouldConstructASectionInstance() {
-        final SectionEntity definition = new SectionBuilder(7)
+        final SectionDefinition definition = new SectionDefinitionBuilder(7)
                 .paragraph("Lorem ipsum dolor sit amet")
-                .event(new EventBuilder("add-indication").parameter("clue", "L").build())
-                .action(new ActionBuilder(new OptionBuilder(4).expression("false").build()).build())
-                .action(new ActionBuilder(2).build())
+                .event(new EventDefinitionBuilder("add-indication").parameter("clue", "L").build())
+                .action(new ActionDefinitionBuilder(new OptionDefinitionBuilder(4).expression("false").build()).build())
+                .action(new ActionDefinitionBuilder(2).build())
                 .build();
         final SectionInstance expected = new SectionInstance();
         expected.setId(7);
@@ -45,9 +45,9 @@ public class SectionServiceTest {
     @Test
     @DisplayName("evaluate should throw an exception if no action is possible while definition contains actions")
     public void evaluateShouldThrowAnExceptionIfNoActionIsPossibleWhileDefinitionContainsActions() {
-        final SectionEntity definition = new SectionBuilder(7)
+        final SectionDefinition definition = new SectionDefinitionBuilder(7)
                 .paragraph("Lorem ipsum dolor sit amet")
-                .action(new ActionBuilder(new OptionBuilder(4).expression("false").build()).build())
+                .action(new ActionDefinitionBuilder(new OptionDefinitionBuilder(4).expression("false").build()).build())
                 .build();
 
         assertThatIllegalStateException()
@@ -58,7 +58,7 @@ public class SectionServiceTest {
     @Test
     @DisplayName("evaluate should construct a section instance without actions")
     public void evaluateShouldConstructASectionInstanceWithoutActions() {
-        final SectionEntity definition = new SectionBuilder(7)
+        final SectionDefinition definition = new SectionDefinitionBuilder(7)
                 .paragraph("Lorem ipsum dolor sit amet")
                 .build();
         final SectionInstance expected = new SectionInstance();
@@ -82,11 +82,11 @@ public class SectionServiceTest {
     @Test
     @DisplayName("evaluate should choose only first action")
     public void evaluateShouldChooseAllActions() {
-        final SectionEntity definition = new SectionBuilder(7)
+        final SectionDefinition definition = new SectionDefinitionBuilder(7)
                 .paragraph("Lorem ipsum dolor sit amet")
                 .selection((ActionSelection.ALL))
-                .action(new ActionBuilder(475).build())
-                .action(new ActionBuilder(2).build())
+                .action(new ActionDefinitionBuilder(475).build())
+                .action(new ActionDefinitionBuilder(2).build())
                 .build();
         final SectionInstance expected = new SectionInstance();
         expected.setId(7);
@@ -101,11 +101,11 @@ public class SectionServiceTest {
     @Test
     @DisplayName("evaluate should choose only first action")
     public void evaluateShouldChooseOnlyFirstAction() {
-        final SectionEntity definition = new SectionBuilder(7)
+        final SectionDefinition definition = new SectionDefinitionBuilder(7)
                 .paragraph("Lorem ipsum dolor sit amet")
                 .selection((ActionSelection.FIRST))
-                .action(new ActionBuilder(475).build())
-                .action(new ActionBuilder(2).build())
+                .action(new ActionDefinitionBuilder(475).build())
+                .action(new ActionDefinitionBuilder(2).build())
                 .build();
         final SectionInstance expected = new SectionInstance();
         expected.setId(7);

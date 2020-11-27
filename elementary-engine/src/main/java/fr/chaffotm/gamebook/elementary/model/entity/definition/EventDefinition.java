@@ -1,4 +1,4 @@
-package fr.chaffotm.gamebook.elementary.model.entity;
+package fr.chaffotm.gamebook.elementary.model.entity.definition;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -6,7 +6,7 @@ import java.util.Set;
 
 @Entity(name = "Event")
 @Table(name = "event")
-public class EventEntity {
+public class EventDefinition {
 
     @Id
     @SequenceGenerator(name = "eventSeq", sequenceName = "event_id_seq", allocationSize = 1)
@@ -15,7 +15,7 @@ public class EventEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "section_id", foreignKey = @ForeignKey(name = "fk_event_section_id"))
-    private SectionEntity section;
+    private SectionDefinition section;
 
     @Column(nullable = false)
     private String type;
@@ -25,7 +25,7 @@ public class EventEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Set<ParameterEntity> parameters = new HashSet<>();
+    private Set<ParameterDefinition> parameters = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -35,11 +35,11 @@ public class EventEntity {
         this.id = id;
     }
 
-    public SectionEntity getSection() {
+    public SectionDefinition getSection() {
         return section;
     }
 
-    public void setSection(SectionEntity section) {
+    public void setSection(SectionDefinition section) {
         this.section = section;
     }
 
@@ -51,15 +51,15 @@ public class EventEntity {
         this.type = type;
     }
 
-    public Set<ParameterEntity> getParameters() {
+    public Set<ParameterDefinition> getParameters() {
         return parameters;
     }
 
-    public void setParameters(Set<ParameterEntity> parameters) {
+    public void setParameters(Set<ParameterDefinition> parameters) {
         this.parameters = parameters;
     }
 
-    public void addParameter(final ParameterEntity parameter) {
+    public void addParameter(final ParameterDefinition parameter) {
         parameters.add(parameter);
     }
 }

@@ -1,6 +1,6 @@
 package fr.chaffotm.gamebook.elementary.service.action;
 
-import fr.chaffotm.gamebook.elementary.model.entity.ActionEntity;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.ActionDefinition;
 import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
 import fr.chaffotm.gamebook.elementary.service.GameContext;
 
@@ -12,11 +12,11 @@ public class FirstActionStrategy implements ActionStrategy {
 
     private final ActionEvaluator evaluator = new ActionEvaluator();
 
-    public List<ActionInstance> getActionInstances(final List<ActionEntity> actions, final GameContext context) {
+    public List<ActionInstance> getActionInstances(final List<ActionDefinition> actions, final GameContext context) {
         final List<ActionInstance> instances = new ArrayList<>();
-        final Iterator<ActionEntity> iterator = actions.iterator();
+        final Iterator<ActionDefinition> iterator = actions.iterator();
         while (iterator.hasNext() && instances.size() < 1) {
-            ActionEntity action = iterator.next();
+            ActionDefinition action = iterator.next();
             ActionInstance instance = evaluator.toInstance(action, context);
             if (instance != null) {
                 instances.add(instance);

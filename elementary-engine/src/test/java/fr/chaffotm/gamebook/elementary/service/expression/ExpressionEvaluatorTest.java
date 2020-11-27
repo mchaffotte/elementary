@@ -1,7 +1,7 @@
 package fr.chaffotm.gamebook.elementary.service.expression;
 
-import fr.chaffotm.gamebook.elementary.model.builder.CharacterBuilder;
-import fr.chaffotm.gamebook.elementary.model.entity.CharacterEntity;
+import fr.chaffotm.gamebook.elementary.model.builder.CharacterDefinitionBuilder;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.CharacterDefinition;
 import fr.chaffotm.gamebook.elementary.model.instance.Indication;
 import fr.chaffotm.gamebook.elementary.model.instance.IndicationType;
 import fr.chaffotm.gamebook.elementary.service.Die;
@@ -113,7 +113,7 @@ public class ExpressionEvaluatorTest {
     @DisplayName("evaluateSkills should return the value of the skill")
     public void evaluateSkillsShouldReturnTheValueOfTheSkill() {
         final ExpressionEvaluator evaluator = new ExpressionEvaluator();
-        final CharacterEntity character = new CharacterBuilder("John")
+        final CharacterDefinition character = new CharacterDefinitionBuilder("John")
                 .skill("observation", 1).build();
         final GameContext context = new GameContext(null, character);
 
@@ -126,7 +126,7 @@ public class ExpressionEvaluatorTest {
     @DisplayName("evaluateSkills should throw an exception if skill does not exist")
     public void evaluateSkillsShouldThrowAnExceptionIfSkillDoesNotExist() {
         final ExpressionEvaluator evaluator = new ExpressionEvaluator();
-        final CharacterEntity character = new CharacterBuilder("John")
+        final CharacterDefinition character = new CharacterDefinitionBuilder("John")
                 .skill("athletics", 1).build();
         final GameContext context = new GameContext(null, character);
 

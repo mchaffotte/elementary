@@ -1,11 +1,11 @@
-package fr.chaffotm.gamebook.elementary.model.entity;
+package fr.chaffotm.gamebook.elementary.model.entity.definition;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity(name = "Skill")
 @Table(name = "skill")
-public class SkillEntity {
+public class SkillDefinition {
 
     @Id
     @SequenceGenerator(name = "skillSeq", sequenceName = "skill_id_seq", allocationSize = 1)
@@ -14,18 +14,18 @@ public class SkillEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_id", foreignKey = @ForeignKey(name = "fx_skill_character"))
-    private CharacterEntity character;
+    private CharacterDefinition character;
 
     @Column(nullable = false)
     private String name;
 
     private int value;
 
-    public SkillEntity() {
+    public SkillDefinition() {
         // used by JPA
     }
 
-    public SkillEntity(final SkillEntity skill) {
+    public SkillDefinition(final SkillDefinition skill) {
         name = skill.name;
         value = skill.value;
     }
@@ -38,11 +38,11 @@ public class SkillEntity {
         this.id = id;
     }
 
-    public CharacterEntity getCharacter() {
+    public CharacterDefinition getCharacter() {
         return character;
     }
 
-    public void setCharacter(CharacterEntity character) {
+    public void setCharacter(CharacterDefinition character) {
         this.character = character;
     }
 
@@ -66,7 +66,7 @@ public class SkillEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SkillEntity skill = (SkillEntity) o;
+        SkillDefinition skill = (SkillDefinition) o;
         return value == skill.value &&
                 Objects.equals(name, skill.name);
     }

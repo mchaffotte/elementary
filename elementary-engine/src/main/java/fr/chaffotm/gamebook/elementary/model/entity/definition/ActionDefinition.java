@@ -1,4 +1,4 @@
-package fr.chaffotm.gamebook.elementary.model.entity;
+package fr.chaffotm.gamebook.elementary.model.entity.definition;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity(name = "Action")
 @Table(name = "action")
-public class ActionEntity {
+public class ActionDefinition {
 
     @Id
     @SequenceGenerator(name = "actionSeq", sequenceName = "action_id_seq", allocationSize = 1)
@@ -15,7 +15,7 @@ public class ActionEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "section_id", foreignKey = @ForeignKey(name = "fk_action_section_id"))
-    private SectionEntity section;
+    private SectionDefinition section;
 
     private String expression;
 
@@ -24,7 +24,7 @@ public class ActionEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<OptionEntity> options = new ArrayList<>();
+    private List<OptionDefinition> options = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -34,11 +34,11 @@ public class ActionEntity {
         this.id = id;
     }
 
-    public SectionEntity getSection() {
+    public SectionDefinition getSection() {
         return section;
     }
 
-    public void setSection(SectionEntity section) {
+    public void setSection(SectionDefinition section) {
         this.section = section;
     }
 
@@ -50,15 +50,15 @@ public class ActionEntity {
         this.expression = expression;
     }
 
-    public List<OptionEntity> getOptions() {
+    public List<OptionDefinition> getOptions() {
         return options;
     }
 
-    public void setOptions(List<OptionEntity> options) {
+    public void setOptions(List<OptionDefinition> options) {
         this.options = options;
     }
 
-    public void addOption(final OptionEntity option) {
+    public void addOption(final OptionDefinition option) {
         options.add(option);
         option.setAction(this);
     }

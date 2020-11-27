@@ -1,6 +1,6 @@
 package fr.chaffotm.gamebook.elementary.service.event;
 
-import fr.chaffotm.gamebook.elementary.model.entity.ParameterEntity;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.ParameterDefinition;
 import fr.chaffotm.gamebook.elementary.model.instance.Indication;
 import fr.chaffotm.gamebook.elementary.model.instance.IndicationType;
 import fr.chaffotm.gamebook.elementary.service.GameContext;
@@ -18,10 +18,10 @@ public class AddIndicationEventCommandTest {
     @DisplayName("execute should add the clue in the context")
     public void executeShouldAddTheClueInTheContext() {
         final AddIndicationEventCommand command = new AddIndicationEventCommand();
-        final ParameterEntity parameter = new ParameterEntity();
+        final ParameterDefinition parameter = new ParameterDefinition();
         parameter.setName("clue");
         parameter.setValue("V");
-        final Set<ParameterEntity> parameters = Set.of(parameter);
+        final Set<ParameterDefinition> parameters = Set.of(parameter);
         final GameContext context = new GameContext(null, null);
 
         command.execute(context, parameters);
@@ -33,10 +33,10 @@ public class AddIndicationEventCommandTest {
     @DisplayName("execute should add the clue in the context")
     public void executeShould2AddTheClueInTheContext() {
         final AddIndicationEventCommand command = new AddIndicationEventCommand();
-        final ParameterEntity parameter = new ParameterEntity();
+        final ParameterDefinition parameter = new ParameterDefinition();
         parameter.setName("place");
         parameter.setValue("V");
-        final Set<ParameterEntity> parameters = Set.of(parameter);
+        final Set<ParameterDefinition> parameters = Set.of(parameter);
         final GameContext context = new GameContext(null, null);
 
         assertThatIllegalArgumentException()

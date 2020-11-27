@@ -1,10 +1,10 @@
-package fr.chaffotm.gamebook.elementary.model.entity;
+package fr.chaffotm.gamebook.elementary.model.entity.definition;
 
 import javax.persistence.*;
 
 @Entity(name = "Option")
 @Table(name = "option")
-public class OptionEntity {
+public class OptionDefinition {
 
     @Id
     @SequenceGenerator(name = "optionSeq", sequenceName = "option_id_seq", allocationSize = 1)
@@ -13,7 +13,7 @@ public class OptionEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "action_id", foreignKey = @ForeignKey(name = "fk_option_action_id"))
-    private ActionEntity action;
+    private ActionDefinition action;
 
     private String expression;
 
@@ -24,7 +24,7 @@ public class OptionEntity {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "story_id", foreignKey = @ForeignKey(name = "fk_option_event"))
-    private EventEntity event;
+    private EventDefinition event;
 
     public Long getId() {
         return id;
@@ -34,11 +34,11 @@ public class OptionEntity {
         this.id = id;
     }
 
-    public ActionEntity getAction() {
+    public ActionDefinition getAction() {
         return action;
     }
 
-    public void setAction(ActionEntity action) {
+    public void setAction(ActionDefinition action) {
         this.action = action;
     }
 
@@ -66,11 +66,11 @@ public class OptionEntity {
         this.nextReference = nextReference;
     }
 
-    public EventEntity getEvent() {
+    public EventDefinition getEvent() {
         return event;
     }
 
-    public void setEvent(EventEntity event) {
+    public void setEvent(EventDefinition event) {
         this.event = event;
     }
 }

@@ -1,9 +1,9 @@
 package fr.chaffotm.gamebook.elementary.service;
 
-import fr.chaffotm.gamebook.elementary.model.entity.CharacterEntity;
-import fr.chaffotm.gamebook.elementary.model.entity.EventEntity;
-import fr.chaffotm.gamebook.elementary.model.entity.SectionEntity;
-import fr.chaffotm.gamebook.elementary.model.entity.StoryEntity;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.CharacterDefinition;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.EventDefinition;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.SectionDefinition;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.StoryDefinition;
 import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
 import fr.chaffotm.gamebook.elementary.model.instance.GameInstance;
 import fr.chaffotm.gamebook.elementary.model.instance.SectionInstance;
@@ -42,8 +42,8 @@ public class GameService {
         if (gameRepository.getGame() != null) {
             throw new IllegalStateException("Another game is already in progress");
         }
-        final StoryEntity story = storyService.getStoryEntity();
-        final CharacterEntity character = storyService.getCharacter(story);
+        final StoryDefinition story = storyService.getStoryEntity();
+        final CharacterDefinition character = storyService.getCharacter(story);
         final GameInstance game = new GameInstance(story, character);
         final GameContext context = new GameContext(game.getContext());
         return turnTo(game, null, story.getPrologue(), context);
@@ -61,16 +61,16 @@ public class GameService {
         }
         final SectionInstance section = game.getSection();
         final ActionInstance instance = getActionInstance(section.getActions(), reference);
-        final StoryEntity story = game.getStory();
-        final SectionEntity prologue = story.getPrologue();
-        final EventEntity event = instance.getEvent();
+        final StoryDefinition story = game.getStory();
+        final SectionDefinition prologue = story.getPrologue();
+        final EventDefinition event = instance.getEvent();
         if (reference == prologue.getReference()) {
-            final CharacterEntity character = storyService.getCharacter(story);
+            final CharacterDefinition character = storyService.getCharacter(story);
             final GameContext context = new GameContext(game.getContext().getDie(), character);
             return turnTo(game, event, prologue, context);
         }
         final GameContext context = new GameContext(game.getContext());
-        final SectionEntity next = storyService.getSection(story, reference);
+        final SectionDefinition next = storyService.getSection(story, reference);
         return turnTo(game, event, next, context);
     }
 
@@ -81,7 +81,7 @@ public class GameService {
                 .orElseThrow(() -> new IllegalArgumentException("Cannot reach that section"));
     }
 
-    private Game turnTo(final GameInstance game, final EventEntity event, final SectionEntity section, final GameContext context) {
+    private Game turnTo(final GameInstance game, final EventDefinition event, final SectionDefinition section, final GameContext context) {
         if (event != null) {
             final EventCommand command = eventFactory.getEvent(event.getType());
             command.execute(context, event.getParameters());

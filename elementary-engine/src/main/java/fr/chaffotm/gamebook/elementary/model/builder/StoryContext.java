@@ -1,34 +1,34 @@
 package fr.chaffotm.gamebook.elementary.model.builder;
 
-import fr.chaffotm.gamebook.elementary.model.entity.CharacterEntity;
-import fr.chaffotm.gamebook.elementary.model.entity.SectionEntity;
-import fr.chaffotm.gamebook.elementary.model.entity.StoryEntity;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.CharacterDefinition;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.SectionDefinition;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.StoryDefinition;
 
 import java.util.List;
 
 public class StoryContext {
 
-    private final StoryEntity story;
+    private final StoryDefinition story;
 
-    private final CharacterEntity character;
+    private final CharacterDefinition character;
 
-    private final List<SectionEntity> sections;
+    private final List<SectionDefinition> sections;
 
-    public StoryContext(StoryEntity story, CharacterEntity character, List<SectionEntity> sections) {
+    public StoryContext(StoryDefinition story, CharacterDefinition character, List<SectionDefinition> sections) {
         this.story = story;
         this.character = character;
         this.sections = sections;
     }
 
-    public StoryEntity getStory() {
+    public StoryDefinition getStory() {
         return story;
     }
 
-    public CharacterEntity getCharacter() {
+    public CharacterDefinition getCharacter() {
         return character;
     }
 
-    public List<SectionEntity> getSections() {
+    public List<SectionDefinition> getSections() {
         return sections;
     }
 }

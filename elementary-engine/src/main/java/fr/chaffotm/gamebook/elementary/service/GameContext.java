@@ -1,7 +1,7 @@
 package fr.chaffotm.gamebook.elementary.service;
 
-import fr.chaffotm.gamebook.elementary.model.entity.CharacterEntity;
-import fr.chaffotm.gamebook.elementary.model.entity.SkillEntity;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.CharacterDefinition;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.SkillDefinition;
 import fr.chaffotm.gamebook.elementary.model.instance.Indication;
 
 import java.util.HashSet;
@@ -12,11 +12,11 @@ public class GameContext {
 
     private final Die die;
 
-    private final CharacterEntity character;
+    private final CharacterDefinition character;
 
     private final Set<Indication> indications;
 
-    public GameContext(final Die die, final CharacterEntity character) {
+    public GameContext(final Die die, final CharacterDefinition character) {
         this.die = die;
         this.character = character;
         this.indications = new HashSet<>();
@@ -24,7 +24,7 @@ public class GameContext {
 
     public GameContext(final GameContext context) {
         this.die = context.die;
-        this.character = new CharacterEntity(context.character);
+        this.character = new CharacterDefinition(context.character);
         this.indications = new HashSet<>(context.indications);
     }
 
@@ -33,7 +33,7 @@ public class GameContext {
     }
 
     public int getSkillValue(final String skillName) {
-        final Optional<SkillEntity> optionalSkill = character.getSkill(skillName);
+        final Optional<SkillDefinition> optionalSkill = character.getSkill(skillName);
         if (optionalSkill.isEmpty()) {
             throw new IllegalStateException("Skill \"" + skillName + "\" does not exist.");
         }
@@ -48,7 +48,7 @@ public class GameContext {
         return indications;
     }
 
-    public CharacterEntity getCharacter() {
+    public CharacterDefinition getCharacter() {
         return character;
     }
 

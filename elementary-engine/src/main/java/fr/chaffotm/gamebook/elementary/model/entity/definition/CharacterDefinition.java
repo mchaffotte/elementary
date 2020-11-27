@@ -1,4 +1,4 @@
-package fr.chaffotm.gamebook.elementary.model.entity;
+package fr.chaffotm.gamebook.elementary.model.entity.definition;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -7,7 +7,7 @@ import java.util.Set;
 
 @Entity(name = "Character")
 @Table(name = "character")
-public class CharacterEntity {
+public class CharacterDefinition {
 
     @Id
     private Long id;
@@ -15,7 +15,7 @@ public class CharacterEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "story_id", foreignKey = @ForeignKey(name = "fx_character_story"))
-    private StoryEntity story;
+    private StoryDefinition story;
 
     @Column(nullable = false)
     private String name;
@@ -25,17 +25,17 @@ public class CharacterEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Set<SkillEntity> skills = new HashSet<>();
+    private Set<SkillDefinition> skills = new HashSet<>();
 
-    public CharacterEntity() {
+    public CharacterDefinition() {
         // used by JPA
     }
 
-    public CharacterEntity(final CharacterEntity character) {
+    public CharacterDefinition(final CharacterDefinition character) {
         name = character.name;
         skills = new HashSet<>();
-        for (SkillEntity skill : character.skills) {
-            skills.add(new SkillEntity(skill));
+        for (SkillDefinition skill : character.skills) {
+            skills.add(new SkillDefinition(skill));
         }
     }
 
@@ -48,11 +48,11 @@ public class CharacterEntity {
         this.id = id;
     }
 
-    public StoryEntity getStory() {
+    public StoryDefinition getStory() {
         return story;
     }
 
-    public void setStory(StoryEntity story) {
+    public void setStory(StoryDefinition story) {
         this.story = story;
     }
 
@@ -64,20 +64,20 @@ public class CharacterEntity {
         this.name = name;
     }
 
-    public Set<SkillEntity> getSkills() {
+    public Set<SkillDefinition> getSkills() {
         return skills;
     }
 
-    public void setSkills(Set<SkillEntity> skills) {
+    public void setSkills(Set<SkillDefinition> skills) {
         this.skills = skills;
     }
 
-    public void addSkill(final SkillEntity skill) {
+    public void addSkill(final SkillDefinition skill) {
         skills.add(skill);
         skill.setCharacter(this);
     }
 
-    public Optional<SkillEntity> getSkill(final String name) {
+    public Optional<SkillDefinition> getSkill(final String name) {
         return skills.stream()
                 .filter(skill -> skill.getName().equals(name))
                 .findFirst();

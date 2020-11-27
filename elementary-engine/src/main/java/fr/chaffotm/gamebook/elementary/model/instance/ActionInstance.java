@@ -1,6 +1,6 @@
 package fr.chaffotm.gamebook.elementary.model.instance;
 
-import fr.chaffotm.gamebook.elementary.model.entity.EventEntity;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.EventDefinition;
 
 import java.util.Objects;
 
@@ -10,7 +10,7 @@ public class ActionInstance {
 
     private final int nextReference;
 
-    private final EventEntity event;
+    private final EventDefinition event;
 
     public ActionInstance(final int nextReference) {
         this(nextReference, null);
@@ -20,7 +20,7 @@ public class ActionInstance {
         this(nextReference, description, null);
     }
 
-    public ActionInstance(final int nextReference, final String description, final EventEntity event) {
+    public ActionInstance(final int nextReference, final String description, final EventDefinition event) {
         this.nextReference = nextReference;
         this.description = description;
         this.event = event;
@@ -34,7 +34,7 @@ public class ActionInstance {
         return nextReference;
     }
 
-    public EventEntity getEvent() {
+    public EventDefinition getEvent() {
         return event;
     }
 

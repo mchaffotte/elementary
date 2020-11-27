@@ -1,4 +1,6 @@
-package fr.chaffotm.gamebook.elementary.model.entity;
+package fr.chaffotm.gamebook.elementary.model.entity.definition;
+
+import fr.chaffotm.gamebook.elementary.model.entity.ReadOnlyEntityListener;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -7,7 +9,7 @@ import java.util.Objects;
 @Table(name = "story",
         uniqueConstraints = @UniqueConstraint(name = "uk_story_name", columnNames = "name"))
 @EntityListeners(ReadOnlyEntityListener.class)
-public class StoryEntity {
+public class StoryDefinition {
 
     @Id
     @SequenceGenerator(name = "storySeq", sequenceName = "story_id_seq", allocationSize = 1)
@@ -18,7 +20,7 @@ public class StoryEntity {
     private String name;
 
     @OneToOne(mappedBy = "prologueStory", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
-    private SectionEntity prologue;
+    private SectionDefinition prologue;
 
     public Long getId() {
         return id;
@@ -36,11 +38,11 @@ public class StoryEntity {
         this.name = name;
     }
 
-    public SectionEntity getPrologue() {
+    public SectionDefinition getPrologue() {
         return prologue;
     }
 
-    public void setPrologue(SectionEntity prologue) {
+    public void setPrologue(SectionDefinition prologue) {
         this.prologue = prologue;
         prologue.setPrologueStory(this);
     }
@@ -54,7 +56,7 @@ public class StoryEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        StoryEntity that = (StoryEntity) o;
+        StoryDefinition that = (StoryDefinition) o;
         return Objects.equals(name, that.name);
     }
 }

@@ -1,10 +1,10 @@
-package fr.chaffotm.gamebook.elementary.model.entity;
+package fr.chaffotm.gamebook.elementary.model.entity.definition;
 
 import javax.persistence.*;
 
 @Entity(name = "Parameter")
 @Table(name = "parameter")
-public class ParameterEntity {
+public class ParameterDefinition {
 
     @Id
     @SequenceGenerator(name = "parameterSeq", sequenceName = "parameter_id_seq", allocationSize = 1)
@@ -13,7 +13,7 @@ public class ParameterEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id", foreignKey = @ForeignKey(name = "fk_parameter_event_id"))
-    private EventEntity event;
+    private EventDefinition event;
 
     @Column(nullable = false)
     private String name;
@@ -28,11 +28,11 @@ public class ParameterEntity {
         this.id = id;
     }
 
-    public EventEntity getEvent() {
+    public EventDefinition getEvent() {
         return event;
     }
 
-    public void setEvent(EventEntity event) {
+    public void setEvent(EventDefinition event) {
         this.event = event;
     }
 
