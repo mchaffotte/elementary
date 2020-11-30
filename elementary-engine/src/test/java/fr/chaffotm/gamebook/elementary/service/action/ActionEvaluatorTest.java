@@ -5,11 +5,10 @@ import fr.chaffotm.gamebook.elementary.model.builder.CharacterDefinitionBuilder;
 import fr.chaffotm.gamebook.elementary.model.builder.OptionDefinitionBuilder;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.ActionDefinition;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.CharacterDefinition;
-import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
-import fr.chaffotm.gamebook.elementary.model.instance.Indication;
-import fr.chaffotm.gamebook.elementary.model.instance.IndicationType;
+import fr.chaffotm.gamebook.elementary.model.entity.instance.*;
 import fr.chaffotm.gamebook.elementary.service.Die;
 import fr.chaffotm.gamebook.elementary.service.GameContext;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,15 +16,34 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mvel2.PropertyAccessException;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static fr.chaffotm.gamebook.elementary.assertion.ActionInstanceAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ActionEvaluatorTest {
 
+    private ActionEvaluator evaluator;
+
     @Mock
     private Die die;
+
+    private GameInstance buildGame() {
+        final GameInstance game = new GameInstance();
+        game.setCharacter(new CharacterInstance());
+        return game;
+    }
+
+    private GameInstance buildGame(CharacterDefinition character) {
+        final GameInstance game = new GameInstance();
+        game.setCharacter(new CharacterInstance(character));
+        return game;
+    }
+
+    @BeforeEach
+    public void setUp() {
+        evaluator = new ActionEvaluator();
+    }
 
     @Test
     @DisplayName("toInstance should create an instance with reference and description")
@@ -33,12 +51,13 @@ public class ActionEvaluatorTest {
         final ActionDefinition action = new ActionDefinitionBuilder("If you want to enter in the cockpit", 125)
                 .build();
         final GameContext context = new GameContext(new Die(12), null);
-        final ActionEvaluator evaluator = new ActionEvaluator();
-        final ActionInstance expected = new ActionInstance(125, "If you want to enter in the cockpit");
 
         final ActionInstance actionInstance = evaluator.toInstance(action, context);
 
-        assertThat(actionInstance).isEqualTo(expected);
+        assertThat(actionInstance)
+                .hasNextReference(125)
+                .hasDescription("If you want to enter in the cockpit")
+                .hasNoEvent();
     }
 
     @Test
@@ -46,10 +65,10 @@ public class ActionEvaluatorTest {
     public void toInstanceShouldNotChooseThePathBecauseTheClueHasNotYetBeenFound() {
         final ActionDefinition action = new ActionDefinitionBuilder(
                 new OptionDefinitionBuilder(485)
-                        .expression("clue.A").build())
+                        .expression("clue.A")
+                        .build())
                 .build();
-        final GameContext context = new GameContext(null, null);
-        final ActionEvaluator evaluator = new ActionEvaluator();
+        final GameContext context = new GameContext(null, buildGame());
 
         final ActionInstance actionInstance = evaluator.toInstance(action, context);
 
@@ -61,17 +80,19 @@ public class ActionEvaluatorTest {
     public void toInstanceShouldChooseThePathBecauseTheClueHasBeenFound() {
         final ActionDefinition action = new ActionDefinitionBuilder(
                 new OptionDefinitionBuilder(485)
-                        .expression("clue.A").build())
+                        .expression("clue.A")
+                        .build())
                 .build();
-        final GameContext context = new GameContext(null, null);
-        context.addIndication(new Indication(IndicationType.CLUE, "A"));
-        final ActionEvaluator evaluator = new ActionEvaluator();
+        final GameContext context = new GameContext(null, buildGame());
+        context.addIndication(new IndicationInstance(IndicationType.CLUE, "A"));
 
         final ActionInstance actionInstance = evaluator.toInstance(action, context);
 
-        assertThat(actionInstance).isEqualTo(new ActionInstance(485));
+        assertThat(actionInstance)
+                .hasNextReference(485)
+                .hasNoDescription()
+                .hasNoEvent();
     }
-
 
     @Test
     @DisplayName("toInstance should choose the first option")
@@ -83,15 +104,16 @@ public class ActionEvaluatorTest {
                         .expression("value <= 12").build())
                 .expression("die.roll()")
                 .build();
-        final GameContext context = new GameContext(die, new CharacterDefinition());
-        context.addIndication(new Indication(IndicationType.CLUE, "A"));
-        final ActionEvaluator evaluator = new ActionEvaluator();
-        final ActionInstance expected = new ActionInstance(458);
+        final GameContext context = new GameContext(die, buildGame());
+        context.addIndication(new IndicationInstance(IndicationType.CLUE, "A"));
         when(die.roll()).thenReturn(6);
 
         final ActionInstance actionInstance = evaluator.toInstance(action, context);
 
-        assertThat(actionInstance).isEqualTo(expected);
+        assertThat(actionInstance)
+                .hasNextReference(458)
+                .hasNoDescription()
+                .hasNoEvent();
     }
 
     @Test
@@ -104,14 +126,15 @@ public class ActionEvaluatorTest {
                         .expression("value <= 12").build())
                 .expression("die.roll()")
                 .build();
-        final GameContext context = new GameContext(die, new CharacterDefinition());
-        final ActionEvaluator evaluator = new ActionEvaluator();
-        final ActionInstance expected = new ActionInstance(12);
+        final GameContext context = new GameContext(die, buildGame());
         when(die.roll()).thenReturn(7);
 
         final ActionInstance actionInstance = evaluator.toInstance(action, context);
 
-        assertThat(actionInstance).isEqualTo(expected);
+        assertThat(actionInstance).
+                hasNextReference(12)
+                .hasNoDescription()
+                .hasNoEvent();
      }
 
     @Test
@@ -124,8 +147,7 @@ public class ActionEvaluatorTest {
                         .expression("value <= 12").build())
                 .expression("die.roll()")
                 .build();
-        final GameContext context = new GameContext(die, new CharacterDefinition());
-        final ActionEvaluator evaluator = new ActionEvaluator();
+        final GameContext context = new GameContext(die, buildGame());
         when(die.roll()).thenReturn(13);
 
         final ActionInstance actionInstance = evaluator.toInstance(action, context);
@@ -144,16 +166,18 @@ public class ActionEvaluatorTest {
                 .expression("die.roll() + skill.observation")
                 .build();
         final CharacterDefinition character = new CharacterDefinitionBuilder("John")
-                .skill("observation", 1).build();
-        final GameContext context = new GameContext(die, character);
-        context.addIndication(new Indication(IndicationType.CLUE, "A"));
-        final ActionEvaluator evaluator = new ActionEvaluator();
-        final ActionInstance expected = new ActionInstance(12);
+                .skill("observation", 1)
+                .build();
+        final GameContext context = new GameContext(die, buildGame(character));
+        context.addIndication(new IndicationInstance(IndicationType.CLUE, "A"));
         when(die.roll()).thenReturn(6);
 
         final ActionInstance actionInstance = evaluator.toInstance(action, context);
 
-        assertThat(actionInstance).isEqualTo(expected);
+        assertThat(actionInstance)
+                .hasNextReference(12)
+                .hasNoDescription()
+                .hasNoEvent();
     }
 
     @Test
@@ -166,9 +190,8 @@ public class ActionEvaluatorTest {
                         .expression("value <= 12").build())
                 .expression("die.roll() + skill.observation")
                 .build();
-        final GameContext context = new GameContext(die, new CharacterDefinition());
-        context.addIndication(new Indication(IndicationType.CLUE, "A"));
-        final ActionEvaluator evaluator = new ActionEvaluator();
+        final GameContext context = new GameContext(die, buildGame());
+        context.addIndication(new IndicationInstance(IndicationType.CLUE, "A"));
         when(die.roll()).thenReturn(6);
 
         assertThatExceptionOfType(PropertyAccessException.class)

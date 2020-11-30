@@ -2,11 +2,11 @@ package fr.chaffotm.gamebook.elementary.service;
 
 import fr.chaffotm.gamebook.elementary.model.builder.*;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.*;
-import fr.chaffotm.gamebook.elementary.model.instance.*;
+import fr.chaffotm.gamebook.elementary.model.entity.instance.*;
 import fr.chaffotm.gamebook.elementary.model.resource.Action;
 import fr.chaffotm.gamebook.elementary.model.resource.Game;
 import fr.chaffotm.gamebook.elementary.model.resource.Section;
-import fr.chaffotm.gamebook.elementary.repository.GameRepository;
+import fr.chaffotm.gamebook.elementary.repository.GameInstanceRepository;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +31,7 @@ public class GameServiceTest {
     StoryService storyService;
 
     @InjectMock
-    GameRepository gameRepository;
+    GameInstanceRepository gameInstanceRepository;
 
     @BeforeEach
     public void setUp() {
@@ -71,8 +71,15 @@ public class GameServiceTest {
         return action;
     }
 
+    private GameInstance buildGame(final StoryDefinition story, final CharacterInstance character) {
+        final GameInstance game= new GameInstance();
+        game.setStory(story);
+        game.setCharacter(character);
+        return game;
+    }
+
     private GameInstance buildGame(final StoryDefinition story, int nextId) {
-        return buildGame(story, new ActionInstance(nextId));
+        return buildGame(story, new ActionInstance(nextId, null, null));
     }
 
     private GameInstance buildGame(final StoryDefinition story, int nextId, final String clue) {
@@ -82,7 +89,9 @@ public class GameServiceTest {
     private GameInstance buildGame(final StoryDefinition story, ActionInstance action) {
         final SectionInstance section = new SectionInstance();
         section.setActions(List.of(action));
-        final GameInstance game = new GameInstance(story, new CharacterDefinition());
+        final GameInstance game = new GameInstance();
+        game.setStory(story);
+        game.setCharacter(new CharacterInstance());
         game.setSection(section);
         return game;
     }
@@ -133,7 +142,7 @@ public class GameServiceTest {
 
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> service.startGame());
-        verify(gameRepository, never()).save(any());
+        verify(gameInstanceRepository, never()).save(any());
     }
 
     @Test
@@ -141,7 +150,7 @@ public class GameServiceTest {
     public void startGameShouldThrowAnExceptionIfAnotherGameIsAlreadyInProgress() {
         final StoryDefinition story = buildStory(null);
         when(storyService.getStoryEntity()).thenReturn(story);
-        when(gameRepository.getGame()).thenReturn(new GameInstance(story, new CharacterDefinition()));
+        when(gameInstanceRepository.getGame()).thenReturn(buildGame(story, new CharacterInstance()));
 
         assertThatIllegalStateException()
                 .isThrownBy(() -> service.startGame())
@@ -175,7 +184,7 @@ public class GameServiceTest {
         when(storyService.getStoryEntity()).thenReturn(story);
         when(storyService.getSection(story, 2)).thenReturn(buildSection2(null));
         final GameInstance instance = buildGame(story, 2);
-        when(gameRepository.getGame()).thenReturn(instance);
+        when(gameInstanceRepository.getGame()).thenReturn(instance);
 
         Game game = service.turnTo(2);
 
@@ -190,12 +199,12 @@ public class GameServiceTest {
         when(storyService.getStoryEntity()).thenReturn(story);
         when(storyService.getSection(story, 2)).thenReturn(buildSection2(null));
         final GameInstance game = buildGame(story, 2, "Z");
-        when(gameRepository.getGame()).thenReturn(game);
+        when(gameInstanceRepository.getGame()).thenReturn(game);
 
         service.turnTo(2);
 
-        assertThat(game.getContext().getIndications())
-                .contains(new Indication(IndicationType.CLUE, "Z"));
+        assertThat(game.getIndications())
+                .contains(new IndicationInstance(IndicationType.CLUE, "Z"));
     }
 
     @Test
@@ -215,12 +224,12 @@ public class GameServiceTest {
                 .build().getStory();
         when(storyService.getStoryEntity()).thenReturn(story);
         final GameInstance game = buildGame(story, new ActionInstance(2, null, null));
-        when(gameRepository.getGame()).thenReturn(game);
+        when(gameInstanceRepository.getGame()).thenReturn(game);
 
         assertThatIllegalStateException()
                 .isThrownBy(() -> service.turnTo(2));
-        assertThat(gameRepository.getGame().getContext().getIndications())
-                .doesNotContain(new Indication(IndicationType.CLUE, "Q"));
+        assertThat(game.getIndications())
+                .contains(new IndicationInstance(IndicationType.CLUE, "Q"));
     }
 
     @Test
@@ -232,12 +241,12 @@ public class GameServiceTest {
         when(storyService.getStoryEntity()).thenReturn(story);
         when(storyService.getSection(story, 2)).thenReturn(buildSection2(event));
         final GameInstance game = buildGame(story, 2);
-        when(gameRepository.getGame()).thenReturn(game);
+        when(gameInstanceRepository.getGame()).thenReturn(game);
 
         service.turnTo(2);
 
-        assertThat(game.getContext().getIndications())
-                .contains(new Indication(IndicationType.CLUE, "Z"));
+        assertThat(game.getIndications())
+                .contains(new IndicationInstance(IndicationType.CLUE, "Z"));
     }
 
     @Test
@@ -256,12 +265,12 @@ public class GameServiceTest {
                 .build().getStory();
         when(storyService.getStoryEntity()).thenReturn(story);
         final GameInstance game = buildGame(story, 2);
-        when(gameRepository.getGame()).thenReturn(game);
+        when(gameInstanceRepository.getGame()).thenReturn(game);
 
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> service.turnTo(2));
-        assertThat(game.getContext().getIndications())
-                .doesNotContain(new Indication(IndicationType.CLUE, "Q"));
+        assertThat(game.getIndications())
+                .doesNotContain(new IndicationInstance(IndicationType.CLUE, "Q"));
     }
 
     @Test
@@ -269,16 +278,15 @@ public class GameServiceTest {
     public void turnToShouldRestartTheGame() {
         final StoryDefinition story = buildStory(null);
         when(storyService.getStoryEntity()).thenReturn(story);
-        final GameContext context = new GameContext(new Die(12), new CharacterDefinition());
-        context.addIndication(new Indication(IndicationType.CLUE, "A"));
         final GameInstance instance = buildGame(story, 0);
-        instance.setContext(context);
-        when(gameRepository.getGame()).thenReturn(instance);
+        instance.addIndication(new IndicationInstance(IndicationType.CLUE, "A"));
+        when(gameInstanceRepository.getGame()).thenReturn(instance);
+        when(storyService.getCharacter(story)).thenReturn(new CharacterDefinition());
 
         Game game = service.turnTo(0);
 
-        assertThat(game.getSection().getId()).isEqualTo(0);
-        assertThat(instance.getContext().getIndications()).isEmpty();
+        assertThat(game.getSection().getReference()).isEqualTo(0);
+        assertThat(instance.getIndications()).isEmpty();
     }
 
 }

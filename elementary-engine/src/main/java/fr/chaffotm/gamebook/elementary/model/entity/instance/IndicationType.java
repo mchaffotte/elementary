@@ -1,4 +1,4 @@
-package fr.chaffotm.gamebook.elementary.model.instance;
+package fr.chaffotm.gamebook.elementary.model.entity.instance;
 
 public enum IndicationType {
     CLUE {

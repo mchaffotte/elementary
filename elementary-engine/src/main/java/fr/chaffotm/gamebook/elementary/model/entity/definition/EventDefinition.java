@@ -1,11 +1,15 @@
 package fr.chaffotm.gamebook.elementary.model.entity.definition;
 
+import fr.chaffotm.gamebook.elementary.model.entity.ReadOnlyEntityListener;
+
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity(name = "Event")
 @Table(name = "event")
+@EntityListeners(ReadOnlyEntityListener.class)
 public class EventDefinition {
 
     @Id
@@ -61,5 +65,19 @@ public class EventDefinition {
 
     public void addParameter(final ParameterDefinition parameter) {
         parameters.add(parameter);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EventDefinition that = (EventDefinition) o;
+        return Objects.equals(type, that.type) &&
+                Objects.equals(parameters, that.parameters);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, parameters);
     }
 }

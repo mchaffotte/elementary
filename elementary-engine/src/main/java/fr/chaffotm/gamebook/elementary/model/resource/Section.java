@@ -4,18 +4,18 @@ import java.util.List;
 
 public class Section {
 
-    private int id;
+    private int reference;
 
     private List<String> paragraphs;
 
     private List<Action> actions;
 
-    public int getId() {
-        return id;
+    public int getReference() {
+        return reference;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setReference(int reference) {
+        this.reference = reference;
     }
 
     public List<String> getParagraphs() {

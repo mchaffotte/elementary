@@ -1,11 +1,14 @@
 package fr.chaffotm.gamebook.elementary.model.entity.definition;
 
+import fr.chaffotm.gamebook.elementary.model.entity.ReadOnlyEntityListener;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "Action")
 @Table(name = "action")
+@EntityListeners(ReadOnlyEntityListener.class)
 public class ActionDefinition {
 
     @Id

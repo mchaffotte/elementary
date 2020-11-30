@@ -1,9 +1,9 @@
 package fr.chaffotm.gamebook.elementary.service.expression;
 
-import fr.chaffotm.gamebook.elementary.model.entity.definition.CharacterDefinition;
-import fr.chaffotm.gamebook.elementary.model.entity.definition.SkillDefinition;
-import fr.chaffotm.gamebook.elementary.model.instance.Indication;
-import fr.chaffotm.gamebook.elementary.model.instance.IndicationType;
+import fr.chaffotm.gamebook.elementary.model.entity.instance.CharacterInstance;
+import fr.chaffotm.gamebook.elementary.model.entity.instance.IndicationInstance;
+import fr.chaffotm.gamebook.elementary.model.entity.instance.SkillInstance;
+import fr.chaffotm.gamebook.elementary.model.entity.instance.IndicationType;
 import fr.chaffotm.gamebook.elementary.service.GameContext;
 import org.mvel2.MVEL;
 
@@ -20,7 +20,7 @@ public class ExpressionEvaluator {
         for (IndicationType type : IndicationType.values()) {
             variables.put(type.toString(), new ExistenceMap<String, Boolean>());
         }
-        for (Indication indication : context.getIndications()) {
+        for (IndicationInstance indication : context.getIndications()) {
             final Map<String, Boolean> type = (Map<String, Boolean>) variables.get(indication.getType().toString());
             type.put(indication.getValue(), true);
         }
@@ -30,11 +30,14 @@ public class ExpressionEvaluator {
         return MVEL.eval(expression, variables, Boolean.class);
     }
 
-    public int evaluateSkills(final String expression, final GameContext context) {
+    public Integer evaluateSkills(final String expression, final GameContext context) {
+        if (expression == null || expression.isBlank()) {
+            return null;
+        }
         final Map<String, Object> variables = new HashMap<>();
-        final CharacterDefinition character = context.getCharacter();
+        final CharacterInstance character = context.getCharacter();
         final SkillMap<String, Integer> skills = new SkillMap<>();
-        for (SkillDefinition skill : character.getSkills()) {
+        for (SkillInstance skill : character.getSkills()) {
             skills.put(skill.getName(), skill.getValue());
         }
         variables.put("skill", skills);

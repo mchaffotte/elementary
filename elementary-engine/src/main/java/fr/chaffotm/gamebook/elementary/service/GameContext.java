@@ -1,55 +1,35 @@
 package fr.chaffotm.gamebook.elementary.service;
 
-import fr.chaffotm.gamebook.elementary.model.entity.definition.CharacterDefinition;
-import fr.chaffotm.gamebook.elementary.model.entity.definition.SkillDefinition;
-import fr.chaffotm.gamebook.elementary.model.instance.Indication;
+import fr.chaffotm.gamebook.elementary.model.entity.instance.CharacterInstance;
+import fr.chaffotm.gamebook.elementary.model.entity.instance.GameInstance;
+import fr.chaffotm.gamebook.elementary.model.entity.instance.IndicationInstance;
 
-import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 public class GameContext {
 
     private final Die die;
 
-    private final CharacterDefinition character;
+    private final GameInstance game;
 
-    private final Set<Indication> indications;
-
-    public GameContext(final Die die, final CharacterDefinition character) {
+    public GameContext(final Die die, final GameInstance game) {
         this.die = die;
-        this.character = character;
-        this.indications = new HashSet<>();
-    }
-
-    public GameContext(final GameContext context) {
-        this.die = context.die;
-        this.character = new CharacterDefinition(context.character);
-        this.indications = new HashSet<>(context.indications);
+        this.game = game;
     }
 
     public Die getDie() {
         return die;
     }
 
-    public int getSkillValue(final String skillName) {
-        final Optional<SkillDefinition> optionalSkill = character.getSkill(skillName);
-        if (optionalSkill.isEmpty()) {
-            throw new IllegalStateException("Skill \"" + skillName + "\" does not exist.");
-        }
-        return optionalSkill.get().getValue();
+    public void addIndication(final IndicationInstance indication) {
+        game.addIndication(indication);
     }
 
-    public void addIndication(final Indication indication) {
-        indications.add(indication);
+    public Set<IndicationInstance> getIndications() {
+        return game.getIndications();
     }
 
-    public Set<Indication> getIndications() {
-        return indications;
+    public CharacterInstance getCharacter() {
+        return game.getCharacter();
     }
-
-    public CharacterDefinition getCharacter() {
-        return character;
-    }
-
 }

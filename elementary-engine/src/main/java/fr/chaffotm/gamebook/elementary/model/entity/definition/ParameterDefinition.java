@@ -1,9 +1,13 @@
 package fr.chaffotm.gamebook.elementary.model.entity.definition;
 
+import fr.chaffotm.gamebook.elementary.model.entity.ReadOnlyEntityListener;
+
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity(name = "Parameter")
 @Table(name = "parameter")
+@EntityListeners(ReadOnlyEntityListener.class)
 public class ParameterDefinition {
 
     @Id
@@ -50,5 +54,19 @@ public class ParameterDefinition {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ParameterDefinition that = (ParameterDefinition) o;
+        return Objects.equals(name, that.name) &&
+                Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, value);
     }
 }

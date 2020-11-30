@@ -1,9 +1,12 @@
 package fr.chaffotm.gamebook.elementary.model.entity.definition;
 
+import fr.chaffotm.gamebook.elementary.model.entity.ReadOnlyEntityListener;
+
 import javax.persistence.*;
 
 @Entity(name = "Option")
 @Table(name = "option")
+@EntityListeners(ReadOnlyEntityListener.class)
 public class OptionDefinition {
 
     @Id

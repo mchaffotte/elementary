@@ -1,36 +1,35 @@
-package fr.chaffotm.gamebook.elementary.model.entity.definition;
+package fr.chaffotm.gamebook.elementary.model.entity.instance;
 
-import fr.chaffotm.gamebook.elementary.model.entity.ReadOnlyEntityListener;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.SkillDefinition;
 
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity(name = "Skill")
-@Table(name = "skill")
-@EntityListeners(ReadOnlyEntityListener.class)
-public class SkillDefinition {
+@Entity
+@Table(name = "skill_instance")
+public class SkillInstance {
 
     @Id
-    @SequenceGenerator(name = "skillSeq", sequenceName = "skill_id_seq", allocationSize = 1)
-    @GeneratedValue(generator = "skillSeq")
+    @SequenceGenerator(name = "skillInstanceSeq", sequenceName = "skill_instance_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "skillInstanceSeq")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "character_id", foreignKey = @ForeignKey(name = "fk_skill_character"))
-    private CharacterDefinition character;
+    @JoinColumn(name = "character_id", foreignKey = @ForeignKey(name = "fk_skill_instance_character_instance"))
+    private CharacterInstance character;
 
     @Column(nullable = false)
     private String name;
 
     private int value;
 
-    public SkillDefinition() {
+    public SkillInstance() {
         // used by JPA
     }
 
-    public SkillDefinition(final SkillDefinition skill) {
-        name = skill.name;
-        value = skill.value;
+    public SkillInstance(final SkillDefinition skill) {
+        name = skill.getName();
+        value = skill.getValue();
     }
 
     public Long getId() {
@@ -41,11 +40,11 @@ public class SkillDefinition {
         this.id = id;
     }
 
-    public CharacterDefinition getCharacter() {
+    public CharacterInstance getCharacter() {
         return character;
     }
 
-    public void setCharacter(CharacterDefinition character) {
+    public void setCharacter(CharacterInstance character) {
         this.character = character;
     }
 
@@ -69,7 +68,7 @@ public class SkillDefinition {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SkillDefinition skill = (SkillDefinition) o;
+        SkillInstance skill = (SkillInstance) o;
         return value == skill.value &&
                 Objects.equals(name, skill.name);
     }
