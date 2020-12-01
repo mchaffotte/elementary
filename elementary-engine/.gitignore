@@ -1,3 +1,7 @@
+# Gradle
+.gradle/
+build/
+
 # Eclipse
 .project
 .classpath
@@ -27,7 +31,3 @@ nb-configuration.xml
 # patch
 *.orig
 *.rej
-
-# Gradle
-.gradle/
-build/
