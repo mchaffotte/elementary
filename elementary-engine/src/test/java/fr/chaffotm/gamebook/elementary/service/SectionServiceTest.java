@@ -1,21 +1,23 @@
 package fr.chaffotm.gamebook.elementary.service;
 
+import fr.chaffotm.gamebook.elementary.assertion.SectionInstanceAssert;
 import fr.chaffotm.gamebook.elementary.model.builder.ActionDefinitionBuilder;
 import fr.chaffotm.gamebook.elementary.model.builder.EventDefinitionBuilder;
 import fr.chaffotm.gamebook.elementary.model.builder.OptionDefinitionBuilder;
 import fr.chaffotm.gamebook.elementary.model.builder.SectionDefinitionBuilder;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.ActionSelection;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.SectionDefinition;
-import fr.chaffotm.gamebook.elementary.model.instance.ActionInstance;
-import fr.chaffotm.gamebook.elementary.model.instance.SectionInstance;
+import fr.chaffotm.gamebook.elementary.model.entity.instance.ActionInstance;
+import fr.chaffotm.gamebook.elementary.model.entity.instance.GameInstance;
+import fr.chaffotm.gamebook.elementary.model.entity.instance.SectionInstance;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
+import static  fr.chaffotm.gamebook.elementary.assertion.SectionInstanceAssert.assertThat;
 
 @QuarkusTest
 public class SectionServiceTest {
@@ -32,14 +34,13 @@ public class SectionServiceTest {
                 .action(new ActionDefinitionBuilder(new OptionDefinitionBuilder(4).expression("false").build()).build())
                 .action(new ActionDefinitionBuilder(2).build())
                 .build();
-        final SectionInstance expected = new SectionInstance();
-        expected.setId(7);
-        expected.setParagraphs(List.of("Lorem ipsum dolor sit amet"));
-        expected.setActions(List.of(new ActionInstance(2)));
 
-        SectionInstance instance = service.evaluate(definition, new GameContext(null, null));
+        SectionInstance instance = service.evaluate(definition, new GameContext(null, new GameInstance()));
 
-        assertThat(instance).isEqualTo(expected);
+        assertThat(instance)
+                .hasReference(7)
+                .hasParagraphs("Lorem ipsum dolor sit amet")
+                .hasActions(new ActionInstance(2, null, null));
     }
 
     @Test
@@ -51,7 +52,7 @@ public class SectionServiceTest {
                 .build();
 
         assertThatIllegalStateException()
-                .isThrownBy(() -> service.evaluate(definition, new GameContext(null, null)))
+                .isThrownBy(() -> service.evaluate(definition, new GameContext(null, new GameInstance())))
                 .withMessage("No action is possible");
     }
 
@@ -61,14 +62,13 @@ public class SectionServiceTest {
         final SectionDefinition definition = new SectionDefinitionBuilder(7)
                 .paragraph("Lorem ipsum dolor sit amet")
                 .build();
-        final SectionInstance expected = new SectionInstance();
-        expected.setId(7);
-        expected.setParagraphs(List.of("Lorem ipsum dolor sit amet"));
-        expected.setActions(List.of());
 
         SectionInstance instance = service.evaluate(definition, new GameContext(null, null));
 
-        assertThat(instance).isEqualTo(expected);
+        assertThat(instance)
+                .hasReference(7)
+                .hasParagraphs("Lorem ipsum dolor sit amet")
+                .hasNoActions();
     }
 
     @Test
@@ -88,14 +88,13 @@ public class SectionServiceTest {
                 .action(new ActionDefinitionBuilder(475).build())
                 .action(new ActionDefinitionBuilder(2).build())
                 .build();
-        final SectionInstance expected = new SectionInstance();
-        expected.setId(7);
-        expected.setParagraphs(List.of("Lorem ipsum dolor sit amet"));
-        expected.setActions(List.of(new ActionInstance(475), new ActionInstance(2)));
 
        SectionInstance instance = service.evaluate(definition, new GameContext(null, null));
 
-        assertThat(instance).isEqualTo(expected);
+       assertThat(instance)
+               .hasReference(7)
+               .hasParagraphs("Lorem ipsum dolor sit amet")
+               .hasActions(new ActionInstance(475, null, null), new ActionInstance(2, null, null));
     }
 
     @Test
@@ -107,14 +106,13 @@ public class SectionServiceTest {
                 .action(new ActionDefinitionBuilder(475).build())
                 .action(new ActionDefinitionBuilder(2).build())
                 .build();
-        final SectionInstance expected = new SectionInstance();
-        expected.setId(7);
-        expected.setParagraphs(List.of("Lorem ipsum dolor sit amet"));
-        expected.setActions(List.of(new ActionInstance(475)));
 
-        SectionInstance instance = service.evaluate(definition, new GameContext(null, null));
+        SectionInstance instance = service.evaluate(definition, new GameContext(null, new GameInstance()));
 
-        assertThat(instance).isEqualTo(expected);
+        SectionInstanceAssert.assertThat(instance)
+                .hasReference(7)
+                .hasParagraphs("Lorem ipsum dolor sit amet")
+                .hasActions(new ActionInstance(475, null, null));
     }
 
 }
