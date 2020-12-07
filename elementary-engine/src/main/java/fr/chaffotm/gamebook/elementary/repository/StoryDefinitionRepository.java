@@ -4,7 +4,7 @@ import fr.chaffotm.gamebook.elementary.model.builder.StoryContext;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.CharacterDefinition;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.SectionDefinition;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.StoryDefinition;
-import fr.chaffotm.gamebook.elementary.service.StoryMaker;
+import fr.chaffotm.gamebook.elementary.service.StoryImporterService;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -15,6 +15,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.List;
 
 @ApplicationScoped
@@ -22,15 +23,18 @@ public class StoryDefinitionRepository {
 
     private final EntityManager em;
 
+    private final StoryImporterService importer;
+
     @Inject
-    public StoryDefinitionRepository(final EntityManager em) {
+    public StoryDefinitionRepository(final EntityManager em, StoryImporterService importer) {
         this.em = em;
+        this.importer = importer;
     }
 
     @PostConstruct
     @Transactional
-    public void populate() {
-        final StoryContext context = new StoryMaker().buildDefault();
+    public void populate() throws IOException {
+        final StoryContext context = importer.getStoryContext();
         final StoryDefinition story = context.getStory();
         final List<SectionDefinition> sections = context.getSections();
         em.persist(story);

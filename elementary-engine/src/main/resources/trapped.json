@@ -1,0 +1,100 @@
+{
+  "name": "Trapped",
+  "character": {
+    "name": "John Doe",
+    "skills": [
+      {
+        "name": "intuition",
+        "value": 1
+      },
+      {
+        "name": "athletics",
+        "value": 1
+      }
+    ]
+  },
+  "prologue": {
+    "reference": 0,
+    "paragraphs": [
+      "You are locked in a room.",
+      "The only visible exit is the door."
+    ],
+    "actions": [
+      {
+        "type": "singleOption",
+        "description": "If you want to open the door",
+        "toReference": 254
+      },
+      {
+        "type": "singleOption",
+        "description": "Or inspect the shelves",
+        "toReference": 191
+      }
+    ]
+  },
+  "sections": [
+    {
+      "reference": 10,
+      "paragraphs": [
+        "You are out."
+      ]
+    },
+    {
+      "reference": 12,
+      "paragraphs": [
+        "ou cannot open the door."
+      ],
+      "actions": [
+        {
+          "type": "singleOption",
+          "toReference": 191
+        }
+      ]
+    },
+    {
+      "reference": 191,
+      "paragraphs": [
+        "Between two books, you find a map showing how to open the door."
+      ],
+      "events": [
+        {
+          "type": "addClue",
+          "value": "A"
+        }
+      ],
+      "actions": [
+        {
+          "type": "singleOption",
+          "toReference": 254
+        }
+      ]
+    },
+    {
+      "reference": 254,
+      "paragraphs": [
+        "The door is locked. You tried to break down the door."
+      ],
+      "actions": [
+        {
+          "type": "expressionOption",
+          "expression": "clue.A",
+          "toReference": 10
+        },
+        {
+          "type": "multivaluedExpressionOption",
+          "expression": "die.roll() + skill.athletics",
+          "options": [
+            {
+              "expression": "value < 14",
+              "toReference": 12
+            },
+            {
+              "expression": "value < 20",
+              "toReference": 444
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
