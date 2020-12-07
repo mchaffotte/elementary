@@ -34,7 +34,7 @@ public class StoryDefinitionRepository {
     @PostConstruct
     @Transactional
     public void populate() throws IOException {
-        final StoryContext context = importer.getStoryContext();
+        final StoryContext context = importer.getDefaultStoryContext();
         final StoryDefinition story = context.getStory();
         final List<SectionDefinition> sections = context.getSections();
         em.persist(story);

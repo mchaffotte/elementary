@@ -1,13 +1,9 @@
 package fr.chaffotm.gamebook.elementary.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.chaffotm.gamebook.elementary.model.builder.CharacterDefinitionBuilder;
-import fr.chaffotm.gamebook.elementary.model.builder.SectionDefinitionBuilder;
 import fr.chaffotm.gamebook.elementary.model.builder.StoryContext;
-import fr.chaffotm.gamebook.elementary.model.builder.StoryDefinitionBuilder;
-import fr.chaffotm.gamebook.elementary.model.entity.definition.CharacterDefinition;
-import fr.chaffotm.gamebook.elementary.model.entity.definition.SectionDefinition;
-import fr.chaffotm.gamebook.elementary.model.io.*;
+import fr.chaffotm.gamebook.elementary.model.io.IOStory;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -17,55 +13,34 @@ import java.io.InputStream;
 @ApplicationScoped
 public class StoryImporterService {
 
+    private final IOService ioService;
+
+    private final StoryContextMapper storyMapper;
+
     private final ObjectMapper mapper;
 
+    private final String storyLocation;
+
     @Inject
-    public StoryImporterService(final ObjectMapper mapper) {
+    public StoryImporterService(final ObjectMapper mapper,
+                                @ConfigProperty(name = "elementary.default-story.location", defaultValue = " ") final String storyLocation) {
         this.mapper = mapper;
+        this.storyLocation =storyLocation;
+        this.ioService = new IOService();
+        this.storyMapper = new StoryContextMapper();
     }
 
-    public StoryContext getStoryContext() throws IOException {
+    public StoryContext getDefaultStoryContext() throws IOException {
+        if (storyLocation.isBlank()) {
+            return null;
+        }
         final IOStory story = getBuiltInStory();
-        return build(story);
+        return storyMapper.map(story);
     }
 
     private IOStory getBuiltInStory() throws IOException {
-        final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        try (InputStream inputStream = classLoader.getResourceAsStream("trapped.json")) {
+        try (InputStream inputStream = ioService.getInputStream(storyLocation)) {
             return mapper.readValue(inputStream, IOStory.class);
         }
     }
-
-    private StoryContext build(final IOStory story) {
-        final StoryDefinitionBuilder builder = new StoryDefinitionBuilder(story.getName())
-                .character(build(story.getCharacter()))
-                .prologue(build(story.getPrologue()));
-        for (IOSection section : story.getSections()) {
-            builder.section(build(section));
-        }
-        return builder.build();
-    }
-
-    private CharacterDefinition build(IOCharacter character) {
-        final CharacterDefinitionBuilder builder = new CharacterDefinitionBuilder(character.getName());
-        for (IOSkill skill : character.getSkills()) {
-            builder.skill(skill.getName(), skill.getValue());
-        }
-        return builder.build();
-    }
-
-    private SectionDefinition build(final IOSection section) {
-        final SectionDefinitionBuilder builder = new SectionDefinitionBuilder(section.getReference());
-        for (String paragraph : section.getParagraphs()) {
-            builder.paragraph(paragraph);
-        }
-        for (IOEvent event : section.getEvents()) {
-            builder.event(event.toEventDefinition());
-        }
-        for (IOAction action : section.getActions()) {
-            builder.action(action.toActionDefinition());
-        }
-        return builder.build();
-    }
-
 }
