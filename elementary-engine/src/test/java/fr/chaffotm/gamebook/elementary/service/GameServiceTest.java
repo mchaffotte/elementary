@@ -117,10 +117,10 @@ public class GameServiceTest {
     @Test
     @DisplayName("startGame should return the prologue")
     public void startGameShouldReturnThePrologue() {
-        when(storyService.getStoryEntity()).thenReturn(buildStory(null));
+        when(storyService.getStoryDefinition(1)).thenReturn(buildStory(null));
         when(storyService.getCharacter(any())).thenReturn(new CharacterDefinition());
 
-        final Game game = service.startGame();
+        final Game game = service.startGame(1);
 
         Section section = game.getSection();
         assertThat(section.getActions())
@@ -137,11 +137,11 @@ public class GameServiceTest {
                         .event(new EventDefinitionBuilder("unknown").build())
                         .build())
                 .build().getStory();
-        when(storyService.getStoryEntity()).thenReturn(story);
+        when(storyService.getStoryDefinition(1)).thenReturn(story);
         when(storyService.getCharacter(any())).thenReturn(new CharacterDefinition());
 
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> service.startGame());
+                .isThrownBy(() -> service.startGame(1));
         verify(gameInstanceRepository, never()).save(any());
     }
 
@@ -149,11 +149,11 @@ public class GameServiceTest {
     @DisplayName("startGame should return an exception if another game is already in progress")
     public void startGameShouldThrowAnExceptionIfAnotherGameIsAlreadyInProgress() {
         final StoryDefinition story = buildStory(null);
-        when(storyService.getStoryEntity()).thenReturn(story);
+        when(storyService.getStoryDefinition(1)).thenReturn(story);
         when(gameInstanceRepository.getGame()).thenReturn(buildGame(story, new CharacterInstance()));
 
         assertThatIllegalStateException()
-                .isThrownBy(() -> service.startGame())
+                .isThrownBy(() -> service.startGame(1))
                 .withMessage("Another game is already in progress");
     }
 
@@ -168,9 +168,9 @@ public class GameServiceTest {
     @Test
     @DisplayName("turnTo should throw an exception if section is not reachable")
     public void turnToShouldThrowAnExceptionIfSectionIsNotReachable() {
-        when(storyService.getStoryEntity()).thenReturn(buildStory(null));
+        when(storyService.getStoryDefinition(1)).thenReturn(buildStory(null));
         when(storyService.getCharacter(any())).thenReturn(new CharacterDefinition());
-        service.startGame();
+        service.startGame(1);
 
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> service.turnTo(48))
@@ -181,7 +181,7 @@ public class GameServiceTest {
     @DisplayName("turnTo should go to new section")
     public void turnToShouldGoToNewSection() {
         final StoryDefinition story = buildStory(null);
-        when(storyService.getStoryEntity()).thenReturn(story);
+        when(storyService.getStoryDefinition(1)).thenReturn(story);
         when(storyService.getSection(story, 2)).thenReturn(buildSection2(null));
         final GameInstance instance = buildGame(story, 2);
         when(gameInstanceRepository.getGame()).thenReturn(instance);
@@ -196,7 +196,7 @@ public class GameServiceTest {
     @DisplayName("turnTo should update context with action event")
     public void turnToShouldUpdateContextWithActionEvent() {
         final StoryDefinition story = buildStory(buildClueEvent("Z"));
-        when(storyService.getStoryEntity()).thenReturn(story);
+        when(storyService.getStoryDefinition(1)).thenReturn(story);
         when(storyService.getSection(story, 2)).thenReturn(buildSection2(null));
         final GameInstance game = buildGame(story, 2, "Z");
         when(gameInstanceRepository.getGame()).thenReturn(game);
@@ -222,7 +222,7 @@ public class GameServiceTest {
                                 .build())
                         .build())
                 .build().getStory();
-        when(storyService.getStoryEntity()).thenReturn(story);
+        when(storyService.getStoryDefinition(1)).thenReturn(story);
         final GameInstance game = buildGame(story, new ActionInstance(2, null, null));
         when(gameInstanceRepository.getGame()).thenReturn(game);
 
@@ -238,7 +238,7 @@ public class GameServiceTest {
         final EventDefinition event = new EventDefinitionBuilder("add-indication")
                 .parameter("clue", "Z").build();
         final StoryDefinition story = buildStory(null);
-        when(storyService.getStoryEntity()).thenReturn(story);
+        when(storyService.getStoryDefinition(1)).thenReturn(story);
         when(storyService.getSection(story, 2)).thenReturn(buildSection2(event));
         final GameInstance game = buildGame(story, 2);
         when(gameInstanceRepository.getGame()).thenReturn(game);
@@ -263,7 +263,7 @@ public class GameServiceTest {
                         .event(new EventDefinitionBuilder("unknown").build())
                         .build())
                 .build().getStory();
-        when(storyService.getStoryEntity()).thenReturn(story);
+        when(storyService.getStoryDefinition(1)).thenReturn(story);
         final GameInstance game = buildGame(story, 2);
         when(gameInstanceRepository.getGame()).thenReturn(game);
 
@@ -277,7 +277,7 @@ public class GameServiceTest {
     @DisplayName("turnTo should restart the game")
     public void turnToShouldRestartTheGame() {
         final StoryDefinition story = buildStory(null);
-        when(storyService.getStoryEntity()).thenReturn(story);
+        when(storyService.getStoryDefinition(1)).thenReturn(story);
         final GameInstance instance = buildGame(story, 0);
         instance.addIndication(new IndicationInstance(IndicationType.CLUE, "A"));
         when(gameInstanceRepository.getGame()).thenReturn(instance);
@@ -288,5 +288,4 @@ public class GameServiceTest {
         assertThat(game.getSection().getReference()).isEqualTo(0);
         assertThat(instance.getIndications()).isEmpty();
     }
-
 }

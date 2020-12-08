@@ -39,11 +39,11 @@ public class GameService {
         eventFactory = new EventFactory();
     }
 
-    public Game startGame() {
+    public Game startGame(final long storyId) {
         if (gameInstanceRepository.getGame() != null) {
             throw new IllegalStateException("Another game is already in progress");
         }
-        final StoryDefinition story = storyService.getStoryEntity();
+        final StoryDefinition story = storyService.getStoryDefinition(storyId);
         final CharacterDefinition character = storyService.getCharacter(story);
         final GameInstance game = new GameInstance();
         game.setStory(story);

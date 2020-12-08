@@ -114,5 +114,4 @@ public class SectionServiceTest {
                 .hasParagraphs("Lorem ipsum dolor sit amet")
                 .hasActions(new ActionInstance(475, null, null));
     }
-
 }

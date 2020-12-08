@@ -8,6 +8,10 @@ import java.util.Objects;
 @Entity(name = "Story")
 @Table(name = "story",
         uniqueConstraints = @UniqueConstraint(name = "uk_story_name", columnNames = "name"))
+@NamedQueries({
+        @NamedQuery(name = "getStories", query = "SELECT s FROM Story s"),
+        @NamedQuery(name = "getStory", query = "SELECT s FROM Story s WHERE s.id=:id")
+})
 @EntityListeners(ReadOnlyEntityListener.class)
 public class StoryDefinition {
 

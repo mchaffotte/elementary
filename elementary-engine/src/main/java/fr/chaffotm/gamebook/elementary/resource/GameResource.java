@@ -25,8 +25,8 @@ public class GameResource {
     }
 
     @Mutation
-    public Game startGame() {
-        return service.startGame();
+    public Game startGame(final long storyId) {
+        return service.startGame(storyId);
     }
 
     @Mutation
@@ -38,5 +38,4 @@ public class GameResource {
     public boolean stopGame() {
         return service.stopGame();
     }
-
 }

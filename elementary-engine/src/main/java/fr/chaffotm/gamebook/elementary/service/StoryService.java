@@ -9,6 +9,7 @@ import fr.chaffotm.gamebook.elementary.repository.StoryDefinitionRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.util.List;
 
 @ApplicationScoped
 public class StoryService {
@@ -20,13 +21,18 @@ public class StoryService {
         this.repository = repository;
     }
 
-    public Story getStory() {
-        final StoryDefinition story = repository.getStory();
+    public List<Story> getStories(final int offset, final int limit) {
+        final List<StoryDefinition> stories = repository.getStories(offset, limit);
+        return StoryMapper.map(stories);
+    }
+
+    public Story getStory(final long id) {
+        final StoryDefinition story = getStoryDefinition(id);
         return StoryMapper.map(story);
     }
 
-    public StoryDefinition getStoryEntity() {
-        return repository.getStory();
+    public StoryDefinition getStoryDefinition(final long id) {
+        return repository.getStory(id);
     }
 
     public SectionDefinition getSection(final StoryDefinition story, int reference) {

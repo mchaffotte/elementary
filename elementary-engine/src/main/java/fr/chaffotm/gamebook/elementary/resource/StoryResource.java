@@ -6,6 +6,7 @@ import org.eclipse.microprofile.graphql.GraphQLApi;
 import org.eclipse.microprofile.graphql.Query;
 
 import javax.inject.Inject;
+import java.util.List;
 
 @GraphQLApi
 public class StoryResource {
@@ -18,8 +19,12 @@ public class StoryResource {
     }
 
     @Query
-    public Story getStory() {
-        return service.getStory();
+    public List<Story> getStories(final int offset, final int limit) {
+        return service.getStories(offset, limit);
     }
 
+    @Query
+    public Story getStory(final long storyId) {
+        return service.getStory(storyId);
+    }
 }

@@ -11,9 +11,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
@@ -45,13 +42,17 @@ public class StoryDefinitionRepository {
         }
     }
 
-    public StoryDefinition getStory() {
-        final CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        final CriteriaQuery<StoryDefinition> criteriaQuery = criteriaBuilder.createQuery(StoryDefinition.class);
-        final Root<StoryDefinition> rootQuery = criteriaQuery.from(StoryDefinition.class);
-        criteriaQuery.select(rootQuery);
-        final TypedQuery<StoryDefinition> query = em.createQuery(criteriaQuery);
-        return query.getResultList().get(0);
+    public List<StoryDefinition> getStories(final int offset, final int limit) {
+        final TypedQuery<StoryDefinition> query = em.createNamedQuery("getStories", StoryDefinition.class);
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
+        return query.getResultList();
+    }
+
+    public StoryDefinition getStory(final long id) {
+        final TypedQuery<StoryDefinition> query = em.createNamedQuery("getStory", StoryDefinition.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
     }
 
     public SectionDefinition getSection(final StoryDefinition story, final int reference) {
