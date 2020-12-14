@@ -1,49 +1,232 @@
 package fr.chaffotm.gamebook.elementary;
 
+import fr.chaffotm.gamebook.elementary.api.GameAPI;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.path.json.JsonPath;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
 public class GameResourceIT {
 
+    private GameAPI gameAPI;
+
+    @BeforeEach
+    public void setUp() {
+        gameAPI = new GameAPI();
+    }
+
     @Test
     @DisplayName("It should play the game")
     public void playGame() {
-        given()
-            .when()
-                .body("{\"query\":\"mutation stopGame {\\n  stopGame\\n}\",\"variables\":null,\"operationName\":\"stopGame\"}")
-                .post("/graphql")
-            .then()
-                .statusCode(200)
-                .body(is("{\"data\":{\"stopGame\":true}}"));
+        gameAPI.stopGame();
 
-        given()
-            .when()
-                .body("{\"query\":\"mutation startGame {\\n  startGame(storyId: 1) {\\n    section{\\n      paragraphs\\n      actions {\\n        description\\n        id\\n      }\\n    }\\n  }\\n}\\n\",\"variables\":null,\"operationName\":\"startGame\"}")
-                .post("/graphql")
-            .then()
-                .statusCode(200)
-                .body(is("{\"data\":{\"startGame\":{\"section\":{\"paragraphs\":[\"You are locked in a room.\",\"The only visible exit is the door.\"],\"actions\":[{\"description\":\"If you want to open the door\",\"id\":254},{\"description\":\"Or inspect the shelves\",\"id\":191}]}}}}"));
+        final JsonPath startGame = gameAPI.startGame(1);
+        assertThat(startGame.prettify())
+                .isEqualTo("{\n" +
+                        "    \"data\": {\n" +
+                        "        \"startGame\": {\n" +
+                        "            \"section\": {\n" +
+                        "                \"paragraphs\": [\n" +
+                        "                    \"You are locked in a room.\",\n" +
+                        "                    \"The only visible exit is the door.\"\n" +
+                        "                ],\n" +
+                        "                \"actions\": [\n" +
+                        "                    {\n" +
+                        "                        \"description\": \"If you want to open the door\",\n" +
+                        "                        \"id\": 254\n" +
+                        "                    },\n" +
+                        "                    {\n" +
+                        "                        \"description\": \"Or inspect the shelves\",\n" +
+                        "                        \"id\": 191\n" +
+                        "                    }\n" +
+                        "                ]\n" +
+                        "            }\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "}");
 
-        given()
-            .when()
-                .body("{\"query\":\"query getGame {\\n  game {\\n    section {\\n      reference\\n      paragraphs\\n      actions {\\n        id\\n        description\\n      }\\n    }\\n  }\\n}\",\"variables\":null,\"operationName\":\"getGame\"}")
-                .post("/graphql")
-            .then()
-                .statusCode(200)
-                .body(is("{\"data\":{\"game\":{\"section\":{\"reference\":0,\"paragraphs\":[\"You are locked in a room.\",\"The only visible exit is the door.\"],\"actions\":[{\"id\":254,\"description\":\"If you want to open the door\"},{\"id\":191,\"description\":\"Or inspect the shelves\"}]}}}}"));
+        final JsonPath getGame = gameAPI.getGame();
+        assertThat(getGame.prettify())
+                .isEqualTo("{\n" +
+                        "    \"data\": {\n" +
+                        "        \"game\": {\n" +
+                        "            \"section\": {\n" +
+                        "                \"reference\": 0,\n" +
+                        "                \"paragraphs\": [\n" +
+                        "                    \"You are locked in a room.\",\n" +
+                        "                    \"The only visible exit is the door.\"\n" +
+                        "                ],\n" +
+                        "                \"actions\": [\n" +
+                        "                    {\n" +
+                        "                        \"id\": 254,\n" +
+                        "                        \"description\": \"If you want to open the door\"\n" +
+                        "                    },\n" +
+                        "                    {\n" +
+                        "                        \"id\": 191,\n" +
+                        "                        \"description\": \"Or inspect the shelves\"\n" +
+                        "                    }\n" +
+                        "                ]\n" +
+                        "            }\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "}");
 
-        given()
-            .when()
-                .body("{\"query\":\"mutation turnTo {\\n  turnTo(nextReference: 254) {\\n    section {\\n      reference\\n      paragraphs\\n    actions {\\n        id\\n        description\\n      }\\n    }\\n  }\\n}\",\"variables\":null,\"operationName\":\"turnTo\"}")
-                .post("/graphql")
-            .then()
-                .statusCode(200)
-                .body(is("{\"data\":{\"turnTo\":{\"section\":{\"reference\":254,\"paragraphs\":[\"The door is locked. You tried to break down the door.\"],\"actions\":[{\"id\":12,\"description\":null}]}}}}"));
+        final JsonPath turnTo = gameAPI.turnTo(254);
+        assertThat(turnTo.prettify())
+                .isEqualTo("{\n" +
+                        "    \"data\": {\n" +
+                        "        \"turnTo\": {\n" +
+                        "            \"section\": {\n" +
+                        "                \"reference\": 254,\n" +
+                        "                \"paragraphs\": [\n" +
+                        "                    \"The door is locked. You tried to break down the door.\"\n" +
+                        "                ],\n" +
+                        "                \"actions\": [\n" +
+                        "                    {\n" +
+                        "                        \"id\": 12,\n" +
+                        "                        \"description\": null\n" +
+                        "                    }\n" +
+                        "                ]\n" +
+                        "            }\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "}");
+    }
+
+    @Test
+    @DisplayName("It should play the whole game")
+    public void playTheWholeGame() {
+        gameAPI.stopGame();
+        JsonPath response = gameAPI.startGame(1);
+
+        assertThat(response.prettify())
+                .isEqualTo("{\n" +
+                        "    \"data\": {\n" +
+                        "        \"startGame\": {\n" +
+                        "            \"section\": {\n" +
+                        "                \"paragraphs\": [\n" +
+                        "                    \"You are locked in a room.\",\n" +
+                        "                    \"The only visible exit is the door.\"\n" +
+                        "                ],\n" +
+                        "                \"actions\": [\n" +
+                        "                    {\n" +
+                        "                        \"description\": \"If you want to open the door\",\n" +
+                        "                        \"id\": 254\n" +
+                        "                    },\n" +
+                        "                    {\n" +
+                        "                        \"description\": \"Or inspect the shelves\",\n" +
+                        "                        \"id\": 191\n" +
+                        "                    }\n" +
+                        "                ]\n" +
+                        "            }\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "}");
+        response = gameAPI.turnTo(254);
+        assertThat(response.prettify())
+                .isEqualTo("{\n" +
+                        "    \"data\": {\n" +
+                        "        \"turnTo\": {\n" +
+                        "            \"section\": {\n" +
+                        "                \"reference\": 254,\n" +
+                        "                \"paragraphs\": [\n" +
+                        "                    \"The door is locked. You tried to break down the door.\"\n" +
+                        "                ],\n" +
+                        "                \"actions\": [\n" +
+                        "                    {\n" +
+                        "                        \"id\": 12,\n" +
+                        "                        \"description\": null\n" +
+                        "                    }\n" +
+                        "                ]\n" +
+                        "            }\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "}");
+        response = gameAPI.turnTo(12);
+        assertThat(response.prettify())
+                .isEqualTo("{\n" +
+                        "    \"data\": {\n" +
+                        "        \"turnTo\": {\n" +
+                        "            \"section\": {\n" +
+                        "                \"reference\": 12,\n" +
+                        "                \"paragraphs\": [\n" +
+                        "                    \"You cannot open the door.\"\n" +
+                        "                ],\n" +
+                        "                \"actions\": [\n" +
+                        "                    {\n" +
+                        "                        \"id\": 191,\n" +
+                        "                        \"description\": null\n" +
+                        "                    }\n" +
+                        "                ]\n" +
+                        "            }\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "}");
+        response = gameAPI.turnTo(191);
+        assertThat(response.prettify())
+                .isEqualTo("{\n" +
+                        "    \"data\": {\n" +
+                        "        \"turnTo\": {\n" +
+                        "            \"section\": {\n" +
+                        "                \"reference\": 191,\n" +
+                        "                \"paragraphs\": [\n" +
+                        "                    \"Between two books, you find a map showing how to open the door.\"\n" +
+                        "                ],\n" +
+                        "                \"actions\": [\n" +
+                        "                    {\n" +
+                        "                        \"id\": 254,\n" +
+                        "                        \"description\": null\n" +
+                        "                    }\n" +
+                        "                ]\n" +
+                        "            }\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "}");
+        response = gameAPI.turnTo(254);
+        assertThat(response.prettify())
+                .isEqualTo("{\n" +
+                        "    \"data\": {\n" +
+                        "        \"turnTo\": {\n" +
+                        "            \"section\": {\n" +
+                        "                \"reference\": 254,\n" +
+                        "                \"paragraphs\": [\n" +
+                        "                    \"The door is locked. You tried to break down the door.\"\n" +
+                        "                ],\n" +
+                        "                \"actions\": [\n" +
+                        "                    {\n" +
+                        "                        \"id\": 10,\n" +
+                        "                        \"description\": null\n" +
+                        "                    },\n" +
+                        "                    {\n" +
+                        "                        \"id\": 12,\n" +
+                        "                        \"description\": null\n" +
+                        "                    }\n" +
+                        "                ]\n" +
+                        "            }\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "}");
+        response = gameAPI.turnTo(10);
+        assertThat(response.prettify())
+                .isEqualTo("{\n" +
+                        "    \"data\": {\n" +
+                        "        \"turnTo\": {\n" +
+                        "            \"section\": {\n" +
+                        "                \"reference\": 10,\n" +
+                        "                \"paragraphs\": [\n" +
+                        "                    \"You are out.\"\n" +
+                        "                ],\n" +
+                        "                \"actions\": [\n" +
+                        "                    \n" +
+                        "                ]\n" +
+                        "            }\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "}");
     }
 
 }

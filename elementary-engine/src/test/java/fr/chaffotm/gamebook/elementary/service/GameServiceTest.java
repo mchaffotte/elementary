@@ -44,7 +44,7 @@ public class GameServiceTest {
         if (nextSectionEvent != null) {
             section2.setEvents(List.of(nextSectionEvent));
         }
-        section2.setParagraphs(List.of("Section 2"));
+        section2.setText("Section 2");
         section2.setActions(List.of(buildAction(4, null, null), buildAction(0, null, null)));
         return section2;
     }
@@ -52,7 +52,7 @@ public class GameServiceTest {
     private StoryDefinition buildStory(final EventDefinition actionEvent) {
         final SectionDefinition prologue = new SectionDefinition();
         prologue.setReference(0);
-        prologue.setParagraphs(List.of("Prologue 1", "Prologue 2"));
+        prologue.setText("Prologue 1\nPrologue 2");
         prologue.setActions(List.of(buildAction(2, null, actionEvent)));
 
         final StoryDefinition definition = new StoryDefinition();

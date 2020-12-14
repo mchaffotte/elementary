@@ -12,7 +12,6 @@ import fr.chaffotm.gamebook.elementary.service.event.EventCommand;
 import fr.chaffotm.gamebook.elementary.service.event.EventFactory;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
@@ -30,7 +29,7 @@ public class SectionService {
         }
         final SectionInstance instance = new SectionInstance();
         instance.setReference(definition.getReference());
-        instance.setParagraphs(new ArrayList<>(definition.getParagraphs()));
+        instance.setText(definition.getText());
 
         final ActionStrategy strategy = getStrategy(definition.getSelection());
         final List<ActionInstance> actions = strategy.getActionInstances(definition.getActions(), context);
@@ -54,5 +53,4 @@ public class SectionService {
         }
         return new AllActionStrategy();
     }
-
 }

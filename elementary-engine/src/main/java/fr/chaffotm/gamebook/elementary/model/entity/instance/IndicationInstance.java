@@ -12,6 +12,10 @@ public class IndicationInstance {
     @GeneratedValue(generator = "indicationInstanceSeq")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "game_id", foreignKey = @ForeignKey(name = "fk_indication_instance_game_instance"))
+    private GameInstance game;
+
     private IndicationType type;
 
     private String value;
@@ -31,6 +35,14 @@ public class IndicationInstance {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public GameInstance getGame() {
+        return game;
+    }
+
+    public void setGame(GameInstance game) {
+        this.game = game;
     }
 
     public IndicationType getType() {

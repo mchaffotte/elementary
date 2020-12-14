@@ -28,7 +28,7 @@ public class GameInstanceRepository {
     }
 
     public void removeGame() {
-        GameInstance game = getGame();
+        final GameInstance game = getGame();
         if (game != null) {
             em.remove(game);
         }

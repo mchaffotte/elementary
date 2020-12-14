@@ -17,15 +17,16 @@ public class GameInstance {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "story_id", foreignKey = @ForeignKey(name = "fk_game_instance_story"))
     private StoryDefinition story;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @OneToOne(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
     private SectionInstance section;
 
-    @OneToOne(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @OneToOne(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
     private CharacterInstance character;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<IndicationInstance> indications = new HashSet<>();
 
     public Long getId() {
@@ -72,5 +73,6 @@ public class GameInstance {
 
     public void addIndication(final IndicationInstance indication) {
         indications.add(indication);
+        indication.setGame(this);
     }
 }

@@ -16,7 +16,7 @@ public class ParameterDefinition {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id", foreignKey = @ForeignKey(name = "fk_parameter_event_id"))
+    @JoinColumn(name = "event_id", foreignKey = @ForeignKey(name = "fk_parameter_event"))
     private EventDefinition event;
 
     @Column(nullable = false)

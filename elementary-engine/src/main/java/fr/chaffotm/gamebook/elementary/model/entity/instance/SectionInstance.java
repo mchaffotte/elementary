@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "section_instance")
+@Table(name = "section_instance",
+        uniqueConstraints = @UniqueConstraint(name = "uk_section_instance_game_instance", columnNames = {"game_id"} )
+)
 public class SectionInstance {
 
     @Id
@@ -14,17 +16,14 @@ public class SectionInstance {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "game_id", foreignKey = @ForeignKey(name = "fx_section_instance_game_instance"))
     private GameInstance game;
 
     private int reference;
 
-    @Column(name = "content", nullable = false)
-    @ElementCollection
-    @CollectionTable(name = "paragraph_instance",
-            joinColumns = @JoinColumn(name = "section_id"),
-            foreignKey = @ForeignKey(name = "fk_section_instance_paragraph")
-    )
-    private List<String> paragraphs = new ArrayList<>();
+    @Lob
+    @Column(name="text", length=1024)
+    private String text;
 
     @OneToMany(
             mappedBy = "section",
@@ -57,12 +56,12 @@ public class SectionInstance {
         this.reference = reference;
     }
 
-    public List<String> getParagraphs() {
-        return paragraphs;
+    public String getText() {
+        return text;
     }
 
-    public void setParagraphs(List<String> paragraphs) {
-        this.paragraphs = paragraphs;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public List<ActionInstance> getActions() {

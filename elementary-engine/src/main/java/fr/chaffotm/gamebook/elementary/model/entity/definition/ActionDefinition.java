@@ -17,7 +17,7 @@ public class ActionDefinition {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "section_id", foreignKey = @ForeignKey(name = "fk_action_section_id"))
+    @JoinColumn(name = "section_id", foreignKey = @ForeignKey(name = "fk_action_section"))
     private SectionDefinition section;
 
     private String expression;

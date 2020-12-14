@@ -9,17 +9,24 @@ public class SectionDefinitionBuilder {
 
     private final SectionDefinition section;
 
+    private final StringBuilder textBuilder;
+
     public SectionDefinitionBuilder(int reference) {
+        textBuilder = new StringBuilder();
         section = new SectionDefinition();
         section.setReference(reference);
     }
 
     public SectionDefinition build() {
+        section.setText(textBuilder.toString());
         return section;
     }
 
     public SectionDefinitionBuilder paragraph(final String paragraph) {
-        section.addParagraph(paragraph);
+        if (textBuilder.length() > 0) {
+            textBuilder.append('\n');
+        }
+        textBuilder.append(paragraph);
         return this;
     }
 

@@ -13,7 +13,7 @@ public class SectionMapper {
     public static Section map(final SectionInstance sectionInstance) {
         final Section section = new Section();
         section.setReference(sectionInstance.getReference());
-        section.setParagraphs(sectionInstance.getParagraphs());
+        section.setParagraphs(List.of(sectionInstance.getText().split("\\n")));
         final List<Action> actions = new ArrayList<>();
         for (ActionInstance action : sectionInstance.getActions()) {
             actions.add(new Action(action.getNextReference(), action.getDescription()));
@@ -21,5 +21,4 @@ public class SectionMapper {
         section.setActions(actions);
         return section;
     }
-
 }

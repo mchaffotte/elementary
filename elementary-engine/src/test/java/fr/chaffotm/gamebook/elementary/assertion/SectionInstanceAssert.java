@@ -27,11 +27,11 @@ public class SectionInstanceAssert extends AbstractAssert<SectionInstanceAssert,
         return this;
     }
 
-    public SectionInstanceAssert hasParagraphs(String... paragraphs) {
+    public SectionInstanceAssert hasText(String text) {
         isNotNull();
-        if (!Objects.equals(actual.getParagraphs(), List.of(paragraphs))) {
-            failWithMessage("Expected section to have paragraphs %s but was %s",
-                    List.of(paragraphs), actual.getParagraphs());
+        if (!Objects.equals(actual.getText(), text)) {
+            failWithMessage("Expected section to have text %s but was %s",
+                    text, actual.getText());
         }
         return this;
     }

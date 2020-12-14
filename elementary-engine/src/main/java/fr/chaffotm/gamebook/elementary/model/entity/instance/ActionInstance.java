@@ -15,7 +15,7 @@ public class ActionInstance {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "section_id", foreignKey = @ForeignKey(name = "fk_action_instance_section_instance_id"))
+    @JoinColumn(name = "section_id", foreignKey = @ForeignKey(name = "fk_action_instance_section_instance"))
     private SectionInstance section;
 
     private String description;
@@ -23,6 +23,7 @@ public class ActionInstance {
     private int nextReference;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "event_id", foreignKey = @ForeignKey(name = "fx_action_instance_event"))
     private EventDefinition event;
 
     public ActionInstance() {

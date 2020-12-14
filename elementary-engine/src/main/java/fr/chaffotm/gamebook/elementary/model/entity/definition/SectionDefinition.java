@@ -32,13 +32,9 @@ public class SectionDefinition {
 
     private int reference;
 
-    @Column(name = "content", nullable = false)
-    @ElementCollection
-    @CollectionTable(name = "paragraph",
-            joinColumns = @JoinColumn(name = "section_id"),
-            foreignKey = @ForeignKey(name = "fk_section_paragraph")
-    )
-    private List<String> paragraphs = new ArrayList<>();
+    @Lob
+    @Column(name="text", length=1024)
+    private String text;
 
     @OneToMany(
             mappedBy = "section",
@@ -88,16 +84,12 @@ public class SectionDefinition {
         this.reference = reference;
     }
 
-    public List<String> getParagraphs() {
-        return paragraphs;
+    public String getText() {
+        return text;
     }
 
-    public void setParagraphs(List<String> paragraphs) {
-        this.paragraphs = paragraphs;
-    }
-
-    public void addParagraph(String paragraph) {
-        paragraphs.add(paragraph);
+    public void setText(String text) {
+        this.text = text;
     }
 
     public List<EventDefinition> getEvents() {

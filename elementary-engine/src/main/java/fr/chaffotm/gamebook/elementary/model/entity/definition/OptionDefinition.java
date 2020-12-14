@@ -15,7 +15,7 @@ public class OptionDefinition {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "action_id", foreignKey = @ForeignKey(name = "fk_option_action_id"))
+    @JoinColumn(name = "action_id", foreignKey = @ForeignKey(name = "fk_option_action"))
     private ActionDefinition action;
 
     private String expression;

@@ -28,11 +28,6 @@ public class SkillDefinition {
         // used by JPA
     }
 
-    public SkillDefinition(final SkillDefinition skill) {
-        name = skill.name;
-        value = skill.value;
-    }
-
     public Long getId() {
         return id;
     }

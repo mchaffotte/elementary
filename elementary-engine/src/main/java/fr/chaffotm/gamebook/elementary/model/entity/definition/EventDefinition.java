@@ -18,7 +18,7 @@ public class EventDefinition {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "section_id", foreignKey = @ForeignKey(name = "fk_event_section_id"))
+    @JoinColumn(name = "section_id", foreignKey = @ForeignKey(name = "fk_event_section"))
     private SectionDefinition section;
 
     @Column(nullable = false)
@@ -65,6 +65,7 @@ public class EventDefinition {
 
     public void addParameter(final ParameterDefinition parameter) {
         parameters.add(parameter);
+        parameter.setEvent(this);
     }
 
     @Override

@@ -39,7 +39,7 @@ public class SectionServiceTest {
 
         assertThat(instance)
                 .hasReference(7)
-                .hasParagraphs("Lorem ipsum dolor sit amet")
+                .hasText("Lorem ipsum dolor sit amet")
                 .hasActions(new ActionInstance(2, null, null));
     }
 
@@ -67,7 +67,7 @@ public class SectionServiceTest {
 
         assertThat(instance)
                 .hasReference(7)
-                .hasParagraphs("Lorem ipsum dolor sit amet")
+                .hasText("Lorem ipsum dolor sit amet")
                 .hasNoActions();
     }
 
@@ -93,7 +93,7 @@ public class SectionServiceTest {
 
        assertThat(instance)
                .hasReference(7)
-               .hasParagraphs("Lorem ipsum dolor sit amet")
+               .hasText("Lorem ipsum dolor sit amet")
                .hasActions(new ActionInstance(475, null, null), new ActionInstance(2, null, null));
     }
 
@@ -111,7 +111,7 @@ public class SectionServiceTest {
 
         SectionInstanceAssert.assertThat(instance)
                 .hasReference(7)
-                .hasParagraphs("Lorem ipsum dolor sit amet")
+                .hasText("Lorem ipsum dolor sit amet")
                 .hasActions(new ActionInstance(475, null, null));
     }
 }
