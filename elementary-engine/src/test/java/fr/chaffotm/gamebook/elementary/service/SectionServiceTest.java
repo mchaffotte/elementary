@@ -5,7 +5,6 @@ import fr.chaffotm.gamebook.elementary.model.builder.ActionDefinitionBuilder;
 import fr.chaffotm.gamebook.elementary.model.builder.EventDefinitionBuilder;
 import fr.chaffotm.gamebook.elementary.model.builder.OptionDefinitionBuilder;
 import fr.chaffotm.gamebook.elementary.model.builder.SectionDefinitionBuilder;
-import fr.chaffotm.gamebook.elementary.model.entity.definition.ActionSelection;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.SectionDefinition;
 import fr.chaffotm.gamebook.elementary.model.entity.instance.ActionInstance;
 import fr.chaffotm.gamebook.elementary.model.entity.instance.GameInstance;
@@ -84,9 +83,8 @@ public class SectionServiceTest {
     public void evaluateShouldChooseAllActions() {
         final SectionDefinition definition = new SectionDefinitionBuilder(7)
                 .paragraph("Lorem ipsum dolor sit amet")
-                .selection((ActionSelection.ALL))
-                .action(new ActionDefinitionBuilder(475).build())
-                .action(new ActionDefinitionBuilder(2).build())
+                .action(new ActionDefinitionBuilder("Lorem", 475).build())
+                .action(new ActionDefinitionBuilder("Ipsum", 2).build())
                 .build();
 
        SectionInstance instance = service.evaluate(definition, new GameContext(null, null));
@@ -94,7 +92,43 @@ public class SectionServiceTest {
        assertThat(instance)
                .hasReference(7)
                .hasText("Lorem ipsum dolor sit amet")
-               .hasActions(new ActionInstance(475, null, null), new ActionInstance(2, null, null));
+               .hasActions(
+                       new ActionInstance(475, "Lorem", null),
+                       new ActionInstance(2, "Ipsum", null));
+    }
+
+    @Test
+    @DisplayName("evaluate should choose first action without description")
+    public void evaluateShouldChooseFirstActionWithoutDescription() {
+        final SectionDefinition definition = new SectionDefinitionBuilder(7)
+                .paragraph("Lorem ipsum dolor sit amet")
+                .action(new ActionDefinitionBuilder(475).build())
+                .action(new ActionDefinitionBuilder("Ipsum", 2).build())
+                .build();
+
+        SectionInstance instance = service.evaluate(definition, new GameContext(null, null));
+
+        assertThat(instance)
+                .hasReference(7)
+                .hasText("Lorem ipsum dolor sit amet")
+                .hasActions(new ActionInstance(475, null, null));
+    }
+
+    @Test
+    @DisplayName("evaluate should stop the action selection with an action without a description")
+    public void evaluateShouldStopTheActionSelectionWithAnActionWithoutADescription() {
+        final SectionDefinition definition = new SectionDefinitionBuilder(7)
+                .paragraph("Lorem ipsum dolor sit amet")
+                .action(new ActionDefinitionBuilder("Ipsum", 475).build())
+                .action(new ActionDefinitionBuilder( 2).build())
+                .build();
+
+        SectionInstance instance = service.evaluate(definition, new GameContext(null, null));
+
+        assertThat(instance)
+                .hasReference(7)
+                .hasText("Lorem ipsum dolor sit amet")
+                .hasActions(new ActionInstance(475, "Ipsum", null));
     }
 
     @Test
@@ -102,8 +136,24 @@ public class SectionServiceTest {
     public void evaluateShouldChooseOnlyFirstAction() {
         final SectionDefinition definition = new SectionDefinitionBuilder(7)
                 .paragraph("Lorem ipsum dolor sit amet")
-                .selection((ActionSelection.FIRST))
                 .action(new ActionDefinitionBuilder(475).build())
+                .action(new ActionDefinitionBuilder(2).build())
+                .build();
+
+        SectionInstance instance = service.evaluate(definition, new GameContext(null, new GameInstance()));
+
+        SectionInstanceAssert.assertThat(instance)
+                .hasReference(7)
+                .hasText("Lorem ipsum dolor sit amet")
+                .hasActions(new ActionInstance(475, null, null));
+    }
+
+    @Test
+    @DisplayName("evaluate should choose only first action with blank description")
+    public void evaluateShouldChooseOnlyFirstActionWithBlankDescription() {
+        final SectionDefinition definition = new SectionDefinitionBuilder(7)
+                .paragraph("Lorem ipsum dolor sit amet")
+                .action(new ActionDefinitionBuilder("                       ",475).build())
                 .action(new ActionDefinitionBuilder(2).build())
                 .build();
 

@@ -1,5 +1,7 @@
 package fr.chaffotm.gamebook.elementary.model.resource;
 
+import java.util.Objects;
+
 public class Story {
 
     private long id;
@@ -22,4 +24,16 @@ public class Story {
         this.name = name;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Story story = (Story) o;
+        return id == story.id && Objects.equals(name, story.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
 }

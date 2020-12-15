@@ -45,7 +45,7 @@ public class GameServiceTest {
             section2.setEvents(List.of(nextSectionEvent));
         }
         section2.setText("Section 2");
-        section2.setActions(List.of(buildAction(4, null, null), buildAction(0, null, null)));
+        section2.setActions(List.of(buildAction(4, "Go to", null), buildAction(0, "Or", null)));
         return section2;
     }
 
@@ -124,7 +124,7 @@ public class GameServiceTest {
 
         Section section = game.getSection();
         assertThat(section.getActions())
-                .containsExactly(new Action(2, null));
+                .containsExactly(new Action(2, ""));
     }
 
     @Test
@@ -189,7 +189,7 @@ public class GameServiceTest {
         Game game = service.turnTo(2);
 
         assertThat(game.getSection().getActions())
-                .containsExactly(new Action(4, null), new Action(0, null));
+                .containsExactly(new Action(4, "Go to"), new Action(0, "Or"));
     }
 
     @Test

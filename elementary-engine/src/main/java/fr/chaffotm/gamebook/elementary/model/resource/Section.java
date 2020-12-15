@@ -1,6 +1,7 @@
 package fr.chaffotm.gamebook.elementary.model.resource;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Section {
 
@@ -32,5 +33,18 @@ public class Section {
 
     public void setActions(List<Action> actions) {
         this.actions = actions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Section section = (Section) o;
+        return reference == section.reference && Objects.equals(paragraphs, section.paragraphs) && Objects.equals(actions, section.actions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(reference, paragraphs, actions);
     }
 }

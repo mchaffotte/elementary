@@ -36,7 +36,7 @@ public class ActionInstanceAssert extends AbstractAssert<ActionInstanceAssert, A
 
     public ActionInstanceAssert hasNoDescription() {
         isNotNull();
-        if (actual.getDescription() != null) {
+        if (actual.getDescription() != null && !actual.getDescription().isEmpty()) {
             failWithMessage("Expected action to have no description but was %s", actual.getDescription());
         }
         return this;

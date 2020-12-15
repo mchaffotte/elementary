@@ -1,11 +1,13 @@
 package fr.chaffotm.gamebook.elementary;
 
 import fr.chaffotm.gamebook.elementary.api.StoryAPI;
+import fr.chaffotm.gamebook.elementary.model.resource.Story;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.path.json.JsonPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,27 +24,14 @@ public class StoryResourceIT {
     @Test
     @DisplayName("It should display the content of the default story")
     public void getStories() {
-        final JsonPath getStories = storyAPI.getStories();
-        assertThat(getStories.prettify())
-                .isEqualTo("{\n" +
-                        "    \"data\": {\n" +
-                        "        \"stories\": [\n" +
-                        "            {\n" +
-                        "                \"id\": 1\n" +
-                        "            }\n" +
-                        "        ]\n" +
-                        "    }\n" +
-                        "}");
+        final Story story = new Story();
+        story.setId(1);
+        story.setName("Trapped");
+        final List<Story> stories = storyAPI.getStories();
+        assertThat(stories).containsOnly(story);
 
-        final JsonPath getStory = storyAPI.getStory(1);
-        assertThat(getStory.prettify())
-                .isEqualTo("{\n" +
-                        "    \"data\": {\n" +
-                        "        \"story\": {\n" +
-                        "            \"id\": 1,\n" +
-                        "            \"name\": \"Trapped\"\n" +
-                        "        }\n" +
-                        "    }\n" +
-                        "}");
+        final Story firstStory = storyAPI.getStory(stories.get(0).getId());
+        assertThat(firstStory).isEqualTo(story);
     }
+
 }

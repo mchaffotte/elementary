@@ -1,17 +1,17 @@
 package fr.chaffotm.gamebook.elementary.service;
 
-import fr.chaffotm.gamebook.elementary.model.entity.definition.ActionSelection;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.ActionDefinition;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.EventDefinition;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.SectionDefinition;
 import fr.chaffotm.gamebook.elementary.model.entity.instance.ActionInstance;
 import fr.chaffotm.gamebook.elementary.model.entity.instance.SectionInstance;
-import fr.chaffotm.gamebook.elementary.service.action.ActionStrategy;
-import fr.chaffotm.gamebook.elementary.service.action.AllActionStrategy;
-import fr.chaffotm.gamebook.elementary.service.action.FirstActionStrategy;
+import fr.chaffotm.gamebook.elementary.service.action.ActionEvaluator;
 import fr.chaffotm.gamebook.elementary.service.event.EventCommand;
 import fr.chaffotm.gamebook.elementary.service.event.EventFactory;
 
 import javax.enterprise.context.ApplicationScoped;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @ApplicationScoped
@@ -19,8 +19,11 @@ public class SectionService {
 
     private final EventFactory eventFactory;
 
+    private final ActionEvaluator evaluator;
+
     public SectionService() {
         eventFactory = new EventFactory();
+        evaluator = new ActionEvaluator();
     }
 
     public SectionInstance evaluate(final SectionDefinition definition, final GameContext context) {
@@ -31,8 +34,7 @@ public class SectionService {
         instance.setReference(definition.getReference());
         instance.setText(definition.getText());
 
-        final ActionStrategy strategy = getStrategy(definition.getSelection());
-        final List<ActionInstance> actions = strategy.getActionInstances(definition.getActions(), context);
+        final List<ActionInstance> actions = getActions(definition.getActions(), context);
         if (actions.isEmpty() && !definition.getActions().isEmpty()) {
             throw new IllegalStateException("No action is possible");
         }
@@ -47,10 +49,28 @@ public class SectionService {
         return instance;
     }
 
-    private ActionStrategy getStrategy(ActionSelection selection) {
-        if (selection == ActionSelection.FIRST) {
-            return new FirstActionStrategy();
+    private List<ActionInstance> getActions(List<ActionDefinition> actions, GameContext context) {
+        final List<ActionInstance> instances = new ArrayList<>();
+        final Iterator<ActionDefinition> actionIterator = actions.iterator();
+        boolean enough = false;
+        ActionInstance lastInstance = null;
+        while (actionIterator.hasNext() && !enough) {
+            final ActionDefinition action = actionIterator.next();
+            final ActionInstance instance = evaluator.toInstance(action, context);
+            if (instance != null) {
+                enough = lastInstance != null && (hasNoDescription(lastInstance) || hasNoDescription(instance));
+                if (!enough) {
+                    instances.add(instance);
+                    lastInstance = instance;
+                    enough = instance.getDescription() == null;
+                }
+            }
         }
-        return new AllActionStrategy();
+        return instances;
+    }
+
+    private boolean hasNoDescription(final ActionInstance instance) {
+        final String description = instance.getDescription();
+        return description == null || description.isEmpty();
     }
 }

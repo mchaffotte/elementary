@@ -43,8 +43,6 @@ public class SectionDefinition {
     )
     private List<EventDefinition> events = new ArrayList<>();
 
-    private ActionSelection selection;
-
     @OneToMany(
             mappedBy = "section",
             cascade = CascadeType.ALL,
@@ -103,14 +101,6 @@ public class SectionDefinition {
     public void addEvent(final EventDefinition event) {
         events.add(event);
         event.setSection(this);
-    }
-
-    public ActionSelection getSelection() {
-        return selection;
-    }
-
-    public void setSelection(ActionSelection selection) {
-        this.selection = selection;
     }
 
     public List<ActionDefinition> getActions() {

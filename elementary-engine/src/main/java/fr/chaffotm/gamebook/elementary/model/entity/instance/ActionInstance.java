@@ -31,14 +31,12 @@ public class ActionInstance {
     }
 
     public ActionInstance(final OptionDefinition option) {
-        this.nextReference = option.getNextReference();
-        this.description = option.getDescription();
-        this.event = option.getEvent();
+        this(option.getNextReference(), option.getDescription(), option.getEvent());
     }
 
     public ActionInstance(final int nextReference, final String description, final EventDefinition event) {
         this.nextReference = nextReference;
-        this.description = description;
+        this.description = description == null ? "" : description.trim();
         this.event = event;
     }
 
