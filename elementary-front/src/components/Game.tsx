@@ -1,0 +1,113 @@
+import { FunctionComponent, useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { useMutation, gql } from "@apollo/client";
+
+import { Game } from "../api";
+
+interface LocationState {
+  storyId: number;
+}
+
+const START_GAME = gql`
+  mutation startGame($id: BigInteger!) {
+    startGame(storyId: $id) {
+      section {
+        reference
+        paragraphs
+        actions {
+          description
+          id
+        }
+      }
+    }
+  }
+`;
+
+const TURN_TO = gql`
+  mutation turnTo($id: Int!) {
+    turnTo(nextReference: $id) {
+      section {
+        reference
+        paragraphs
+        actions {
+          id
+          description
+        }
+      }
+    }
+  }
+`;
+
+const STOP_GAME = gql`
+  mutation stopGame {
+    stopGame
+  }
+`;
+
+const GamePage: FunctionComponent<{}> = () => {
+  const [sectionId, setSectionId] = useState(-1);
+  const location = useLocation<LocationState>();
+
+  const [start, response] = useMutation<{ startGame: Game }, { id: number }>(
+    START_GAME
+  );
+
+  const [turnTo, toResponse] = useMutation<{ turnTo: Game }, { id: number }>(
+    TURN_TO
+  );
+
+  const [stop] = useMutation<{ stopGame: boolean }>(STOP_GAME);
+
+  useEffect(() => {
+    if (location.state) {
+      start({ variables: { id: location.state.storyId } });
+    }
+  }, [location.state, start]);
+
+  useEffect(() => {
+    if (sectionId !== -1) {
+      turnTo({ variables: { id: sectionId } });
+    }
+  }, [sectionId, turnTo]);
+
+  const handleTurnTo = (nextReference: number) => {
+    setSectionId(nextReference);
+  };
+
+  let section;
+  if (sectionId === -1) {
+    if (!location) {
+      return null;
+    }
+    if (response.loading || !response.data) {
+      return <span>LOADING</span>;
+    }
+    section = response.data.startGame.section;
+  } else {
+    if (toResponse.loading || !toResponse.data) {
+      return <span>LOADING</span>;
+    }
+    section = toResponse.data.turnTo.section;
+  }
+
+  return (
+    <div>
+      <span>{section.reference}</span>
+      <div>
+        {section.paragraphs.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </div>
+      <div>
+        {section.actions.map((action) => (
+          <div>
+            {action.description}
+            <button onClick={() => handleTurnTo(action.id)}>Next</button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default GamePage;
