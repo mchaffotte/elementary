@@ -16,7 +16,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-resteasy-jackson'
     implementation 'io.quarkus:quarkus-hibernate-orm'
     implementation 'io.quarkus:quarkus-jdbc-h2'
-    implementation 'org.mvel:mvel2:2.4.10.Final'
+    implementation 'org.mvel:mvel2:2.4.12.Final'
 
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.quarkus:quarkus-junit5-mockito'

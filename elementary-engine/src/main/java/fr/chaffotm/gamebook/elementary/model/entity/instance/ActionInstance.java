@@ -22,7 +22,7 @@ public class ActionInstance {
 
     private int nextReference;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id", foreignKey = @ForeignKey(name = "fx_action_instance_event"))
     private EventDefinition event;
 

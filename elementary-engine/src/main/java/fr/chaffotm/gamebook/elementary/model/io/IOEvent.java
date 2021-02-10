@@ -9,6 +9,7 @@ import fr.chaffotm.gamebook.elementary.model.entity.definition.EventDefinition;
         property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = IOAddClueEvent.class, name = "addClue"),
+        @JsonSubTypes.Type(value = IOAddDecisionEvent.class, name = "addDecision"),
 })
 public interface IOEvent {
     EventDefinition toEventDefinition();

@@ -65,7 +65,11 @@
       "actions": [
         {
           "type": "singleOption",
-          "toReference": 254
+          "toReference": 254,
+          "event": {
+            "type": "addDecision",
+            "value": "1"
+          }
         }
       ]
     },
@@ -77,7 +81,7 @@
       "actions": [
         {
           "type": "expressionOption",
-          "expression": "clue.A",
+          "expression": "clue.A && decision.1",
           "toReference": 10
         },
         {
