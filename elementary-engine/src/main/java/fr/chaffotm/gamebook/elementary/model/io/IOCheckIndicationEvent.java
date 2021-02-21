@@ -3,9 +3,19 @@ package fr.chaffotm.gamebook.elementary.model.io;
 import fr.chaffotm.gamebook.elementary.model.builder.EventDefinitionBuilder;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.EventDefinition;
 
-public class IOAddDecisionEvent implements IOEvent{
+public class IOCheckIndicationEvent implements IOEvent {
+
+    private IOIndicationType indication;
 
     private String value;
+
+    public IOIndicationType getIndication() {
+        return indication;
+    }
+
+    public void setIndication(IOIndicationType indication) {
+        this.indication = indication;
+    }
 
     public String getValue() {
         return value;
@@ -18,7 +28,7 @@ public class IOAddDecisionEvent implements IOEvent{
     @Override
     public EventDefinition toEventDefinition() {
         return new EventDefinitionBuilder("add-indication")
-                .parameter("decision", value)
+                .parameter(indication.name().toLowerCase(), value)
                 .build();
     }
 }

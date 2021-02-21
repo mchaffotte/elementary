@@ -8,8 +8,7 @@ import fr.chaffotm.gamebook.elementary.model.entity.definition.EventDefinition;
         use = JsonTypeInfo.Id.NAME,
         property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = IOAddClueEvent.class, name = "addClue"),
-        @JsonSubTypes.Type(value = IOAddDecisionEvent.class, name = "addDecision"),
+        @JsonSubTypes.Type(value = IOCheckIndicationEvent.class, name = "checkIndication"),
 })
 public interface IOEvent {
     EventDefinition toEventDefinition();

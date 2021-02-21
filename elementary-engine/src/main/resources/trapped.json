@@ -58,7 +58,8 @@
       ],
       "events": [
         {
-          "type": "addClue",
+          "type": "checkIndication",
+          "indication": "clue",
           "value": "A"
         }
       ],
@@ -67,7 +68,8 @@
           "type": "singleOption",
           "toReference": 254,
           "event": {
-            "type": "addDecision",
+            "type": "checkIndication",
+            "indication": "decision",
             "value": "1"
           }
         }
