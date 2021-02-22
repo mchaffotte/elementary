@@ -4,13 +4,23 @@ import fr.chaffotm.gamebook.elementary.model.builder.ActionDefinitionBuilder;
 import fr.chaffotm.gamebook.elementary.model.builder.OptionDefinitionBuilder;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.ActionDefinition;
 
-public class IOSingleAction implements IOAction {
+public class IOSingleOptionAction implements IOAction {
+
+    private String expression;
 
     private String description;
 
     private int toReference;
 
     private IOEvent event;
+
+    public String getExpression() {
+        return expression;
+    }
+
+    public void setExpression(String expression) {
+        this.expression = expression;
+    }
 
     public String getDescription() {
         return description;
@@ -39,7 +49,8 @@ public class IOSingleAction implements IOAction {
     @Override
     public ActionDefinition toActionDefinition() {
         final OptionDefinitionBuilder optionBuilder = new OptionDefinitionBuilder(toReference)
-                .description(this.description);
+                .expression(expression)
+                .description(description);
         if (event != null) {
             optionBuilder.event(event.toEventDefinition());
         }

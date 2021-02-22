@@ -82,7 +82,7 @@
       ],
       "actions": [
         {
-          "type": "expressionOption",
+          "type": "singleOption",
           "expression": "clue.A && decision.1",
           "toReference": 10
         },

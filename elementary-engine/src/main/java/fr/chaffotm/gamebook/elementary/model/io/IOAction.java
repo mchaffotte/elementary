@@ -8,8 +8,7 @@ import fr.chaffotm.gamebook.elementary.model.entity.definition.ActionDefinition;
         use = JsonTypeInfo.Id.NAME,
         property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = IOSingleAction.class, name = "singleOption"),
-        @JsonSubTypes.Type(value = IOExpressionAction.class, name = "expressionOption"),
+        @JsonSubTypes.Type(value = IOSingleOptionAction.class, name = "singleOption"),
         @JsonSubTypes.Type(value = IOMultivaluedExpressionAction.class, name = "multivaluedExpressionOption"),
 })
 public interface IOAction {
