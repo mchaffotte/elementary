@@ -11,9 +11,19 @@ import java.util.List;
 
 public class IOMultivaluedExpressionAction implements IOAction{
 
+    private String description;
+
     private String expression;
 
     private List<IOOption> options = new ArrayList<>();
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getExpression() {
         return expression;
@@ -44,6 +54,7 @@ public class IOMultivaluedExpressionAction implements IOAction{
 
     private OptionDefinition toOptionDefinition(IOOption option) {
         final OptionDefinitionBuilder optionBuilder = new OptionDefinitionBuilder(option.getToReference())
+                .description(description)
                 .expression(option.getExpression());
         if (option.getEvent() != null) {
             optionBuilder.event(option.getEvent().toEventDefinition());
