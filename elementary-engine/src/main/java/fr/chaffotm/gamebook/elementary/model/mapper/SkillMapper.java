@@ -15,9 +15,6 @@ public class SkillMapper {
     }
 
     public static Skill map(final SkillInstance skillInstance) {
-        final Skill skill = new Skill();
-        skill.setName(skillInstance.getName());
-        skill.setValue(skillInstance.getValue());
-        return skill;
+        return new Skill(skillInstance.getName(), skillInstance.getValue());
     }
 }

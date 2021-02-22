@@ -6,6 +6,8 @@ public class IOOption {
 
     private int toReference;
 
+    private IOEvent event;
+
     public String getExpression() {
         return expression;
     }
@@ -20,5 +22,13 @@ public class IOOption {
 
     public void setToReference(int toReference) {
         this.toReference = toReference;
+    }
+
+    public IOEvent getEvent() {
+        return event;
+    }
+
+    public void setEvent(IOEvent event) {
+        this.event = event;
     }
 }

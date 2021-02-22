@@ -43,8 +43,11 @@ public class IOMultivaluedExpressionAction implements IOAction{
     }
 
     private OptionDefinition toOptionDefinition(IOOption option) {
-        return new OptionDefinitionBuilder(option.getToReference())
-                .expression(option.getExpression())
-                .build();
+        final OptionDefinitionBuilder optionBuilder = new OptionDefinitionBuilder(option.getToReference())
+                .expression(option.getExpression());
+        if (option.getEvent() != null) {
+            optionBuilder.event(option.getEvent().toEventDefinition());
+        }
+        return optionBuilder.build();
     }
 }

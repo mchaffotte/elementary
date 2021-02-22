@@ -92,7 +92,12 @@
           "options": [
             {
               "expression": "value < 14",
-              "toReference": 12
+              "toReference": 12,
+              "event": {
+                "type": "reduceSkillBonus",
+                "skill": "athletics",
+                "value": "1"
+              }
             },
             {
               "expression": "value < 20",

@@ -9,6 +9,7 @@ import fr.chaffotm.gamebook.elementary.model.entity.definition.EventDefinition;
         property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = IOCheckIndicationEvent.class, name = "checkIndication"),
+        @JsonSubTypes.Type(value = IOReduceSkillBonusEvent.class, name = "reduceSkillBonus"),
 })
 public interface IOEvent {
     EventDefinition toEventDefinition();

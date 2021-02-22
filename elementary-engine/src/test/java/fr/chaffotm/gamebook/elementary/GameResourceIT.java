@@ -24,12 +24,8 @@ public class GameResourceIT {
     }
 
     private Character getCharacter() {
-        final Skill athletics = new Skill();
-        athletics.setName("athletics");
-        athletics.setValue(1);
-        final Skill intuition = new Skill();
-        intuition.setName("intuition");
-        intuition.setValue(1);
+        final Skill athletics = new Skill("athletics", 1);
+        final Skill intuition = new Skill("intuition", 1);
 
         final Character character = new Character();
         character.setName("John Doe");
@@ -97,11 +93,19 @@ public class GameResourceIT {
         assertThat(game.getSection().getActions())
                 .containsOnly(
                         new Action(12, ""));
+        assertThat(game.getCharacter().getSkills())
+                .containsOnly(
+                        new Skill("athletics", 1),
+                        new Skill("intuition", 1));
 
         game = gameAPI.turnTo(12);
         assertThat(game.getSection().getActions())
                 .containsOnly(
                         new Action(191, ""));
+        assertThat(game.getCharacter().getSkills())
+                .containsOnly(
+                        new Skill("athletics", -2),
+                        new Skill("intuition", 1));
 
         game = gameAPI.turnTo(191);
         assertThat(game.getSection().getActions())
