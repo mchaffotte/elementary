@@ -1,15 +1,15 @@
 package fr.chaffotm.gamebook.elementary;
 
 import fr.chaffotm.gamebook.elementary.api.GameAPI;
-import fr.chaffotm.gamebook.elementary.model.resource.Action;
-import fr.chaffotm.gamebook.elementary.model.resource.Game;
-import fr.chaffotm.gamebook.elementary.model.resource.Section;
+import fr.chaffotm.gamebook.elementary.model.resource.*;
+import fr.chaffotm.gamebook.elementary.model.resource.Character;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,6 +21,20 @@ public class GameResourceIT {
     @BeforeEach
     public void setUp() {
         gameAPI = new GameAPI();
+    }
+
+    private Character getCharacter() {
+        final Skill athletics = new Skill();
+        athletics.setName("athletics");
+        athletics.setValue(1);
+        final Skill intuition = new Skill();
+        intuition.setName("intuition");
+        intuition.setValue(1);
+
+        final Character character = new Character();
+        character.setName("John Doe");
+        character.setSkills(Set.of(athletics, intuition));
+        return character;
     }
 
     private Game getPrologue() {
@@ -35,6 +49,7 @@ public class GameResourceIT {
         ));
         final Game game = new Game();
         game.setSection(section);
+        game.setCharacter(getCharacter());
         return game;
     }
 
@@ -47,6 +62,7 @@ public class GameResourceIT {
         ));
         final Game game = new Game();
         game.setSection(section);
+        game.setCharacter(getCharacter());
         return game;
     }
 

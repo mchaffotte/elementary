@@ -6,6 +6,8 @@ public class Game {
 
     private Section section;
 
+    private Character character;
+
     public Section getSection() {
         return section;
     }
@@ -14,16 +16,24 @@ public class Game {
         this.section = section;
     }
 
+    public Character getCharacter() {
+        return character;
+    }
+
+    public void setCharacter(Character character) {
+        this.character = character;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
-        return Objects.equals(section, game.section);
+        return Objects.equals(section, game.section) && Objects.equals(character, game.character);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(section);
+        return Objects.hash(section, character);
     }
 }

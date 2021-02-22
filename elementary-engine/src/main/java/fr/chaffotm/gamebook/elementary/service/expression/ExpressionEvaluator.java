@@ -27,7 +27,7 @@ public class ExpressionEvaluator {
         if (value != null) {
             variables.put("value", value);
         }
-        return MVEL.eval(expression, variables, Boolean.class);
+        return MVEL.evalToBoolean(expression, variables);
     }
 
     public Integer evaluateSkills(final String expression, final GameContext context) {
