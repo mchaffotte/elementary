@@ -7,7 +7,7 @@ public class Section {
 
     private int reference;
 
-    private List<String> paragraphs;
+    private String text;
 
     private List<Action> actions;
 
@@ -19,12 +19,12 @@ public class Section {
         this.reference = reference;
     }
 
-    public List<String> getParagraphs() {
-        return paragraphs;
+    public String getText() {
+        return text;
     }
 
-    public void setParagraphs(List<String> paragraphs) {
-        this.paragraphs = paragraphs;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public List<Action> getActions() {
@@ -40,11 +40,11 @@ public class Section {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Section section = (Section) o;
-        return reference == section.reference && Objects.equals(paragraphs, section.paragraphs) && Objects.equals(actions, section.actions);
+        return reference == section.reference && Objects.equals(text, section.text) && Objects.equals(actions, section.actions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(reference, paragraphs, actions);
+        return Objects.hash(reference, text, actions);
     }
 }

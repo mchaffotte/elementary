@@ -10,7 +10,7 @@ public class SectionDefinitionBuilder {
 
     private final StringBuilder textBuilder;
 
-    public SectionDefinitionBuilder(int reference) {
+    public SectionDefinitionBuilder(final int reference) {
         textBuilder = new StringBuilder();
         section = new SectionDefinition();
         section.setReference(reference);
@@ -23,7 +23,7 @@ public class SectionDefinitionBuilder {
 
     public SectionDefinitionBuilder paragraph(final String paragraph) {
         if (textBuilder.length() > 0) {
-            textBuilder.append('\n');
+            textBuilder.append("  \n");
         }
         textBuilder.append(paragraph);
         return this;

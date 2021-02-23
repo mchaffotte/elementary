@@ -5,7 +5,7 @@ import fr.chaffotm.gamebook.elementary.model.entity.definition.ParameterDefiniti
 
 public class EventDefinitionBuilder {
 
-    private EventDefinition event;
+    private final EventDefinition event;
 
     public EventDefinitionBuilder(final String type) {
         event = new EventDefinition();

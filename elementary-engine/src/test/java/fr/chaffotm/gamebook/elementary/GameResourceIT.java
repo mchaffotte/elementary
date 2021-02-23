@@ -36,9 +36,7 @@ public class GameResourceIT {
     private Game getPrologue() {
         final Section section = new Section();
         section.setReference(0);
-        section.setParagraphs(List.of(
-                "You are locked in a room.",
-                "The only visible exit is the door."));
+        section.setText("You are locked in a room.  \nThe only visible exit is the door.");
         section.setActions(List.of(
                 new Action(254, "If you want to open the door"),
                 new Action(191, "Or inspect the shelves")
@@ -52,7 +50,7 @@ public class GameResourceIT {
     private Game getSection254() {
         final Section section = new Section();
         section.setReference(254);
-        section.setParagraphs(List.of("The door is locked. You tried to break down the door."));
+        section.setText("The door is locked. You tried to break down the door.");
         section.setActions(List.of(
                 new Action(12, "")
         ));
