@@ -1,6 +1,7 @@
 import { FunctionComponent, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useMutation, gql } from "@apollo/client";
+import ReactMarkdown from "react-markdown";
 
 import { Game } from "../api";
 
@@ -13,7 +14,7 @@ const START_GAME = gql`
     startGame(storyId: $id) {
       section {
         reference
-        paragraphs
+        text
         actions {
           description
           id
@@ -28,7 +29,7 @@ const TURN_TO = gql`
     turnTo(nextReference: $id) {
       section {
         reference
-        paragraphs
+        text
         actions {
           id
           description
@@ -93,11 +94,7 @@ const GamePage: FunctionComponent<{}> = () => {
   return (
     <div>
       <span>{section.reference}</span>
-      <div>
-        {section.paragraphs.map((paragraph) => (
-          <p>{paragraph}</p>
-        ))}
-      </div>
+      <ReactMarkdown source={section.text} />
       <div>
         {section.actions.map((action) => (
           <div>

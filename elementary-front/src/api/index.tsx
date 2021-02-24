@@ -9,7 +9,7 @@ export interface Game {
 
 export interface Section {
   reference: number;
-  paragraphs: string[];
+  text: string;
   actions: Action[];
 }
 

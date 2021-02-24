@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "indication_instance")
+@Table(name = "indication_instance", uniqueConstraints=@UniqueConstraint(columnNames={"game_id", "type", "value"}))
 public class IndicationInstance {
 
     @Id
