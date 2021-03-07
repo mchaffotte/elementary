@@ -13,6 +13,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
 import java.util.List;
 
 @ApplicationScoped
@@ -30,15 +32,18 @@ public class StoryDefinitionRepository {
 
     @PostConstruct
     @Transactional
-    public void populate() throws IOException {
-        final StoryContext context = importer.getDefaultStoryContext();
-        final StoryDefinition story = context.getStory();
-        final List<SectionDefinition> sections = context.getSections();
-        em.persist(story);
-        em.persist(context.getCharacter());
-        for (SectionDefinition section : sections) {
-            section.setStory(story);
-            em.persist(section);
+    public void populate() throws IOException, URISyntaxException {
+        final List<Path> storyPaths = importer.getStoryPaths();
+        for (Path storyPath : storyPaths) {
+            final StoryContext context = importer.getStoryContext(storyPath);
+            final StoryDefinition story = context.getStory();
+            final List<SectionDefinition> sections = context.getSections();
+            em.persist(story);
+            em.persist(context.getCharacter());
+            for (SectionDefinition section : sections) {
+                section.setStory(story);
+                em.persist(section);
+            }
         }
     }
 

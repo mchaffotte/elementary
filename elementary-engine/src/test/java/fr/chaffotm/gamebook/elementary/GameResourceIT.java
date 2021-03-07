@@ -36,7 +36,7 @@ public class GameResourceIT {
     private Game getPrologue() {
         final Section section = new Section();
         section.setReference(0);
-        section.setText("You are locked in a room.  \nThe only visible exit is the door.");
+        section.setText("![trap](trap.png)  \nYou are locked in a room.  \nThe only visible exit is the door.");
         section.setActions(List.of(
                 new Action(254, "If you want to open the door"),
                 new Action(191, "Or inspect the shelves")
