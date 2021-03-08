@@ -15,9 +15,14 @@ public class StoryDefinitionBuilder {
 
     private final List<SectionDefinition> sections;
 
-    public StoryDefinitionBuilder(String name) {
+    public StoryDefinitionBuilder(final String name) {
+       this(name, null);
+    }
+
+    public StoryDefinitionBuilder(final String name, final String location) {
         story = new StoryDefinition();
         story.setName(name);
+        story.setLocation(location);
         sections = new ArrayList<>();
     }
 

@@ -26,6 +26,8 @@ public class StoryDefinition {
     @OneToOne(mappedBy = "prologueStory", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     private SectionDefinition prologue;
 
+    private String location;
+
     public Long getId() {
         return id;
     }
@@ -49,6 +51,14 @@ public class StoryDefinition {
     public void setPrologue(SectionDefinition prologue) {
         this.prologue = prologue;
         prologue.setPrologueStory(this);
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     @Override

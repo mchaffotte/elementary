@@ -45,6 +45,28 @@ const STOP_GAME = gql`
   }
 `;
 
+const getRenderers = (storyId: number) => {
+  return {
+    image: ({
+      alt,
+      src,
+      title,
+    }: {
+      alt?: string;
+      src?: string;
+      title?: string;
+    }) => {
+      return (
+        <img
+          alt={alt}
+          src={`http://localhost:8181/stories/${storyId}/images/${src}`}
+          title={title}
+        />
+      );
+    },
+  };
+};
+
 const GamePage: FunctionComponent<{}> = () => {
   const [sectionId, setSectionId] = useState(-1);
   const location = useLocation<LocationState>();
@@ -94,7 +116,10 @@ const GamePage: FunctionComponent<{}> = () => {
   return (
     <div>
       <span>{section.reference}</span>
-      <ReactMarkdown source={section.text} />
+      <ReactMarkdown
+        source={section.text}
+        renderers={getRenderers(location.state.storyId)}
+      />
       <div>
         {section.actions.map((action) => (
           <div>

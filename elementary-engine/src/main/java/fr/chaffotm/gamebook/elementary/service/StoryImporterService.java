@@ -50,6 +50,6 @@ public class StoryImporterService {
 
     public StoryContext getStoryContext(final Path path) throws IOException {
         final IOStory story = getBuiltInStory(path);
-        return storyMapper.map(story);
+        return storyMapper.map(story, path.toString());
     }
 }

@@ -10,8 +10,8 @@ import fr.chaffotm.gamebook.elementary.model.io.*;
 
 public class StoryContextMapper {
 
-    public StoryContext map(final IOStory story) {
-        final StoryDefinitionBuilder builder = new StoryDefinitionBuilder(story.getName())
+    public StoryContext map(final IOStory story, final String location) {
+        final StoryDefinitionBuilder builder = new StoryDefinitionBuilder(story.getName(), location)
                 .character(map(story.getCharacter()))
                 .prologue(map(story.getPrologue()));
         for (IOSection section : story.getSections()) {
@@ -41,5 +41,4 @@ public class StoryContextMapper {
         }
         return builder.build();
     }
-
 }

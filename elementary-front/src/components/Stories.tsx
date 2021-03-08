@@ -33,7 +33,7 @@ const Stories: FunctionComponent<{}> = () => {
     <div>
       <h1>Stories</h1>
       {data.stories.map((story) => (
-        <div>
+        <div key={story.id}>
           <span>{story.name}</span>
           <Link to={{ pathname: "/game", state: { storyId: story.id } }}>
             New game
