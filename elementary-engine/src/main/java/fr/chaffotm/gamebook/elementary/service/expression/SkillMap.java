@@ -17,5 +17,4 @@ public class SkillMap<String, V> extends HashMap<String, Integer> {
         }
         return value;
     }
-
 }

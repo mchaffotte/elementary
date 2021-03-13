@@ -13,5 +13,4 @@ public class ExistenceMap<String, V> extends HashMap<String, Boolean> {
     public Boolean get(Object key) {
         return super.get(key) != null;
     }
-
 }

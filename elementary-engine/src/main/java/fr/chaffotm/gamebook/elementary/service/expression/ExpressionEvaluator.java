@@ -44,5 +44,4 @@ public class ExpressionEvaluator {
         variables.put("die", context.getDie());
         return MVEL.eval(expression, variables, Integer.class);
     }
-
 }

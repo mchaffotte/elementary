@@ -20,5 +20,4 @@ public class Die {
     public int roll() {
         return random.nextInt(numberOfFaces);
     }
-
 }
