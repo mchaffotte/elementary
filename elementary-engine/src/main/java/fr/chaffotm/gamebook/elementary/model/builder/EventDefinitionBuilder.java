@@ -23,4 +23,9 @@ public class EventDefinitionBuilder {
         event.addParameter(parameter);
         return this;
     }
+
+    public EventDefinitionBuilder expression(final String expression) {
+        event.setExpression(expression);
+        return this;
+    }
 }

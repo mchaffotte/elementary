@@ -6,8 +6,7 @@ import fr.chaffotm.gamebook.elementary.model.entity.definition.SectionDefinition
 import fr.chaffotm.gamebook.elementary.model.entity.instance.ActionInstance;
 import fr.chaffotm.gamebook.elementary.model.entity.instance.SectionInstance;
 import fr.chaffotm.gamebook.elementary.service.action.ActionEvaluator;
-import fr.chaffotm.gamebook.elementary.service.event.EventCommand;
-import fr.chaffotm.gamebook.elementary.service.event.EventFactory;
+import fr.chaffotm.gamebook.elementary.service.event.EventEvaluator;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
@@ -17,12 +16,12 @@ import java.util.List;
 @ApplicationScoped
 public class SectionService {
 
-    private final EventFactory eventFactory;
+    private final EventEvaluator eventEvaluator;
 
     private final ActionEvaluator evaluator;
 
     public SectionService() {
-        eventFactory = new EventFactory();
+        eventEvaluator = new EventEvaluator();
         evaluator = new ActionEvaluator();
     }
 
@@ -43,8 +42,7 @@ public class SectionService {
         }
 
         for (EventDefinition event : definition.getEvents()) {
-            final EventCommand command = eventFactory.getEvent(event.getType());
-            command.execute(context, event.getParameters());
+            eventEvaluator.execute(event, context);
         }
         return instance;
     }

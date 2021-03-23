@@ -12,6 +12,7 @@ import fr.chaffotm.gamebook.elementary.model.mapper.GameMapper;
 import fr.chaffotm.gamebook.elementary.model.resource.Game;
 import fr.chaffotm.gamebook.elementary.repository.GameInstanceRepository;
 import fr.chaffotm.gamebook.elementary.service.event.EventCommand;
+import fr.chaffotm.gamebook.elementary.service.event.EventEvaluator;
 import fr.chaffotm.gamebook.elementary.service.event.EventFactory;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -29,14 +30,14 @@ public class GameService {
 
     private final GameInstanceRepository gameInstanceRepository;
 
-    private final EventFactory eventFactory;
+    private final EventEvaluator eventEvaluator;
 
     @Inject
     public GameService(final StoryService storyService, final SectionService sectionService, final GameInstanceRepository gameInstanceRepository) {
         this.storyService = storyService;
         this.sectionService = sectionService;
         this.gameInstanceRepository = gameInstanceRepository;
-        eventFactory = new EventFactory();
+        eventEvaluator = new EventEvaluator();
     }
 
     public Game startGame(final long storyId) {
@@ -90,8 +91,7 @@ public class GameService {
     private GameInstance turnTo(final GameInstance game, final EventDefinition event, final SectionDefinition section) {
         final GameContext context = new GameContext(new Die(12), game);
         if (event != null) {
-            final EventCommand command = eventFactory.getEvent(event.getType());
-            command.execute(context, event.getParameters());
+            eventEvaluator.execute(event, context);
         }
         final SectionInstance instance = sectionService.evaluate(section, context);
         game.setSection(instance);

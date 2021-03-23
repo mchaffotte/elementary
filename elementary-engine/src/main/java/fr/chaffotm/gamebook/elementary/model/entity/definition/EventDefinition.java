@@ -21,6 +21,8 @@ public class EventDefinition {
     @JoinColumn(name = "section_id", foreignKey = @ForeignKey(name = "fk_event_section"))
     private SectionDefinition section;
 
+    private String expression;
+
     @Column(nullable = false)
     private String type;
 
@@ -68,17 +70,24 @@ public class EventDefinition {
         parameter.setEvent(this);
     }
 
+    public String getExpression() {
+        return expression;
+    }
+
+    public void setExpression(String expression) {
+        this.expression = expression;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EventDefinition that = (EventDefinition) o;
-        return Objects.equals(type, that.type) &&
-                Objects.equals(parameters, that.parameters);
+        return Objects.equals(expression, that.expression) && Objects.equals(type, that.type) && Objects.equals(parameters, that.parameters);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, parameters);
+        return Objects.hash(expression, type, parameters);
     }
 }

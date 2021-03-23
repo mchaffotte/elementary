@@ -5,9 +5,19 @@ import fr.chaffotm.gamebook.elementary.model.entity.definition.EventDefinition;
 
 public class IOCheckIndicationEvent implements IOEvent {
 
+    private String expression;
+
     private IOIndicationType indication;
 
     private String value;
+
+    public String getExpression() {
+        return expression;
+    }
+
+    public void setExpression(String expression) {
+        this.expression = expression;
+    }
 
     public IOIndicationType getIndication() {
         return indication;
@@ -28,6 +38,7 @@ public class IOCheckIndicationEvent implements IOEvent {
     @Override
     public EventDefinition toEventDefinition() {
         return new EventDefinitionBuilder("add-indication")
+                .expression(expression)
                 .parameter(indication.name().toLowerCase(), value)
                 .build();
     }

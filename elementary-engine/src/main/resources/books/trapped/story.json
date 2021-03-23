@@ -61,7 +61,8 @@
         {
           "type": "checkIndication",
           "indication": "clue",
-          "value": "A"
+          "value": "A",
+          "expression": "true"
         }
       ],
       "actions": [
