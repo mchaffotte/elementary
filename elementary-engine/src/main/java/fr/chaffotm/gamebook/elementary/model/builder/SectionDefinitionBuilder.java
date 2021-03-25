@@ -23,7 +23,7 @@ public class SectionDefinitionBuilder {
 
     public SectionDefinitionBuilder paragraph(final String paragraph) {
         if (textBuilder.length() > 0) {
-            textBuilder.append("  \n");
+            textBuilder.append("\n\n");
         }
         textBuilder.append(paragraph);
         return this;
