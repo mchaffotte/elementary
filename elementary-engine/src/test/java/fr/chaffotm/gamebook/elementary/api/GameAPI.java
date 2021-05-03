@@ -1,7 +1,11 @@
 package fr.chaffotm.gamebook.elementary.api;
 
 import fr.chaffotm.gamebook.elementary.model.resource.Game;
+import fr.chaffotm.gamebook.elementary.model.resource.Indication;
 import io.restassured.path.json.JsonPath;
+
+import java.util.List;
+import java.util.StringJoiner;
 
 import static io.restassured.RestAssured.given;
 
@@ -49,5 +53,26 @@ public class GameAPI {
                 .statusCode(200)
                 .extract().body().jsonPath();
         return jsonPath.getObject("data.stopGame", boolean.class);
+    }
+
+    public Game startFrom(final int storyId, final int nextReference) {
+        return startFrom(storyId, nextReference, null);
+    }
+
+    public Game startFrom(final int storyId, final int nextReference, final List<Indication> indications) {
+        final StringJoiner indicationJoiner = new StringJoiner(", ", "[", "]");
+        if (indications != null) {
+            for (Indication indication : indications) {
+                indicationJoiner.add("{\"name\": \"" + indication.getName() + "\", \"value\": \"" + indication.getValue() + "\"}");
+            }
+        }
+        final JsonPath jsonPath = given()
+                .when()
+                .body("{\"query\":\"mutation startFrom($indications: [IndicationInput]) {\\n  startFrom(storyId: " + storyId + ", nextReference: " + nextReference + ", indications: $indications) {\\n    section {\\n      reference\\n      text\\n      actions {\\n        id\\n        description\\n      }\\n    }\\n  }\\n}\\n\",\"variables\":{\"indications\":" +  indicationJoiner + "},\"operationName\":\"startFrom\"}")
+                .post("/graphql")
+                .then()
+                .statusCode(200)
+                .extract().body().jsonPath();
+        return jsonPath.getObject("data.startFrom", Game.class);
     }
 }

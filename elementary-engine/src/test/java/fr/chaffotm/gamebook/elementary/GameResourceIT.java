@@ -120,4 +120,22 @@ public class GameResourceIT {
                 .isEmpty();
     }
 
+    @Test
+    @DisplayName("It should start the game from the given reference")
+    public void startTheGameFromTheGivenReference() {
+        gameAPI.stopGame();
+
+        Game game = gameAPI.startFrom(1, 254);
+        assertThat(game.getSection().getActions())
+                .containsOnly(
+                        new Action(12, ""));
+
+        gameAPI.stopGame();
+
+        game = gameAPI.startFrom(1, 254, List.of(new Indication("clue", "A"), new Indication("decision", "1")));
+        assertThat(game.getSection().getActions())
+                .containsOnly(
+                        new Action(10, ""));
+    }
+
 }

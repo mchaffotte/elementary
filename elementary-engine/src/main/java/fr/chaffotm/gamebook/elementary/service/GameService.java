@@ -4,16 +4,12 @@ import fr.chaffotm.gamebook.elementary.model.entity.definition.CharacterDefiniti
 import fr.chaffotm.gamebook.elementary.model.entity.definition.EventDefinition;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.SectionDefinition;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.StoryDefinition;
-import fr.chaffotm.gamebook.elementary.model.entity.instance.ActionInstance;
-import fr.chaffotm.gamebook.elementary.model.entity.instance.CharacterInstance;
-import fr.chaffotm.gamebook.elementary.model.entity.instance.GameInstance;
-import fr.chaffotm.gamebook.elementary.model.entity.instance.SectionInstance;
+import fr.chaffotm.gamebook.elementary.model.entity.instance.*;
 import fr.chaffotm.gamebook.elementary.model.mapper.GameMapper;
 import fr.chaffotm.gamebook.elementary.model.resource.Game;
+import fr.chaffotm.gamebook.elementary.model.resource.Indication;
 import fr.chaffotm.gamebook.elementary.repository.GameInstanceRepository;
-import fr.chaffotm.gamebook.elementary.service.event.EventCommand;
 import fr.chaffotm.gamebook.elementary.service.event.EventEvaluator;
-import fr.chaffotm.gamebook.elementary.service.event.EventFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -40,7 +36,41 @@ public class GameService {
         eventEvaluator = new EventEvaluator();
     }
 
+    public Game getGame() {
+        final GameInstance game = gameInstanceRepository.getGame();
+        if (game == null) {
+            throw new IllegalStateException("Not found");
+        }
+        return GameMapper.map(game);
+    }
+
     public Game startGame(final long storyId) {
+        final GameInstance game = initialize(storyId);
+        final StoryDefinition story = game.getStory();
+        final GameInstance next = turnTo(game, null, story.getPrologue());
+        gameInstanceRepository.save(next);
+        return GameMapper.map(next);
+    }
+
+    public Game startFrom(final long storyId, final int nextReference, final List<Indication> indications) {
+        final GameInstance game = initialize(storyId);
+        if (indications != null) {
+            for (Indication indication : indications) {
+                game.addIndication(new IndicationInstance(IndicationType.valueOf(indication.getName().toUpperCase()), indication.getValue()));
+            }
+        }
+        final SectionDefinition next = storyService.getSection(game.getStory(), nextReference);
+        final GameInstance nextGame = turnTo(game, null, next);
+        gameInstanceRepository.save(nextGame);
+        return GameMapper.map(nextGame);
+    }
+
+    public boolean stopGame() {
+        gameInstanceRepository.removeGame();
+        return true;
+    }
+
+    private GameInstance initialize(final long storyId) {
         if (gameInstanceRepository.getGame() != null) {
             throw new IllegalStateException("Another game is already in progress");
         }
@@ -49,14 +79,7 @@ public class GameService {
         final GameInstance game = new GameInstance();
         game.setStory(story);
         game.setCharacter(new CharacterInstance(character));
-        final GameInstance next = turnTo(game, null, story.getPrologue());
-        gameInstanceRepository.save(next);
-        return GameMapper.map(next);
-    }
-
-    public boolean stopGame() {
-        gameInstanceRepository.removeGame();
-        return true;
+        return game;
     }
 
     public Game turnTo(final int reference) {
@@ -96,13 +119,5 @@ public class GameService {
         final SectionInstance instance = sectionService.evaluate(section, context);
         game.setSection(instance);
         return game;
-    }
-
-    public Game getGame() {
-        final GameInstance game = gameInstanceRepository.getGame();
-        if (game == null) {
-            throw new IllegalStateException("Not found");
-        }
-        return GameMapper.map(game);
     }
 }
