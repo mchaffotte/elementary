@@ -132,7 +132,7 @@ public class GameResourceIT {
 
         gameAPI.stopGame();
 
-        game = gameAPI.startFrom(1, 254, List.of(new Indication("clue", "A"), new Indication("decision", "1")));
+        game = gameAPI.startFrom(1, 254, new Indication("clue", "A"), new Indication("decision", "1"));
         assertThat(game.getSection().getActions())
                 .containsOnly(
                         new Action(10, ""));
