@@ -35,9 +35,30 @@
   },
   "sections": [
     {
-      "reference": 10,
+      "reference": 9,
       "paragraphs": [
         "You are out."
+      ]
+    },
+    {
+      "reference": 10,
+      "paragraphs": [
+        "You need to say the magic word."
+      ],
+      "actions": [
+        {
+          "type": "multivaluedExpressionOption",
+          "evaluation": "POST",
+          "options": [
+            {
+              "expression": "answer == 'sox'",
+              "toReference": 9
+            },
+            {
+              "toReference": 10
+            }
+          ]
+        }
       ]
     },
     {

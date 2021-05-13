@@ -3,9 +3,8 @@ package fr.chaffotm.gamebook.elementary.resource;
 import fr.chaffotm.gamebook.elementary.model.resource.Game;
 import fr.chaffotm.gamebook.elementary.model.resource.Indication;
 import fr.chaffotm.gamebook.elementary.service.GameService;
-import org.eclipse.microprofile.graphql.GraphQLApi;
-import org.eclipse.microprofile.graphql.Mutation;
-import org.eclipse.microprofile.graphql.Query;
+
+import org.eclipse.microprofile.graphql.*;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -26,18 +25,18 @@ public class GameResource {
     }
 
     @Mutation
-    public Game startGame(final long storyId) {
+    public Game startGame(@NonNull final long storyId) {
         return service.startGame(storyId);
     }
 
     @Mutation
-    public Game turnTo(final int nextReference) {
-        return service.turnTo(nextReference);
+    public Game turnTo(@NonNull final int index, @DefaultValue("") final String answer) {
+        return service.turnTo(index, answer);
     }
 
     @Mutation
-    public Game startFrom(final long storyId, final int nextReference, final List<Indication> indications) {
-        return service.startFrom(storyId, nextReference, indications);
+    public Game startFrom(@NonNull final long storyId, @NonNull final int reference, final List<Indication> indications) {
+        return service.startFrom(storyId, reference, indications);
     }
 
     @Mutation

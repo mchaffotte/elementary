@@ -16,7 +16,7 @@ public class SectionMapper {
         section.setText(sectionInstance.getText());
         final List<Action> actions = new ArrayList<>();
         for (ActionInstance action : sectionInstance.getActions()) {
-            actions.add(new Action(action.getNextReference(), action.getDescription()));
+            actions.add(new Action(action.getDescription(), action.getDefinition() != null));
         }
         section.setActions(actions);
         return section;

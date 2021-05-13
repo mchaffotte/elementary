@@ -22,6 +22,8 @@ public class ActionDefinition {
 
     private String expression;
 
+    private Evaluation evaluation;
+
     @OneToMany(
             mappedBy = "action",
             cascade = CascadeType.ALL,
@@ -51,6 +53,14 @@ public class ActionDefinition {
 
     public void setExpression(String expression) {
         this.expression = expression;
+    }
+
+    public Evaluation getEvaluation() {
+        return evaluation;
+    }
+
+    public void setEvaluation(Evaluation evaluation) {
+        this.evaluation = evaluation;
     }
 
     public List<OptionDefinition> getOptions() {

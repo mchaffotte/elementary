@@ -3,17 +3,20 @@ package fr.chaffotm.gamebook.elementary.model.io;
 import fr.chaffotm.gamebook.elementary.model.builder.ActionDefinitionBuilder;
 import fr.chaffotm.gamebook.elementary.model.builder.OptionDefinitionBuilder;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.ActionDefinition;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.Evaluation;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.OptionDefinition;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class IOMultivaluedExpressionAction implements IOAction{
+public class IOMultivaluedExpressionAction implements IOAction {
 
     private String description;
 
     private String expression;
+
+    private IOEvaluation evaluation;
 
     private List<IOOption> options = new ArrayList<>();
 
@@ -33,6 +36,14 @@ public class IOMultivaluedExpressionAction implements IOAction{
         this.expression = expression;
     }
 
+    public IOEvaluation getEvaluation() {
+        return evaluation;
+    }
+
+    public void setEvaluation(IOEvaluation evaluation) {
+        this.evaluation = evaluation;
+    }
+
     public List<IOOption> getOptions() {
         return options;
     }
@@ -45,7 +56,8 @@ public class IOMultivaluedExpressionAction implements IOAction{
     public ActionDefinition toActionDefinition() {
         final Iterator<IOOption> iterator = options.iterator();
         final ActionDefinitionBuilder builder = new ActionDefinitionBuilder(toOptionDefinition(iterator.next()))
-                .expression(expression);
+                .expression(expression)
+                .evaluation(evaluation == null ? Evaluation.PRE : Evaluation.valueOf(evaluation.name()));
         while (iterator.hasNext()) {
             builder.option(toOptionDefinition(iterator.next()));
         }

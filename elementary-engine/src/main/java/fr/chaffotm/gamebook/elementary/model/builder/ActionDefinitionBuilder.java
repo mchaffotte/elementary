@@ -1,6 +1,7 @@
 package fr.chaffotm.gamebook.elementary.model.builder;
 
 import fr.chaffotm.gamebook.elementary.model.entity.definition.ActionDefinition;
+import fr.chaffotm.gamebook.elementary.model.entity.definition.Evaluation;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.OptionDefinition;
 
 public class ActionDefinitionBuilder {
@@ -35,6 +36,11 @@ public class ActionDefinitionBuilder {
 
     public ActionDefinitionBuilder option(final OptionDefinition option) {
         action.addOption(option);
+        return this;
+    }
+
+    public ActionDefinitionBuilder evaluation(final Evaluation evaluation) {
+        action.setEvaluation(evaluation);
         return this;
     }
 }

@@ -1,5 +1,6 @@
 package fr.chaffotm.gamebook.elementary.model.entity.instance;
 
+import fr.chaffotm.gamebook.elementary.model.entity.definition.ActionDefinition;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.EventDefinition;
 import fr.chaffotm.gamebook.elementary.model.entity.definition.OptionDefinition;
 
@@ -26,8 +27,17 @@ public class ActionInstance {
     @JoinColumn(name = "event_id", foreignKey = @ForeignKey(name = "fx_action_instance_event"))
     private EventDefinition event;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "action_definition_id", foreignKey = @ForeignKey(name = "fx_action_instance_action_definition"))
+    private ActionDefinition definition;
+
     public ActionInstance() {
         // Used bu JPA
+    }
+
+    public ActionInstance(final ActionDefinition definition) {
+        this.description = "";
+        this.definition= definition;
     }
 
     public ActionInstance(final OptionDefinition option) {
@@ -79,4 +89,13 @@ public class ActionInstance {
     public void setEvent(EventDefinition event) {
         this.event = event;
     }
+
+    public ActionDefinition getDefinition() {
+        return definition;
+    }
+
+    public void setDefinition(final ActionDefinition definition) {
+        this.definition = definition;
+    }
+
 }

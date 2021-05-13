@@ -44,4 +44,13 @@ public class ExpressionEvaluator {
         variables.put("die", context.getDie());
         return MVEL.eval(expression, variables, Integer.class);
     }
+
+    public boolean evaluateAnswer(final String expression, final String answer) {
+        if (expression == null || expression.isBlank()) {
+            return true;
+        }
+        final Map<String, Object> variables = new HashMap<>();
+        variables.put("answer", answer);
+        return MVEL.evalToBoolean(expression, variables);
+    }
 }

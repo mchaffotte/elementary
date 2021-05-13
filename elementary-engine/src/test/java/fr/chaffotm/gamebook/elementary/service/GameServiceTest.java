@@ -124,7 +124,7 @@ public class GameServiceTest {
 
         Section section = game.getSection();
         assertThat(section.getActions())
-                .containsExactly(new Action(2, ""));
+                .containsExactly(new Action("", false));
     }
 
     @Test
@@ -161,7 +161,7 @@ public class GameServiceTest {
     @DisplayName("turnTo should throw an exception if the game is not started")
     public void turnToShouldThrowAnExceptionIfTheGameIsNotStarted() {
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> service.turnTo(485))
+                .isThrownBy(() -> service.turnTo(485, ""))
                 .withMessage("Cannot reach that section");
     }
 
@@ -173,7 +173,7 @@ public class GameServiceTest {
         service.startGame(1);
 
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> service.turnTo(48))
+                .isThrownBy(() -> service.turnTo(48, ""))
                 .withMessage("Cannot reach that section");
     }
 
@@ -186,10 +186,10 @@ public class GameServiceTest {
         final GameInstance instance = buildGame(story, 2);
         when(gameInstanceRepository.getGame()).thenReturn(instance);
 
-        Game game = service.turnTo(2);
+        Game game = service.turnTo(0, "");
 
         assertThat(game.getSection().getActions())
-                .containsExactly(new Action(4, "Go to"), new Action(0, "Or"));
+                .containsExactly(new Action("Go to", false), new Action("Or", false));
     }
 
     @Test
@@ -201,7 +201,7 @@ public class GameServiceTest {
         final GameInstance game = buildGame(story, 2, "Z");
         when(gameInstanceRepository.getGame()).thenReturn(game);
 
-        service.turnTo(2);
+        service.turnTo(0, "");
 
         assertThat(game.getIndications())
                 .contains(new IndicationInstance(IndicationType.CLUE, "Z"));
@@ -227,7 +227,7 @@ public class GameServiceTest {
         when(gameInstanceRepository.getGame()).thenReturn(game);
 
         assertThatIllegalStateException()
-                .isThrownBy(() -> service.turnTo(2));
+                .isThrownBy(() -> service.turnTo(2, ""));
         assertThat(game.getIndications())
                 .contains(new IndicationInstance(IndicationType.CLUE, "Q"));
     }
@@ -243,7 +243,7 @@ public class GameServiceTest {
         final GameInstance game = buildGame(story, 2);
         when(gameInstanceRepository.getGame()).thenReturn(game);
 
-        service.turnTo(2);
+        service.turnTo(0, "");
 
         assertThat(game.getIndications())
                 .contains(new IndicationInstance(IndicationType.CLUE, "Z"));
@@ -268,7 +268,7 @@ public class GameServiceTest {
         when(gameInstanceRepository.getGame()).thenReturn(game);
 
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> service.turnTo(2));
+                .isThrownBy(() -> service.turnTo(2, ""));
         assertThat(game.getIndications())
                 .doesNotContain(new IndicationInstance(IndicationType.CLUE, "Q"));
     }
@@ -283,7 +283,7 @@ public class GameServiceTest {
         when(gameInstanceRepository.getGame()).thenReturn(instance);
         when(storyService.getCharacter(story)).thenReturn(new CharacterDefinition());
 
-        Game game = service.turnTo(0);
+        Game game = service.turnTo(0, "");
 
         assertThat(game.getSection().getReference()).isEqualTo(0);
         assertThat(instance.getIndications()).isEmpty();

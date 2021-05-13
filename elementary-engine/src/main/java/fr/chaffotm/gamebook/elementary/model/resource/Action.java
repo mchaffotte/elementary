@@ -4,21 +4,21 @@ import java.util.Objects;
 
 public class Action {
 
-    private final int id;
-
     private final String description;
 
-    public Action(final int id, final String description) {
-        this.id = id;
-        this.description = description;
-    }
+    private final boolean answerNeeded;
 
-    public int getId() {
-        return id;
+    public Action(final String description, final boolean answerNeeded) {
+        this.description =description;
+        this.answerNeeded = answerNeeded;
     }
 
     public String getDescription() {
         return description;
+    }
+
+    public boolean isAnswerNeeded() {
+        return answerNeeded;
     }
 
     @Override
@@ -26,20 +26,19 @@ public class Action {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Action action = (Action) o;
-        return id == action.id &&
-                Objects.equals(description, action.description);
+        return answerNeeded == action.answerNeeded && Objects.equals(description, action.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description);
+        return Objects.hash(description, answerNeeded);
     }
 
     @Override
     public String toString() {
         return "Action{" +
-                "id=" + id +
-                ", description='" + description + '\'' +
+                "description='" + description + '\'' +
+                ", answerNeeded=" + answerNeeded +
                 '}';
     }
 }

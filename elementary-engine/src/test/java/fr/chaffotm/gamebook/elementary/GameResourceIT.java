@@ -38,8 +38,8 @@ public class GameResourceIT {
         section.setReference(0);
         section.setText("![trap](trap.png)\n\nYou are locked in a room.\n\nThe only visible exit is the door.");
         section.setActions(List.of(
-                new Action(254, "If you want to open the door"),
-                new Action(191, "Or inspect the shelves")
+                new Action("If you want to open the door", false),
+                new Action("Or inspect the shelves", false)
         ));
         final Game game = new Game();
         game.setSection(section);
@@ -52,7 +52,7 @@ public class GameResourceIT {
         section.setReference(254);
         section.setText("The door is locked. You tried to break down the door.");
         section.setActions(List.of(
-                new Action(12, "")
+                new Action("", false)
         ));
         final Game game = new Game();
         game.setSection(section);
@@ -72,7 +72,7 @@ public class GameResourceIT {
         game = gameAPI.getGame();
         assertThat(game).isEqualTo(getPrologue());
 
-        game = gameAPI.turnTo(254);
+        game = gameAPI.turnTo(0);
         assertThat(game).isEqualTo(getSection254());
     }
 
@@ -84,38 +84,48 @@ public class GameResourceIT {
         Game game = gameAPI.startGame(1);
         assertThat(game.getSection().getActions())
                 .containsOnly(
-                        new Action(254, "If you want to open the door"),
-                        new Action(191, "Or inspect the shelves"));
+                        new Action("If you want to open the door", false),
+                        new Action("Or inspect the shelves", false));
 
-        game = gameAPI.turnTo(254);
+        game = gameAPI.turnTo(0);
         assertThat(game.getSection().getActions())
                 .containsOnly(
-                        new Action(12, ""));
+                        new Action("", false));
         assertThat(game.getCharacter().getSkills())
                 .containsOnly(
                         new Skill("athletics", 1),
                         new Skill("intuition", 1));
 
-        game = gameAPI.turnTo(12);
+        game = gameAPI.turnTo(0);
         assertThat(game.getSection().getActions())
                 .containsOnly(
-                        new Action(191, ""));
+                        new Action("", false));
         assertThat(game.getCharacter().getSkills())
                 .containsOnly(
                         new Skill("athletics", -2),
                         new Skill("intuition", 1));
 
-        game = gameAPI.turnTo(191);
+        game = gameAPI.turnTo(0);
         assertThat(game.getSection().getActions())
                 .containsOnly(
-                        new Action(254, ""));
+                        new Action("", false));
 
-        game = gameAPI.turnTo(254);
+        game = gameAPI.turnTo(0);
         assertThat(game.getSection().getActions())
                 .containsOnly(
-                        new Action(10, ""));
+                        new Action("", false));
 
-        game = gameAPI.turnTo(10);
+        game = gameAPI.turnTo(0);
+        assertThat(game.getSection().getActions())
+                .containsOnly(
+                        new Action("", true));
+
+        game = gameAPI.turnTo(0, "shoe");
+        assertThat(game.getSection().getActions())
+                .containsOnly(
+                        new Action("", true));
+
+        game = gameAPI.turnTo(0, "sox");
         assertThat(game.getSection().getActions())
                 .isEmpty();
     }
@@ -128,14 +138,14 @@ public class GameResourceIT {
         Game game = gameAPI.startFrom(1, 254);
         assertThat(game.getSection().getActions())
                 .containsOnly(
-                        new Action(12, ""));
+                        new Action("", false));
 
         gameAPI.stopGame();
 
         game = gameAPI.startFrom(1, 254, new Indication("clue", "A"), new Indication("decision", "1"));
         assertThat(game.getSection().getActions())
                 .containsOnly(
-                        new Action(10, ""));
+                        new Action("", false));
     }
 
 }
