@@ -1,6 +1,6 @@
+import { useQuery, gql } from "@apollo/client";
 import { FunctionComponent } from "react";
 import { Link } from "react-router-dom";
-import { useQuery, gql } from "@apollo/client";
 
 import { Story } from "../api";
 

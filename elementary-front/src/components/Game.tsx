@@ -1,9 +1,9 @@
-import { FunctionComponent, useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { useMutation, gql } from "@apollo/client";
-import ReactMarkdown from "react-markdown";
+import { FunctionComponent, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
-import { Game } from "../api";
+import SectionPage from "./Section";
+import { Game, Section } from "../api";
 
 interface LocationState {
   storyId: number;
@@ -17,7 +17,7 @@ const START_GAME = gql`
         text
         actions {
           description
-          id
+          answerNeeded
         }
       }
     }
@@ -26,60 +26,28 @@ const START_GAME = gql`
 
 const TURN_TO = gql`
   mutation turnTo($id: Int!) {
-    turnTo(nextReference: $id) {
+    turnTo(index: $id) {
       section {
         reference
         text
         actions {
-          id
           description
+          answerNeeded
         }
       }
     }
   }
 `;
 
-const STOP_GAME = gql`
-  mutation stopGame {
-    stopGame
-  }
-`;
-
-const getRenderers = (storyId: number) => {
-  return {
-    image: ({
-      alt,
-      src,
-      title,
-    }: {
-      alt?: string;
-      src?: string;
-      title?: string;
-    }) => {
-      return (
-        <img
-          alt={alt}
-          src={`http://localhost:8181/stories/${storyId}/images/${src}`}
-          title={title}
-        />
-      );
-    },
-  };
-};
-
 const GamePage: FunctionComponent<{}> = () => {
-  const [sectionId, setSectionId] = useState(-1);
   const location = useLocation<LocationState>();
+  const [section, setSection] = useState<Section | null>(null);
 
-  const [start, response] = useMutation<{ startGame: Game }, { id: number }>(
-    START_GAME
-  );
+  const [start, response] =
+    useMutation<{ startGame: Game }, { id: number }>(START_GAME);
 
-  const [turnTo, toResponse] = useMutation<{ turnTo: Game }, { id: number }>(
-    TURN_TO
-  );
-
-  const [stop] = useMutation<{ stopGame: boolean }>(STOP_GAME);
+  const [turnTo, toResponse] =
+    useMutation<{ turnTo: Game }, { id: number }>(TURN_TO);
 
   useEffect(() => {
     if (location.state) {
@@ -88,47 +56,28 @@ const GamePage: FunctionComponent<{}> = () => {
   }, [location.state, start]);
 
   useEffect(() => {
-    if (sectionId !== -1) {
-      turnTo({ variables: { id: sectionId } });
+    if (toResponse.data) {
+      setSection(toResponse.data.turnTo.section);
     }
-  }, [sectionId, turnTo]);
+    if (response.data && !section) {
+      setSection(response.data.startGame.section);
+    }
+  }, [response.data, toResponse.data, section]);
 
-  const handleTurnTo = (nextReference: number) => {
-    setSectionId(nextReference);
+  const handleTurnTo = (index: number) => {
+    turnTo({ variables: { id: index } });
   };
 
-  let section;
-  if (sectionId === -1) {
-    if (!location) {
-      return null;
-    }
-    if (response.loading || !response.data) {
-      return <span>LOADING</span>;
-    }
-    section = response.data.startGame.section;
-  } else {
-    if (toResponse.loading || !toResponse.data) {
-      return <span>LOADING</span>;
-    }
-    section = toResponse.data.turnTo.section;
+  if (response.loading || !response.data) {
+    return <span>LOADING</span>;
   }
 
   return (
-    <div>
-      <span>{section.reference}</span>
-      <ReactMarkdown
-        source={section.text}
-        renderers={getRenderers(location.state.storyId)}
-      />
-      <div>
-        {section.actions.map((action) => (
-          <div>
-            {action.description}
-            <button onClick={() => handleTurnTo(action.id)}>Next</button>
-          </div>
-        ))}
-      </div>
-    </div>
+    <SectionPage
+      section={section}
+      storyId={location.state.storyId}
+      onTurnTo={handleTurnTo}
+    />
   );
 };
 
