@@ -1,8 +1,7 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
-import Game from "./components/Game";
-import Stories from "./components/Stories";
+import { Routes } from "./navigation/Routes";
 
 const client = new ApolloClient({
   uri: "http://localhost:8181/graphql",
@@ -13,10 +12,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Router>
-        <Switch>
-          <Route path="/game" children={<Game />} />
-          <Route path="/" children={<Stories />} />
-        </Switch>
+        <Routes />
       </Router>
     </ApolloProvider>
   );
