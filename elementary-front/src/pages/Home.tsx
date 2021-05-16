@@ -17,7 +17,7 @@ const GET_STORIES = gql`
   }
 `;
 
-const Stories: FunctionComponent<{}> = () => {
+export const Home: FunctionComponent<{}> = () => {
   const { loading, data } = useQuery<StoryData, {}>(GET_STORIES, {
     variables: {
       offset: 0,
@@ -43,5 +43,3 @@ const Stories: FunctionComponent<{}> = () => {
     </div>
   );
 };
-
-export default Stories;

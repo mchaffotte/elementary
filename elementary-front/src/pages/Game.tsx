@@ -2,8 +2,8 @@ import { useMutation, gql } from "@apollo/client";
 import { FunctionComponent, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import SectionPage from "./Section";
 import { Game, Section } from "../api";
+import SectionPage from "../components/Section";
 
 interface LocationState {
   storyId: number;
@@ -39,7 +39,7 @@ const TURN_TO = gql`
   }
 `;
 
-const GamePage: FunctionComponent<{}> = () => {
+export const GameView: FunctionComponent<{}> = () => {
   const location = useLocation<LocationState>();
   const [section, setSection] = useState<Section | null>(null);
 
@@ -80,5 +80,3 @@ const GamePage: FunctionComponent<{}> = () => {
     />
   );
 };
-
-export default GamePage;
