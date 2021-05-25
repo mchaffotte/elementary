@@ -60,7 +60,7 @@ const options = (storyId: number, classes: ClassNameMap<string>) => {
   };
 };
 
-const SectionText: FunctionComponent<SectionTextProps> = ({
+export const SectionText: FunctionComponent<SectionTextProps> = ({
   text,
   storyId,
 }) => {
@@ -70,5 +70,3 @@ const SectionText: FunctionComponent<SectionTextProps> = ({
     <ReactMarkdown options={options(storyId, classes)}>{text}</ReactMarkdown>
   );
 };
-
-export default SectionText;

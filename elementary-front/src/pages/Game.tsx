@@ -3,7 +3,7 @@ import { FunctionComponent, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import { Game, Section } from "../api";
-import SectionPage from "../components/Section";
+import { SectionView as SectionPage } from "../components/Section";
 
 interface LocationState {
   storyId: number;
@@ -67,10 +67,6 @@ export const GameView: FunctionComponent<{}> = () => {
   const handleTurnTo = (index: number) => {
     turnTo({ variables: { id: index } });
   };
-
-  if (response.loading || !response.data) {
-    return <span>LOADING</span>;
-  }
 
   return (
     <SectionPage
