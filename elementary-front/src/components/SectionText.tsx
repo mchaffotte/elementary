@@ -1,16 +1,63 @@
 import { CardMedia, Typography, makeStyles } from "@material-ui/core";
+import {
+  BaseCSSProperties,
+  ClassNameMap,
+} from "@material-ui/core/styles/withStyles";
+import ReactMarkdown from "markdown-to-jsx";
 import { FunctionComponent } from "react";
-import ReactMarkdown from "react-markdown";
 
-const useStyles = makeStyles({
-  media: {
-    height: 500,
-  },
-});
+interface StyleProps {
+  media: BaseCSSProperties;
+}
 
 type SectionTextProps = {
   text: string;
   storyId: number;
+};
+
+type ImageProps = {
+  storyId: number;
+  src: string;
+  className: string;
+};
+
+const useStyles = makeStyles<StyleProps>({
+  media: {
+    maxHeight: 500,
+    maxWidth: 518,
+  },
+});
+
+const Image = ({ storyId, src, className }: ImageProps) => {
+  return (
+    <CardMedia
+      component="img"
+      className={className}
+      image={`http://localhost:8181/stories/${storyId}/images/${src}`}
+    />
+  );
+};
+
+const options = (storyId: number, classes: ClassNameMap<string>) => {
+  return {
+    overrides: {
+      p: {
+        component: Typography,
+        props: { paragraph: true, align: "justify" },
+      },
+      span: {
+        component: Typography,
+        props: { paragraph: true, align: "justify" },
+      },
+      img: {
+        component: Image,
+        props: {
+          storyId,
+          className: classes.media,
+        },
+      },
+    },
+  };
 };
 
 const SectionText: FunctionComponent<SectionTextProps> = ({
@@ -20,34 +67,7 @@ const SectionText: FunctionComponent<SectionTextProps> = ({
   const classes = useStyles();
 
   return (
-    <ReactMarkdown
-      components={{
-        img: ({ src, ...props }) => (
-          <CardMedia
-            className={classes.media}
-            image={`http://localhost:8181/stories/${storyId}/images/${src}`}
-            {...props}
-          />
-        ),
-        p: ({ children }) => {
-          return (
-            <>
-              {children
-                .filter((child) => typeof child === "string" && child !== "\n")
-                .map((child, index) => {
-                  return (
-                    <Typography key={index} align="justify" paragraph>
-                      {child}
-                    </Typography>
-                  );
-                })}
-            </>
-          );
-        },
-      }}
-    >
-      {text}
-    </ReactMarkdown>
+    <ReactMarkdown options={options(storyId, classes)}>{text}</ReactMarkdown>
   );
 };
 
