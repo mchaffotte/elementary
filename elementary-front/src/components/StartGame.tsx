@@ -10,6 +10,7 @@ interface StartGameProps {
 
 const START_GAME = gql`
   mutation startGame($id: BigInteger!) {
+    stopGame
     startGame(storyId: $id) {
       section {
         reference
