@@ -20,6 +20,9 @@ const useStyles = makeStyles({
     fontSize: 20,
     textAlign: "center",
   },
+  actions: {
+    justifyContent: "end",
+  },
 });
 
 type SectionContentProps = {
@@ -50,7 +53,7 @@ export const SectionContent: FunctionComponent<SectionContentProps> = ({
         </Typography>
         <SectionText text={section.text} storyId={storyId} />
       </CardContent>
-      <CardActions>
+      <CardActions className={classes.actions}>
         <List>
           {section.actions.map((action, index) => (
             <ListItem key={index}>
