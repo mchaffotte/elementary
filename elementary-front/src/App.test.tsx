@@ -6,7 +6,7 @@ import App from "./App";
 test("renders Home page", () => {
   const { getByText } = render(<App />);
 
-  const Stories = getByText("Choose the story");
+  const Stories = getByText("New Game");
 
   expect(Stories).toBeInTheDocument();
 });
