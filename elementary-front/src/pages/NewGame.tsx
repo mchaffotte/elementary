@@ -8,7 +8,7 @@ import {
 import { FunctionComponent } from "react";
 import { useHistory } from "react-router-dom";
 
-import { StoryList } from "../components/StoriesList";
+import { StoryList } from "../components/StoryList";
 
 const useStyles = makeStyles((theme) => ({
   title: {
