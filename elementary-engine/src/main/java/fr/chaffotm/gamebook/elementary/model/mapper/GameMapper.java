@@ -7,7 +7,7 @@ public class GameMapper {
 
     public static Game map(final GameInstance gameInstance) {
         final Game game = new Game();
-        game.setSection(SectionMapper.map(gameInstance.getSection()));
+        game.setSection(SectionMapper.map(gameInstance.getSection(), gameInstance.getStory().getId()));
         game.setCharacter(CharacterMapper.map(gameInstance.getCharacter()));
         return game;
     }

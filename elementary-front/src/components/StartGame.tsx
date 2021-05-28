@@ -6,6 +6,7 @@ import { PlayGame } from "./PlayGame";
 
 interface StartGameProps {
   storyId: number;
+  onStart: Function;
 }
 
 const START_GAME = gql`
@@ -13,6 +14,7 @@ const START_GAME = gql`
     stopGame
     startGame(storyId: $id) {
       section {
+        storyId
         reference
         text
         actions {
@@ -24,7 +26,10 @@ const START_GAME = gql`
   }
 `;
 
-export const StartGame: FunctionComponent<StartGameProps> = ({ storyId }) => {
+export const StartGame: FunctionComponent<StartGameProps> = ({
+  storyId,
+  onStart,
+}) => {
   const [start, response] =
     useMutation<{ startGame: Game }, { id: number }>(START_GAME);
 
@@ -35,6 +40,9 @@ export const StartGame: FunctionComponent<StartGameProps> = ({ storyId }) => {
   }, [storyId, start]);
 
   const section = response.data?.startGame.section || null;
+  if (section) {
+    onStart();
+  }
 
-  return <PlayGame initialSection={section} storyId={storyId} />;
+  return <PlayGame initialSection={section} />;
 };

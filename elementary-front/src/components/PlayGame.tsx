@@ -8,6 +8,7 @@ const TURN_TO = gql`
   mutation turnTo($id: Int!) {
     turnTo(index: $id) {
       section {
+        storyId
         reference
         text
         actions {
@@ -21,12 +22,10 @@ const TURN_TO = gql`
 
 type PlayGameProps = {
   initialSection: Section | null;
-  storyId: number;
 };
 
 export const PlayGame: FunctionComponent<PlayGameProps> = ({
   initialSection,
-  storyId,
 }) => {
   const [section, setSection] = useState<Section | null>(null);
 
@@ -49,7 +48,5 @@ export const PlayGame: FunctionComponent<PlayGameProps> = ({
     turnTo({ variables: { id: index } });
   };
 
-  return (
-    <SectionPage section={section} storyId={storyId} onTurnTo={handleTurnTo} />
-  );
+  return <SectionPage section={section} onTurnTo={handleTurnTo} />;
 };

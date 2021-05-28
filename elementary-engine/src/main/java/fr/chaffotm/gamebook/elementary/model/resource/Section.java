@@ -5,11 +5,21 @@ import java.util.Objects;
 
 public class Section {
 
+    private long storyId;
+
     private int reference;
 
     private String text;
 
     private List<Action> actions;
+
+    public long getStoryId() {
+        return storyId;
+    }
+
+    public void setStoryId(long storyId) {
+        this.storyId = storyId;
+    }
 
     public int getReference() {
         return reference;
@@ -40,11 +50,11 @@ public class Section {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Section section = (Section) o;
-        return reference == section.reference && Objects.equals(text, section.text) && Objects.equals(actions, section.actions);
+        return storyId == section.storyId && reference == section.reference && Objects.equals(text, section.text) && Objects.equals(actions, section.actions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(reference, text, actions);
+        return Objects.hash(storyId, reference, text, actions);
     }
 }

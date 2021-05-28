@@ -28,6 +28,14 @@ export const Home: FunctionComponent<{}> = () => {
               variant="contained"
               color="primary"
               component={Link}
+              to="/game"
+            >
+              Continue
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              component={Link}
               to="/new-game"
             >
               New Game

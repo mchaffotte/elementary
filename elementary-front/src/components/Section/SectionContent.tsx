@@ -27,13 +27,11 @@ const useStyles = makeStyles({
 
 type SectionContentProps = {
   section: Section | null;
-  storyId: number;
   onTurnTo: Function;
 };
 
 export const SectionContent: FunctionComponent<SectionContentProps> = ({
   section,
-  storyId,
   onTurnTo,
 }) => {
   const classes = useStyles();
@@ -51,7 +49,7 @@ export const SectionContent: FunctionComponent<SectionContentProps> = ({
         >
           {section.reference}
         </Typography>
-        <SectionText text={section.text} storyId={storyId} />
+        <SectionText text={section.text} storyId={section.storyId} />
       </CardContent>
       <CardActions className={classes.actions}>
         <List>

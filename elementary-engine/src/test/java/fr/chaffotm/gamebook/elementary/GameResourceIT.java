@@ -33,8 +33,9 @@ public class GameResourceIT {
         return character;
     }
 
-    private Game getPrologue() {
+    private Game getPrologue(final long storyId) {
         final Section section = new Section();
+        section.setStoryId(storyId);
         section.setReference(0);
         section.setText("![trap](trap.png)\n\nYou are locked in a room.\n\nThe only visible exit is the door.");
         section.setActions(List.of(
@@ -47,8 +48,9 @@ public class GameResourceIT {
         return game;
     }
 
-    private Game getSection254() {
+    private Game getSection254(final long storyId) {
         final Section section = new Section();
+        section.setStoryId(storyId);
         section.setReference(254);
         section.setText("The door is locked. You tried to break down the door.");
         section.setActions(List.of(
@@ -67,13 +69,13 @@ public class GameResourceIT {
         assertThat(stop).isTrue();
 
         Game game = gameAPI.startGame(1);
-        assertThat(game).isEqualTo(getPrologue());
+        assertThat(game).isEqualTo(getPrologue(1));
 
         game = gameAPI.getGame();
-        assertThat(game).isEqualTo(getPrologue());
+        assertThat(game).isEqualTo(getPrologue(1));
 
         game = gameAPI.turnTo(0);
-        assertThat(game).isEqualTo(getSection254());
+        assertThat(game).isEqualTo(getSection254(1));
     }
 
     @Test

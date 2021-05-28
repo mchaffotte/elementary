@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 
+import { ContinueGame } from "../components/ContinueGame";
 import { StartGame } from "../components/StartGame";
 
 interface LocationState {
@@ -9,6 +10,14 @@ interface LocationState {
 
 export const Game: FunctionComponent<{}> = () => {
   const location = useLocation<LocationState>();
+  const history = useHistory();
 
-  return <StartGame storyId={location.state.storyId} />;
+  const handleStart = () => {
+    history.replace({ ...history.location, state: undefined });
+  };
+
+  if (location.state) {
+    return <StartGame storyId={location.state.storyId} onStart={handleStart} />;
+  }
+  return <ContinueGame />;
 };

@@ -17,13 +17,11 @@ const useStyles = makeStyles({
 
 type SectionViewProps = {
   section: Section | null;
-  storyId: number;
   onTurnTo: Function;
 };
 
 export const SectionView: FunctionComponent<SectionViewProps> = ({
   section,
-  storyId,
   onTurnTo,
 }) => {
   const classes = useStyles();
@@ -34,11 +32,7 @@ export const SectionView: FunctionComponent<SectionViewProps> = ({
       <Container maxWidth="sm">
         <Card className={classes.root} variant="outlined">
           {!section && <LoadingSection />}
-          <SectionContent
-            section={section}
-            storyId={storyId}
-            onTurnTo={onTurnTo}
-          />
+          <SectionContent section={section} onTurnTo={onTurnTo} />
         </Card>
       </Container>
     </>

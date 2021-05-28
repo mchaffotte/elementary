@@ -10,8 +10,9 @@ import java.util.List;
 
 public class SectionMapper {
 
-    public static Section map(final SectionInstance sectionInstance) {
+    public static Section map(final SectionInstance sectionInstance, final long storyId) {
         final Section section = new Section();
+        section.setStoryId(storyId);
         section.setReference(sectionInstance.getReference());
         section.setText(sectionInstance.getText());
         final List<Action> actions = new ArrayList<>();

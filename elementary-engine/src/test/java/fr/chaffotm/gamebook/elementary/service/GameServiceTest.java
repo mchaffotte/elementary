@@ -56,6 +56,7 @@ public class GameServiceTest {
         prologue.setActions(List.of(buildAction(2, null, actionEvent)));
 
         final StoryDefinition definition = new StoryDefinition();
+        definition.setId(1L);
         definition.setName("Test");
         definition.setPrologue(prologue);
         return definition;
@@ -82,17 +83,17 @@ public class GameServiceTest {
         return buildGame(story, new ActionInstance(nextId, null, null));
     }
 
-    private GameInstance buildGame(final StoryDefinition story, int nextId, final String clue) {
+    private GameInstance buildGame(final StoryDefinition story, final int nextId, final String clue) {
         return buildGame(story, new ActionInstance(nextId, null, buildClueEvent(clue)));
     }
 
-    private GameInstance buildGame(final StoryDefinition story, ActionInstance action) {
+    private GameInstance buildGame(final StoryDefinition story, final ActionInstance action) {
         final SectionInstance section = new SectionInstance();
         section.setActions(List.of(action));
         final GameInstance game = new GameInstance();
-        game.setStory(story);
         game.setCharacter(new CharacterInstance());
         game.setSection(section);
+        game.setStory(story);
         return game;
     }
 

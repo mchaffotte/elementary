@@ -8,6 +8,7 @@ export interface Game {
 }
 
 export interface Section {
+  storyId: number;
   reference: number;
   text: string;
   actions: Action[];
