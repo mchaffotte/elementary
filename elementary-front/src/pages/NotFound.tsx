@@ -10,7 +10,7 @@ import { FunctionComponent } from "react";
 import { Link } from "react-router-dom";
 
 import { Layout } from "../components/Layout";
-import errorLogo from "../assets/404.png";
+import logo from "../assets/journey.png";
 
 export const NotFound: FunctionComponent<{}> = () => {
   return (
@@ -20,7 +20,7 @@ export const NotFound: FunctionComponent<{}> = () => {
           component="img"
           alt="Wrong Direction"
           height="140"
-          image={errorLogo}
+          image={logo}
           title="Wrong Direction"
         />
         <CardContent>
