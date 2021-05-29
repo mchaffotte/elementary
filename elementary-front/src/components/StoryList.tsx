@@ -7,6 +7,7 @@ import {
   ListItemText,
 } from "@material-ui/core";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import Skeleton from "@material-ui/lab/Skeleton";
 import { FunctionComponent } from "react";
 
 import { Story } from "../api";
@@ -39,7 +40,15 @@ export const StoryList: FunctionComponent<StoryListProps> = ({
   });
 
   if (loading || !data) {
-    return null;
+    return (
+      <List>
+        {[1, 2, 3, 4].map((story) => (
+          <ListItem key={story}>
+            <Skeleton variant="text" width="80%" />
+          </ListItem>
+        ))}
+      </List>
+    );
   }
 
   return (
