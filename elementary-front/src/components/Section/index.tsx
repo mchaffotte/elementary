@@ -1,4 +1,4 @@
-import { Card, Container, CssBaseline, makeStyles } from "@material-ui/core";
+import { Card, Container, makeStyles } from "@material-ui/core";
 import { FunctionComponent } from "react";
 
 import { LoadingSection } from "./LoadingSection";
@@ -23,14 +23,11 @@ export const SectionView: FunctionComponent<SectionViewProps> = ({
   const classes = useStyles();
 
   return (
-    <>
-      <CssBaseline />
-      <Container maxWidth="sm">
-        <Card className={classes.root} variant="outlined">
-          {!section && <LoadingSection />}
-          <SectionContent section={section} onTurnTo={onTurnTo} />
-        </Card>
-      </Container>
-    </>
+    <Container maxWidth="sm">
+      <Card className={classes.root} variant="outlined">
+        {!section && <LoadingSection />}
+        <SectionContent section={section} onTurnTo={onTurnTo} />
+      </Card>
+    </Container>
   );
 };
