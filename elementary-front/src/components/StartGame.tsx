@@ -4,10 +4,10 @@ import { FunctionComponent, useEffect } from "react";
 import { Game } from "../api";
 import { PlayGame } from "./PlayGame";
 
-interface StartGameProps {
+type StartGameProps = {
   storyId: number;
   onStart: Function;
-}
+};
 
 const START_GAME = gql`
   mutation startGame($id: BigInteger!) {

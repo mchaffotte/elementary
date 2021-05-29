@@ -1,20 +1,20 @@
-export interface Story {
+export type Story = {
   id: number;
   name: string;
-}
+};
 
-export interface Game {
+export type Game = {
   section: Section;
-}
+};
 
-export interface Section {
+export type Section = {
   storyId: number;
   reference: number;
   text: string;
   actions: Action[];
-}
+};
 
-export interface Action {
+export type Action = {
   id: number;
   description: string;
-}
+};

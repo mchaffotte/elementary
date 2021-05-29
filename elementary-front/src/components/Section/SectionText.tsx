@@ -6,9 +6,9 @@ import {
 import ReactMarkdown from "markdown-to-jsx";
 import { FunctionComponent } from "react";
 
-interface StyleProps {
+type StyleProps = {
   media: BaseCSSProperties;
-}
+};
 
 type SectionTextProps = {
   text: string;

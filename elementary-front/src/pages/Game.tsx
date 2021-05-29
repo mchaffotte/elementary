@@ -4,9 +4,9 @@ import { useLocation, useHistory } from "react-router-dom";
 import { ContinueGame } from "../components/ContinueGame";
 import { StartGame } from "../components/StartGame";
 
-interface LocationState {
+type LocationState = {
   storyId: number;
-}
+};
 
 export const Game: FunctionComponent<{}> = () => {
   const location = useLocation<LocationState>();

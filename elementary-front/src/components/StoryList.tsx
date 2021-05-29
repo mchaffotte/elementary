@@ -11,9 +11,9 @@ import { FunctionComponent } from "react";
 
 import { Story } from "../api";
 
-interface StoryData {
+type StoryData = {
   stories: Story[];
-}
+};
 
 const GET_STORIES = gql`
   query getStories($offset: Int!, $limit: Int!) {
