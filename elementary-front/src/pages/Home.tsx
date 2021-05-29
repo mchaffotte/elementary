@@ -1,3 +1,4 @@
+import { useQuery, gql } from "@apollo/client";
 import {
   Button,
   Card,
@@ -12,7 +13,19 @@ import { Link } from "react-router-dom";
 import { Layout } from "../components/Layout";
 import logo from "../assets/journey.png";
 
+const GET_GAME = gql`
+  query getGame {
+    game {
+      section {
+        storyId
+      }
+    }
+  }
+`;
+
 export const Home: FunctionComponent<{}> = () => {
+  const { loading, error } = useQuery(GET_GAME);
+
   return (
     <Layout>
       <Card variant="outlined">
@@ -29,7 +42,12 @@ export const Home: FunctionComponent<{}> = () => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button color="primary" component={Link} to="/game">
+          <Button
+            color="primary"
+            component={Link}
+            to="/game"
+            disabled={loading || !!error}
+          >
             Continue
           </Button>
           <Button color="primary" component={Link} to="/new-game">
