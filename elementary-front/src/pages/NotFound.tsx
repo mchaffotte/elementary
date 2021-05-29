@@ -32,7 +32,7 @@ export const NotFound: FunctionComponent<{}> = () => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" color="primary" component={Link} to="/">
+          <Button color="primary" component={Link} to="/">
             Home
           </Button>
         </CardActions>

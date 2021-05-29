@@ -2,7 +2,7 @@ import { useMutation, gql } from "@apollo/client";
 import { FunctionComponent, useEffect, useState } from "react";
 
 import { Game, Section } from "../api";
-import { SectionView as SectionPage } from "../components/Section";
+import { SectionView } from "../components/Section";
 
 const TURN_TO = gql`
   mutation turnTo($id: Int!) {
@@ -48,5 +48,5 @@ export const PlayGame: FunctionComponent<PlayGameProps> = ({
     turnTo({ variables: { id: index } });
   };
 
-  return <SectionPage section={section} onTurnTo={handleTurnTo} />;
+  return <SectionView section={section} onTurnTo={handleTurnTo} />;
 };

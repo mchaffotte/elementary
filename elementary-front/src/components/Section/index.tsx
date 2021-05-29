@@ -9,10 +9,6 @@ const useStyles = makeStyles({
   root: {
     minWidth: 275,
   },
-  title: {
-    fontSize: 20,
-    textAlign: "center",
-  },
 });
 
 type SectionViewProps = {

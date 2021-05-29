@@ -1,4 +1,3 @@
-import React from "react";
 import { render } from "@testing-library/react";
 
 import App from "./App";
@@ -6,7 +5,7 @@ import App from "./App";
 test("renders Home page", () => {
   const { getByText } = render(<App />);
 
-  const Stories = getByText("New Game");
+  const newGame = getByText("New Game");
 
-  expect(Stories).toBeInTheDocument();
+  expect(newGame).toBeInTheDocument();
 });

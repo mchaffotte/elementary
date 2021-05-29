@@ -1,23 +1,11 @@
-import {
-  Container,
-  CssBaseline,
-  Grid,
-  Typography,
-  makeStyles,
-} from "@material-ui/core";
+import { Card, CardContent, Typography } from "@material-ui/core";
 import { FunctionComponent } from "react";
 import { useHistory } from "react-router-dom";
 
+import { Layout } from "../components/Layout";
 import { StoryList } from "../components/StoryList";
 
-const useStyles = makeStyles((theme) => ({
-  title: {
-    margin: theme.spacing(4, 0, 2),
-  },
-}));
-
 export const NewGame: FunctionComponent<{}> = () => {
-  const classes = useStyles();
   const history = useHistory();
 
   const handleChooseStory = (storyId: number) => {
@@ -28,16 +16,15 @@ export const NewGame: FunctionComponent<{}> = () => {
   };
 
   return (
-    <>
-      <CssBaseline />
-      <Container maxWidth="sm">
-        <Grid item xs={12} md={6}>
-          <Typography variant="h6" className={classes.title}>
+    <Layout>
+      <Card variant="outlined">
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
             Choose the story
           </Typography>
           <StoryList onChooseStory={handleChooseStory} />
-        </Grid>
-      </Container>
-    </>
+        </CardContent>
+      </Card>
+    </Layout>
   );
 };
