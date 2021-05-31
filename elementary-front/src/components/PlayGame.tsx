@@ -30,7 +30,7 @@ export const PlayGame: FunctionComponent<PlayGameProps> = ({
   const [section, setSection] = useState<Section | null>(null);
 
   const [turnTo, response] =
-    useMutation<{ turnTo: Game }, { id: number }>(TURN_TO);
+    useMutation<{ turnTo: Game }, { id: number; answer: string }>(TURN_TO);
 
   useEffect(() => {
     if (initialSection) {
@@ -44,8 +44,8 @@ export const PlayGame: FunctionComponent<PlayGameProps> = ({
     }
   }, [response]);
 
-  const handleTurnTo = (index: number) => {
-    turnTo({ variables: { id: index } });
+  const handleTurnTo = (index: number, answer: string) => {
+    turnTo({ variables: { id: index, answer } });
   };
 
   return <SectionView section={section} onTurnTo={handleTurnTo} />;

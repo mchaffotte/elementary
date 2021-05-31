@@ -15,6 +15,6 @@ export type Section = {
 };
 
 export type Action = {
-  id: number;
   description: string;
+  answerNeeded: boolean;
 };

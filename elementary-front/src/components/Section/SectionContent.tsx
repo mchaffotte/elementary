@@ -1,17 +1,13 @@
 import {
   CardActions,
   CardContent,
-  IconButton,
   List,
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText,
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { FunctionComponent } from "react";
 
+import { ActionListItem } from "./ActionListItem";
 import { SectionText } from "./SectionText";
 import { Section } from "../../api";
 
@@ -54,20 +50,12 @@ export const SectionContent: FunctionComponent<SectionContentProps> = ({
       <CardActions className={classes.actions}>
         <List>
           {section.actions.map((action, index) => (
-            <ListItem key={index}>
-              <ListItemText primary={action.description} />
-              <ListItemSecondaryAction>
-                <IconButton
-                  edge="end"
-                  aria-label="next"
-                  onClick={() => {
-                    onTurnTo(index);
-                  }}
-                >
-                  <NavigateNextIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
+            <ActionListItem
+              key={index}
+              index={index}
+              action={action}
+              onTurnTo={onTurnTo}
+            />
           ))}
         </List>
       </CardActions>
