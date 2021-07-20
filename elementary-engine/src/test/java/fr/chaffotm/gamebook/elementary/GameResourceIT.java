@@ -1,8 +1,8 @@
 package fr.chaffotm.gamebook.elementary;
 
 import fr.chaffotm.gamebook.elementary.api.GameAPI;
-import fr.chaffotm.gamebook.elementary.model.resource.*;
 import fr.chaffotm.gamebook.elementary.model.resource.Character;
+import fr.chaffotm.gamebook.elementary.model.resource.*;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,10 +26,15 @@ public class GameResourceIT {
     private Character getCharacter() {
         final Skill athletics = new Skill("athletics", 1);
         final Skill intuition = new Skill("intuition", 1);
+        final Money money = new Money();
+        money.setPounds(1);
+        money.setShillings(2);
+        money.setPence(10);
 
         final Character character = new Character();
         character.setName("John Doe");
         character.setSkills(Set.of(athletics, intuition));
+        character.setMoney(money);
         return character;
     }
 
@@ -130,6 +135,11 @@ public class GameResourceIT {
         game = gameAPI.turnTo(0, "sox");
         assertThat(game.getSection().getActions())
                 .isEmpty();
+        final Money expected = new Money();
+        expected.setPounds(1);
+        expected.setShillings(0);
+        expected.setPence(10);
+        assertThat(game.getCharacter().getMoney()).isEqualTo(expected);
     }
 
     @Test

@@ -32,6 +32,8 @@ public class CharacterInstance {
     )
     private Set<SkillInstance> skills = new HashSet<>();
 
+    private int money;
+
     public CharacterInstance() {
         // used by JPA
     }
@@ -42,6 +44,7 @@ public class CharacterInstance {
         for (SkillDefinition skill : character.getSkills()) {
             addSkill(new SkillInstance(skill));
         }
+        money = character.getMoney();
     }
 
     public Long getId() {
@@ -81,4 +84,11 @@ public class CharacterInstance {
         skill.setCharacter(this);
     }
 
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
 }

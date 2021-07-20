@@ -10,6 +10,8 @@ import fr.chaffotm.gamebook.elementary.model.io.*;
 
 public class StoryContextMapper {
 
+    final MoneyConverter converter = new OldBritishMoneyConverter();
+
     public StoryContext map(final IOStory story, final String location) {
         final StoryDefinitionBuilder builder = new StoryDefinitionBuilder(story.getName(), location)
                 .character(map(story.getCharacter()))
@@ -20,11 +22,12 @@ public class StoryContextMapper {
         return builder.build();
     }
 
-    private CharacterDefinition map(IOCharacter character) {
+    private CharacterDefinition map(final IOCharacter character) {
         final CharacterDefinitionBuilder builder = new CharacterDefinitionBuilder(character.getName());
         for (IOSkill skill : character.getSkills()) {
             builder.skill(skill.getName(), skill.getValue());
         }
+        builder.money(converter.toSubunit(character.getMoney()));
         return builder.build();
     }
 

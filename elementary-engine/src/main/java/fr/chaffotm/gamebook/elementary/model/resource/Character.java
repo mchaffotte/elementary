@@ -10,6 +10,8 @@ public class Character {
 
     private Set<Skill> skills = new HashSet<>();
 
+    private Money money;
+
     public String getName() {
         return name;
     }
@@ -26,16 +28,24 @@ public class Character {
         this.skills = skills;
     }
 
+    public Money getMoney() {
+        return money;
+    }
+
+    public void setMoney(Money money) {
+        this.money = money;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Character character = (Character) o;
-        return Objects.equals(name, character.name) && Objects.equals(skills, character.skills);
+        return Objects.equals(name, character.name) && Objects.equals(skills, character.skills) && Objects.equals(money, character.money);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, skills);
+        return Objects.hash(name, skills, money);
     }
 }

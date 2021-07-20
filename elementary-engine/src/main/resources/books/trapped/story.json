@@ -2,6 +2,7 @@
   "name": "Trapped",
   "character": {
     "name": "John Doe",
+    "money": "£1 2s 10d",
     "skills": [
       {
         "name": "intuition",
@@ -38,6 +39,12 @@
       "reference": 9,
       "paragraphs": [
         "You are out."
+      ],
+      "events": [
+        {
+          "type": "pay",
+          "amount": "£0 2s 0d"
+        }
       ]
     },
     {

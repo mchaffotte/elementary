@@ -26,142 +26,182 @@ public class ExpressionEvaluatorTest {
     }
 
     @Test
-    @DisplayName("evaluateIndications should evaluate a single indication")
-    public void evaluateIndicationsShouldEvaluateASingleIndication() {
+    @DisplayName("evaluateToBoolean should evaluate a single indication")
+    public void evaluateToBooleanShouldEvaluateASingleIndication() {
         final GameContext context = new GameContext(new Die(12), new GameInstance());
         context.addIndication(new IndicationInstance(IndicationType.CLUE, "1"));
+        final VariableBuilder variableBuilder = new VariableBuilder(context);
+        variableBuilder.indications();
 
-        boolean hasClues = evaluator.evaluateIndications("clue.1", context, null);
+        boolean hasClues = evaluator.evaluateToBoolean("clue.1", variableBuilder);
 
         assertThat(hasClues).isTrue();
     }
 
     @Test
-    @DisplayName("evaluateIndications should evaluate an indication which is not present")
-    public void evaluateIndicationsShouldEvaluateAnIndicationWhichIsNotPresent() {
+    @DisplayName("evaluateToBoolean should evaluate an indication which is not present")
+    public void evaluateToBooleanShouldEvaluateAnIndicationWhichIsNotPresent() {
         final GameContext context = new GameContext(new Die(12), new GameInstance());
         context.addIndication(new IndicationInstance(IndicationType.CLUE, "1"));
+        final VariableBuilder variableBuilder = new VariableBuilder(context);
+        variableBuilder.indications();
 
-        boolean hasClues = evaluator.evaluateIndications("!clue.1", context, null);
+        boolean hasClues = evaluator.evaluateToBoolean("!clue.1", variableBuilder);
 
         assertThat(hasClues).isFalse();
     }
 
     @Test
-    @DisplayName("evaluateIndications should throw an exception with an unknown variable")
-    public void evaluateIndicationsShouldThrowAnExceptionWithAnUnknownVariable() {
+    @DisplayName("evaluateToBoolean should throw an exception with an unknown variable")
+    public void evaluateToBooleanShouldThrowAnExceptionWithAnUnknownVariable() {
         final GameContext context = new GameContext(new Die(12), new GameInstance());
+        final VariableBuilder variableBuilder = new VariableBuilder(context);
+        variableBuilder.indications();
 
         assertThatExceptionOfType(PropertyAccessException.class)
-                .isThrownBy(() -> evaluator.evaluateIndications("place.1", context, null))
+                .isThrownBy(() -> evaluator.evaluateToBoolean("place.1", variableBuilder))
                 .withMessageContaining("unresolvable property or identifier: place");
     }
 
     @Test
-    @DisplayName("evaluateIndications should evaluate two indications with or operator")
-    public void evaluateIndicationsShouldEvaluateTwoIndicationsWithOrOperator() {
+    @DisplayName("evaluateToBoolean should evaluate two indications with or operator")
+    public void evaluateToBooleanShouldEvaluateTwoIndicationsWithOrOperator() {
         final GameContext context = new GameContext(new Die(12), new GameInstance());
         context.addIndication(new IndicationInstance(IndicationType.CLUE, "A"));
+        final VariableBuilder variableBuilder = new VariableBuilder(context);
+        variableBuilder.indications();
 
-        boolean hasClues = evaluator.evaluateIndications("clue.1 || clue.A", context, null);
+        boolean hasClues = evaluator.evaluateToBoolean("clue.1 || clue.A", variableBuilder);
 
         assertThat(hasClues).isTrue();
     }
 
     @Test
-    @DisplayName("evaluateIndications should evaluate two indications with and operator")
-    public void evaluateIndicationsShouldEvaluateTwoIndicationsWithAndOperator() {
+    @DisplayName("evaluateToBoolean should evaluate two indications with and operator")
+    public void evaluateToBooleanShouldEvaluateTwoIndicationsWithAndOperator() {
         final GameContext context = new GameContext(new Die(12), new GameInstance());
         context.addIndication(new IndicationInstance(IndicationType.CLUE, "A"));
+        final VariableBuilder variableBuilder = new VariableBuilder(context);
+        variableBuilder.indications();
 
-        boolean hasClues = evaluator.evaluateIndications("clue.A && clue.1", context, null);
+        boolean hasClues = evaluator.evaluateToBoolean("clue.A && clue.1", variableBuilder);
 
         assertThat(hasClues).isFalse();
     }
 
     @Test
-    @DisplayName("evaluateIndications should evaluate with correct operator order")
-    public void evaluateIndicationsShouldEvaluateWithCorrectOperatorOrder() {
+    @DisplayName("evaluateToBoolean should evaluate with correct operator order")
+    public void evaluateToBooleanShouldEvaluateWithCorrectOperatorOrder() {
         final GameContext context = new GameContext(new Die(12), new GameInstance());
         context.addIndication(new IndicationInstance(IndicationType.CLUE, "A"));
+        final VariableBuilder variableBuilder = new VariableBuilder(context);
+        variableBuilder.indications();
 
-        boolean hasClues = evaluator.evaluateIndications("clue.A || clue.1 && clue.C", context, null);
+        boolean hasClues = evaluator.evaluateToBoolean("clue.A || clue.1 && clue.C", variableBuilder);
 
         assertThat(hasClues).isTrue();
     }
 
     @Test
-    @DisplayName("evaluateIndications should evaluate with parenthesis")
-    public void evaluateIndicationsShouldEvaluateWithParenthesis() {
+    @DisplayName("evaluateToBoolean should evaluate with parenthesis")
+    public void evaluateToBooleanShouldEvaluateWithParenthesis() {
         final GameContext context = new GameContext(new Die(12), new GameInstance());
         context.addIndication(new IndicationInstance(IndicationType.CLUE, "A"));
+        final VariableBuilder variableBuilder = new VariableBuilder(context);
+        variableBuilder.indications();
 
-        boolean hasClues = evaluator.evaluateIndications("(clue.A || clue.1) && clue.C", context, null);
+        boolean hasClues = evaluator.evaluateToBoolean("(clue.A || clue.1) && clue.C", variableBuilder);
 
         assertThat(hasClues).isFalse();
     }
 
     @Test
-    @DisplayName("evaluateIndications should answer false when context is empty using default indication types")
-    public void evaluateIndicationsShouldAnswerFalseWhenContextIsEmptyUsingDefaultIndicationTypes() {
+    @DisplayName("evaluateToBoolean should answer false when context is empty using default indication types")
+    public void evaluateToBooleanShouldAnswerFalseWhenContextIsEmptyUsingDefaultIndicationTypes() {
         final GameContext context = new GameContext(new Die(12), new GameInstance());
+        final VariableBuilder variableBuilder = new VariableBuilder(context);
+        variableBuilder.indications();
 
-        boolean hasIndications = evaluator.evaluateIndications("clue.A || decision.45 || deduction.5 || event.4", context, null);
+        boolean hasIndications = evaluator.evaluateToBoolean("clue.A || decision.45 || deduction.5 || event.4", variableBuilder);
 
         assertThat(hasIndications).isFalse();
     }
 
     @Test
-    @DisplayName("evaluateSkills should return the value of the skill")
-    public void evaluateSkillsShouldReturnTheValueOfTheSkill() {
+    @DisplayName("evaluateToBoolean should evaluate the possibility to pay")
+    public void evaluateToBooleanShouldEvaluateThePossibilityToPay() {
+        final CharacterInstance character = new CharacterInstance();
+        character.setMoney(6);
+        GameInstance game = new GameInstance();
+        game.setCharacter(character);
+        final GameContext context = new GameContext(new Die(12), game);
+        final VariableBuilder variableBuilder = new VariableBuilder(context);
+        variableBuilder.money();
+
+        boolean canPay = evaluator.evaluateToBoolean("character.canPay(\"£0 0s 7d\")", variableBuilder);
+
+        assertThat(canPay).isFalse();
+    }
+
+    @Test
+    @DisplayName("evaluate should return the value of the skill")
+    public void evaluateShouldReturnTheValueOfTheSkill() {
         final CharacterDefinition character = new CharacterDefinitionBuilder("John")
                 .skill("observation", 1)
                 .build();
         final GameInstance game = new GameInstance();
         game.setCharacter(new CharacterInstance(character));
         final GameContext context = new GameContext(null, game);
+        final VariableBuilder variableBuilder = new VariableBuilder(context);
+        variableBuilder.skills();
 
-        Integer value = evaluator.evaluateSkills("skill.observation", context);
+        Object value = evaluator.evaluate("skill.observation", variableBuilder);
 
         assertThat(value).isEqualTo(1);
     }
 
     @Test
-    @DisplayName("evaluateSkills should return null if the expression is null")
-    public void evaluateSkillsShouldReturnNullIfExpressionIsNull() {
+    @DisplayName("evaluate should return null if the expression is null")
+    public void evaluateShouldReturnNullIfExpressionIsNull() {
         final GameInstance game = new GameInstance();
         game.setCharacter(new CharacterInstance());
         final GameContext context = new GameContext(null, game);
+        final VariableBuilder variableBuilder = new VariableBuilder(context);
+        variableBuilder.skills();
 
-        Integer value = evaluator.evaluateSkills(null, context);
+        Object value = evaluator.evaluate(null, variableBuilder);
 
         assertThat(value).isNull();
     }
 
     @Test
-    @DisplayName("evaluateSkills should return null if expression is empty")
-    public void evaluateSkillsShouldReturnNullIfExpressionIsEmpty() {
+    @DisplayName("evaluate should return null if expression is empty")
+    public void evaluateShouldReturnNullIfExpressionIsEmpty() {
         final GameInstance game = new GameInstance();
         game.setCharacter(new CharacterInstance());
         final GameContext context = new GameContext(null, game);
+        final VariableBuilder variableBuilder = new VariableBuilder(context);
+        variableBuilder.skills();
 
-        Integer value = evaluator.evaluateSkills("  ", context);
+        Object value = evaluator.evaluate("  ", variableBuilder);
 
         assertThat(value).isNull();
     }
 
     @Test
-    @DisplayName("evaluateSkills should throw an exception if skill does not exist")
-    public void evaluateSkillsShouldThrowAnExceptionIfSkillDoesNotExist() {
+    @DisplayName("evaluate should throw an exception if skill does not exist")
+    public void evaluateShouldThrowAnExceptionIfSkillDoesNotExist() {
         final CharacterDefinition character = new CharacterDefinitionBuilder("John")
                 .skill("athletics", 1)
                 .build();
         final GameInstance game = new GameInstance();
         game.setCharacter(new CharacterInstance(character));
         final GameContext context = new GameContext(null, game);
+        final VariableBuilder variableBuilder = new VariableBuilder(context);
+        variableBuilder.skills();
 
         assertThatExceptionOfType(PropertyAccessException.class)
-                .isThrownBy(() -> evaluator.evaluateSkills("skill.intuition", context))
+                .isThrownBy(() -> evaluator.evaluate("skill.intuition", variableBuilder))
                 .withCause(new IllegalStateException("Skill \"intuition\" does not exist."));
     }
 

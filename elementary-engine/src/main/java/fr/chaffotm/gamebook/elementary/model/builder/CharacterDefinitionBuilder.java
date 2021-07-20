@@ -12,11 +12,16 @@ public class CharacterDefinitionBuilder {
         character.setName(name);
     }
 
-    public CharacterDefinitionBuilder skill(String name, int value) {
-        SkillDefinition skill = new SkillDefinition();
+    public CharacterDefinitionBuilder skill(final String name, final int value) {
+        final SkillDefinition skill = new SkillDefinition();
         skill.setName(name);
         skill.setValue(value);
         character.addSkill(skill);
+        return this;
+    }
+
+    public CharacterDefinitionBuilder money(final int amount) {
+        character.setMoney(amount);
         return this;
     }
 

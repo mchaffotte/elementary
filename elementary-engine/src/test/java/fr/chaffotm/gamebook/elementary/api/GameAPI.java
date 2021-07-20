@@ -13,7 +13,7 @@ public class GameAPI {
     public Game getGame() {
         final JsonPath jsonPath = given()
             .when()
-                .body("{\"query\":\"query getGame {\\n  game {\\n    section {\\n      storyId\\n      reference\\n      text\\n      actions {\\n        description\\n      }\\n    }\\n    character {\\n      name\\n      skills {\\n        name\\n        value\\n      }\\n    }\\n  }\\n}\\n\",\"variables\":{},\"operationName\":\"getGame\"}")
+                .body("{\"query\":\"query getGame {\\n  game {\\n    section {\\n      storyId\\n      reference\\n      text\\n      actions {\\n        description\\n      }\\n    }\\n    character {\\n      name\\n      money{\\n pounds\\n shillings\\n pence\\n }\\n      skills {\\n        name\\n        value\\n      }\\n    }\\n  }\\n}\\n\",\"variables\":{},\"operationName\":\"getGame\"}")
                 .post("/graphql")
             .then()
                 .statusCode(200)
@@ -24,7 +24,7 @@ public class GameAPI {
     public Game startGame(final long storyId) {
         final JsonPath jsonPath = given()
             .when()
-                .body("{\"query\":\"mutation startGame {\\n startGame(storyId: " + storyId + ") {\\n section {\\n storyId\\n reference\\n text\\n actions {\\n description\\n}\\n}\\n character {\\n name\\n skills {\\n name\\n value\\n }\\n}\\n}\\n}\\n\",\"variables\":{},\"operationName\":\"startGame\"}")
+                .body("{\"query\":\"mutation startGame {\\n startGame(storyId: " + storyId + ") {\\n section {\\n storyId\\n reference\\n text\\n actions {\\n description\\n}\\n}\\n character {\\n name\\n money{\\n pounds\\n shillings\\n pence\\n }\\n skills {\\n name\\n value\\n }\\n}\\n}\\n}\\n\",\"variables\":{},\"operationName\":\"startGame\"}")
                 .post("/graphql")
             .then()
                 .statusCode(200)
@@ -35,7 +35,7 @@ public class GameAPI {
     public Game turnTo(final int index) {
         final JsonPath jsonPath = given()
             .when()
-                .body("{\"query\":\"mutation turnTo {\\n  turnTo(index: " + index + ") {\\n    section {\\n      storyId\\n      reference\\n      text\\n      actions {\\n        description\\n      answerNeeded\\n      }\\n    }\\n    character {\\n      name\\n      skills {\\n        name\\n        value\\n      }\\n    }\\n  }\\n}\\n\",\"variables\":{},\"operationName\":\"turnTo\"}")
+                .body("{\"query\":\"mutation turnTo {\\n  turnTo(index: " + index + ") {\\n    section {\\n      storyId\\n      reference\\n      text\\n      actions {\\n        description\\n      answerNeeded\\n      }\\n    }\\n    character {\\n      name\\n      money{\\n pounds\\n shillings\\n pence\\n }\\n      skills {\\n        name\\n        value\\n      }\\n    }\\n  }\\n}\\n\",\"variables\":{},\"operationName\":\"turnTo\"}")
                 .post("/graphql")
             .then()
                 .statusCode(200)
@@ -46,7 +46,7 @@ public class GameAPI {
     public Game turnTo(final int index, String answer) {
         final JsonPath jsonPath = given()
             .when()
-                .body("{\"query\":\"mutation turnTo($answer: String) {\\n  turnTo(index: " + index + ", answer: $answer) {\\n    section {\\n      storyId\\n      reference\\n      text\\n      actions {\\n        description\\n      answerNeeded\\n      }\\n    }\\n    character {\\n      name\\n      skills {\\n        name\\n        value\\n      }\\n    }\\n  }\\n}\\n\",\"variables\":{\"answer\":\"" + answer + "\"},\"operationName\":\"turnTo\"}")
+                .body("{\"query\":\"mutation turnTo($answer: String) {\\n  turnTo(index: " + index + ", answer: $answer) {\\n    section {\\n      storyId\\n      reference\\n      text\\n      actions {\\n        description\\n      answerNeeded\\n      }\\n    }\\n    character {\\n      name\\n      money{\\n pounds\\n shillings\\n pence\\n }\\n      skills {\\n        name\\n        value\\n      }\\n    }\\n  }\\n}\\n\",\"variables\":{\"answer\":\"" + answer + "\"},\"operationName\":\"turnTo\"}")
                 .post("/graphql")
             .then()
                 .statusCode(200)

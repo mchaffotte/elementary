@@ -8,6 +8,8 @@ public class IOCharacter {
 
     private List<IOSkill> skills;
 
+    private String money;
+
     public String getName() {
         return name;
     }
@@ -22,5 +24,13 @@ public class IOCharacter {
 
     public void setSkills(List<IOSkill> skills) {
         this.skills = skills;
+    }
+
+    public String getMoney() {
+        return money;
+    }
+
+    public void setMoney(String money) {
+        this.money = money;
     }
 }

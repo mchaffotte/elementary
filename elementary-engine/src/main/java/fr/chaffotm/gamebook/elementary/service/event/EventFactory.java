@@ -3,13 +3,15 @@ package fr.chaffotm.gamebook.elementary.service.event;
 public class EventFactory {
 
     public EventCommand getEvent(final String type) {
-        if (type.equals("add-indication")) {
-            return new AddIndicationEventCommand();
+        switch (type) {
+            case "add-indication":
+                return new AddIndicationEventCommand();
+            case "reduce-skill-bonus":
+                return new ReduceSkillBonusEventCommand();
+            case "pay":
+                return new PayEventCommand();
+            default:
+                throw new IllegalArgumentException("Unknown event type: " + type);
         }
-        if (type.equals("reduce-skill-bonus")) {
-            return new ReduceSkillBonusEventCommand();
-        }
-        throw new IllegalArgumentException("Unknown event type: " + type);
     }
-
 }

@@ -4,7 +4,6 @@ import fr.chaffotm.gamebook.elementary.model.entity.ReadOnlyEntityListener;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Entity(name = "Character")
@@ -29,6 +28,8 @@ public class CharacterDefinition {
             orphanRemoval = true
     )
     private Set<SkillDefinition> skills = new HashSet<>();
+
+    private int money;
 
     public Long getId() {
         return id;
@@ -67,4 +68,11 @@ public class CharacterDefinition {
         skill.setCharacter(this);
     }
 
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
 }

@@ -87,7 +87,7 @@ public class SectionServiceTest {
                 .action(new ActionDefinitionBuilder("Ipsum", 2).build())
                 .build();
 
-       SectionInstance instance = service.evaluate(definition, new GameContext(null, null));
+       SectionInstance instance = service.evaluate(definition, new GameContext(null, new GameInstance()));
 
        assertThat(instance)
                .hasReference(7)
@@ -106,7 +106,7 @@ public class SectionServiceTest {
                 .action(new ActionDefinitionBuilder("Ipsum", 2).build())
                 .build();
 
-        SectionInstance instance = service.evaluate(definition, new GameContext(null, null));
+        SectionInstance instance = service.evaluate(definition, new GameContext(null, new GameInstance()));
 
         assertThat(instance)
                 .hasReference(7)
@@ -123,7 +123,7 @@ public class SectionServiceTest {
                 .action(new ActionDefinitionBuilder( 2).build())
                 .build();
 
-        SectionInstance instance = service.evaluate(definition, new GameContext(null, null));
+        SectionInstance instance = service.evaluate(definition, new GameContext(null, new GameInstance()));
 
         assertThat(instance)
                 .hasReference(7)

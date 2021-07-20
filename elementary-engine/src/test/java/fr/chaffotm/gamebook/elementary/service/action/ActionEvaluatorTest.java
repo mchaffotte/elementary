@@ -50,7 +50,7 @@ public class ActionEvaluatorTest {
     public void toInstanceShouldCopyDefinitionToInstance() {
         final ActionDefinition action = new ActionDefinitionBuilder("If you want to enter in the cockpit", 125)
                 .build();
-        final GameContext context = new GameContext(new Die(12), null);
+        final GameContext context = new GameContext(new Die(12), new GameInstance());
 
         final ActionInstance actionInstance = evaluator.toInstance(action, context);
 
