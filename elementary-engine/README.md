@@ -1,4 +1,4 @@
-# elementary-engine project
+# elementary-engine Project
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
