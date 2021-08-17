@@ -7,6 +7,18 @@ import { PlayGame } from "./PlayGame";
 const GET_GAME = gql`
   query getGame {
     game {
+      character {
+        name
+        money {
+          pounds
+          shillings
+          pence
+        }
+        skills {
+          name
+          value
+        }
+      }
       section {
         storyId
         reference
@@ -27,7 +39,7 @@ export const ContinueGame: FunctionComponent<{}> = () => {
   if (error) {
     history.push("/");
   }
-  const section = data?.game.section || null;
+  const game = data?.game || null;
 
-  return <PlayGame initialSection={section} />;
+  return <PlayGame initialGame={game} />;
 };

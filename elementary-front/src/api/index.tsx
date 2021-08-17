@@ -4,7 +4,25 @@ export type Story = {
 };
 
 export type Game = {
+  character: Character;
   section: Section;
+};
+
+export type Character = {
+  name: string;
+  money: Money;
+  skills: Skill[];
+};
+
+export type Money = {
+  pounds: number;
+  shillings: number;
+  pence: number;
+};
+
+export type Skill = {
+  name: string;
+  value: string;
 };
 
 export type Section = {

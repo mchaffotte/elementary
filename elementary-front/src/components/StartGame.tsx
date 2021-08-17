@@ -13,6 +13,18 @@ const START_GAME = gql`
   mutation startGame($id: BigInteger!) {
     stopGame
     startGame(storyId: $id) {
+      character {
+        name
+        money {
+          pounds
+          shillings
+          pence
+        }
+        skills {
+          name
+          value
+        }
+      }
       section {
         storyId
         reference
@@ -39,10 +51,10 @@ export const StartGame: FunctionComponent<StartGameProps> = ({
     }
   }, [storyId, start]);
 
-  const section = response.data?.startGame.section || null;
-  if (section) {
+  const game = response.data?.startGame || null;
+  if (game) {
     onStart();
   }
 
-  return <PlayGame initialSection={section} />;
+  return <PlayGame initialGame={game} />;
 };

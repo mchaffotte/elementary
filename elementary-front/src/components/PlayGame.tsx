@@ -1,12 +1,25 @@
 import { useMutation, gql } from "@apollo/client";
 import { FunctionComponent, useEffect, useState } from "react";
 
-import { Game, Section } from "../api";
+import { Game } from "../api";
+import { CharacterView } from "./CharacterView";
 import { SectionView } from "./Section";
 
 const TURN_TO = gql`
   mutation turnTo($id: Int!, $answer: String) {
     turnTo(index: $id, answer: $answer) {
+      character {
+        name
+        money {
+          pounds
+          shillings
+          pence
+        }
+        skills {
+          name
+          value
+        }
+      }
       section {
         storyId
         reference
@@ -21,26 +34,24 @@ const TURN_TO = gql`
 `;
 
 type PlayGameProps = {
-  initialSection: Section | null;
+  initialGame: Game | null;
 };
 
-export const PlayGame: FunctionComponent<PlayGameProps> = ({
-  initialSection,
-}) => {
-  const [section, setSection] = useState<Section | null>(null);
+export const PlayGame: FunctionComponent<PlayGameProps> = ({ initialGame }) => {
+  const [game, setGame] = useState<Game | null>(null);
 
   const [turnTo, response] =
     useMutation<{ turnTo: Game }, { id: number; answer: string }>(TURN_TO);
 
   useEffect(() => {
-    if (initialSection) {
-      setSection(initialSection);
+    if (initialGame) {
+      setGame(initialGame);
     }
-  }, [initialSection]);
+  }, [initialGame]);
 
   useEffect(() => {
     if (response.data) {
-      setSection(response.data.turnTo.section);
+      setGame(response.data.turnTo);
     }
   }, [response]);
 
@@ -48,5 +59,13 @@ export const PlayGame: FunctionComponent<PlayGameProps> = ({
     turnTo({ variables: { id: index, answer } });
   };
 
-  return <SectionView section={section} onTurnTo={handleTurnTo} />;
+  return (
+    <>
+      <CharacterView character={game ? game.character : null} />
+      <SectionView
+        section={game ? game.section : null}
+        onTurnTo={handleTurnTo}
+      />
+    </>
+  );
 };
