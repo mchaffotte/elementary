@@ -2,11 +2,11 @@ import { useMutation, gql } from "@apollo/client";
 import { FunctionComponent, useEffect, useState } from "react";
 
 import { Game, Section } from "../api";
-import { SectionView } from "../components/Section";
+import { SectionView } from "./Section";
 
 const TURN_TO = gql`
-  mutation turnTo($id: Int!) {
-    turnTo(index: $id) {
+  mutation turnTo($id: Int!, $answer: String) {
+    turnTo(index: $id, answer: $answer) {
       section {
         storyId
         reference
