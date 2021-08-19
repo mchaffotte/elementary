@@ -21,6 +21,7 @@ public class ActionEvaluator {
         final VariableBuilder builder = new VariableBuilder(context)
                 .skills()
                 .die()
+                .indications()
                 .money();
         return evaluator.evaluate(expression, builder);
     }

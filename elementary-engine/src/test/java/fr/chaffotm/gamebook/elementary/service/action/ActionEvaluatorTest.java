@@ -156,13 +156,13 @@ public class ActionEvaluatorTest {
     }
 
     @Test
-    @DisplayName("toInstance should add the bonus and choose the second option")
-    public void toInstanceShouldAddSKillAndChooseTheSecondOption() {
+    @DisplayName("toInstance should add skill bonus and choose the second option")
+    public void toInstanceShouldAddSkillBonusAndChooseTheSecondOption() {
         final ActionDefinition action = new ActionDefinitionBuilder(
                 new OptionDefinitionBuilder(458)
                         .expression("value <= 6").build())
                 .option(new OptionDefinitionBuilder(12)
-                        .expression("value <= 12").build())
+                        .build())
                 .expression("die.roll() + skill.observation")
                 .build();
         final CharacterDefinition character = new CharacterDefinitionBuilder("John")
@@ -181,13 +181,38 @@ public class ActionEvaluatorTest {
     }
 
     @Test
-    @DisplayName("toInstance should add the bonus and choose the second option")
-    public void toInstanceShouldAddBonusAndChooseTheSecondOption() {
+    @DisplayName("toInstance should add indication bonus and choose the second option")
+    public void toInstanceShouldAddIndicationBonusAndChooseTheSecondOption() {
         final ActionDefinition action = new ActionDefinitionBuilder(
                 new OptionDefinitionBuilder(458)
                         .expression("value <= 6").build())
                 .option(new OptionDefinitionBuilder(12)
-                        .expression("value <= 12").build())
+                        .build())
+                .expression("die.roll() + (clue.A ? 2 : 0)")
+                .build();
+        final CharacterDefinition character = new CharacterDefinitionBuilder("John")
+                .skill("observation", 1)
+                .build();
+        final GameContext context = new GameContext(die, buildGame(character));
+        context.addIndication(new IndicationInstance(IndicationType.CLUE, "A"));
+        when(die.roll()).thenReturn(6);
+
+        final ActionInstance actionInstance = evaluator.toInstance(action, context);
+
+        assertThat(actionInstance)
+                .hasNextReference(12)
+                .hasNoDescription()
+                .hasNoEvent();
+    }
+
+    @Test
+    @DisplayName("toInstance should throw an exception if the skill does not exist")
+    public void toInstanceShouldThrowAnExceptionIfTheSkillDoesNotExist() {
+        final ActionDefinition action = new ActionDefinitionBuilder(
+                new OptionDefinitionBuilder(458)
+                        .expression("value < 6").build())
+                .option(new OptionDefinitionBuilder(12)
+                        .build())
                 .expression("die.roll() + skill.observation")
                 .build();
         final GameContext context = new GameContext(die, buildGame());
