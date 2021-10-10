@@ -31,6 +31,10 @@ public class StoryDefinitionRepository {
     }
 
     @PostConstruct
+    public void init() throws IOException, URISyntaxException {
+        populate();
+    }
+
     @Transactional
     public void populate() throws IOException, URISyntaxException {
         final List<Path> storyPaths = importer.getStoryPaths();
