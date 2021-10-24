@@ -1,14 +1,6 @@
-import { CardMedia, Typography, makeStyles } from "@material-ui/core";
-import {
-  BaseCSSProperties,
-  ClassNameMap,
-} from "@material-ui/core/styles/withStyles";
+import { CardMedia, Typography } from "@mui/material";
 import ReactMarkdown from "markdown-to-jsx";
 import { FunctionComponent } from "react";
-
-type StyleProps = {
-  media: BaseCSSProperties;
-};
 
 type SectionTextProps = {
   text: string;
@@ -21,24 +13,20 @@ type ImageProps = {
   className: string;
 };
 
-const useStyles = makeStyles<StyleProps>({
-  media: {
-    maxHeight: 500,
-    maxWidth: 518,
-  },
-});
-
 const Image = ({ storyId, src, className }: ImageProps) => {
   return (
     <CardMedia
       component="img"
-      className={className}
+      sx={{
+        maxHeight: 500,
+        maxWidth: 518,
+      }}
       image={`http://localhost:8181/stories/${storyId}/images/${src}`}
     />
   );
 };
 
-const options = (storyId: number, classes: ClassNameMap<string>) => {
+const options = (storyId: number) => {
   return {
     overrides: {
       p: {
@@ -53,7 +41,6 @@ const options = (storyId: number, classes: ClassNameMap<string>) => {
         component: Image,
         props: {
           storyId,
-          className: classes.media,
         },
       },
     },
@@ -64,9 +51,5 @@ export const SectionText: FunctionComponent<SectionTextProps> = ({
   text,
   storyId,
 }) => {
-  const classes = useStyles();
-
-  return (
-    <ReactMarkdown options={options(storyId, classes)}>{text}</ReactMarkdown>
-  );
+  return <ReactMarkdown options={options(storyId)}>{text}</ReactMarkdown>;
 };

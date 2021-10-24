@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography } from "@material-ui/core";
+import { Card, CardContent, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 import { useHistory } from "react-router-dom";
 

@@ -1,15 +1,10 @@
-import { Card, Container, makeStyles } from "@material-ui/core";
+import { Container } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { LoadingSection } from "./LoadingSection";
 import { SectionContent } from "./SectionContent";
+import { PageCard } from "../CardPage";
 import { Section } from "../../api";
-
-const useStyles = makeStyles({
-  root: {
-    minWidth: 275,
-  },
-});
 
 type SectionViewProps = {
   section: Section | null;
@@ -20,14 +15,12 @@ export const SectionView: FunctionComponent<SectionViewProps> = ({
   section,
   onTurnTo,
 }) => {
-  const classes = useStyles();
-
   return (
     <Container maxWidth="sm">
-      <Card className={classes.root} variant="outlined">
+      <PageCard variant="outlined">
         {!section && <LoadingSection />}
         <SectionContent section={section} onTurnTo={onTurnTo} />
-      </Card>
+      </PageCard>
     </Container>
   );
 };

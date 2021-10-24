@@ -5,7 +5,7 @@ import {
   CardContent,
   CardMedia,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import { FunctionComponent } from "react";
 import { Link } from "react-router-dom";
 

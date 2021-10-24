@@ -5,9 +5,9 @@ import {
   ListItem,
   ListItemSecondaryAction,
   ListItemText,
-} from "@material-ui/core";
-import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import Skeleton from "@material-ui/lab/Skeleton";
+} from "@mui/material";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import Skeleton from '@mui/material/Skeleton';
 import { FunctionComponent } from "react";
 
 import { Story } from "../api";
@@ -61,7 +61,7 @@ export const StoryList: FunctionComponent<StoryListProps> = ({
               edge="end"
               aria-label="play"
               onClick={() => onChooseStory(story.id)}
-            >
+              size="large">
               <PlayArrowIcon />
             </IconButton>
           </ListItemSecondaryAction>

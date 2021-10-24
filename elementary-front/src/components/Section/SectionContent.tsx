@@ -1,53 +1,41 @@
-import {
-  CardActions,
-  CardContent,
-  List,
-  Typography,
-  makeStyles,
-} from "@material-ui/core";
+import { CardActions, CardContent, List, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { FunctionComponent } from "react";
 
 import { ActionListItem } from "./ActionListItem";
 import { SectionText } from "./SectionText";
 import { Section } from "../../api";
 
-const useStyles = makeStyles({
-  title: {
-    fontSize: 20,
-    textAlign: "center",
-  },
-  actions: {
-    justifyContent: "end",
-  },
-});
-
 type SectionContentProps = {
   section: Section | null;
   onTurnTo: Function;
 };
 
+const SectionNumber = styled(Typography)`
+  font-size: 20px;
+  text-align: center;
+`;
+
+const Actions = styled(CardActions)`
+  justify-content: end;
+`;
+
 export const SectionContent: FunctionComponent<SectionContentProps> = ({
   section,
   onTurnTo,
 }) => {
-  const classes = useStyles();
-
   if (!section) {
     return null;
   }
   return (
     <>
       <CardContent>
-        <Typography
-          className={classes.title}
-          color="textSecondary"
-          gutterBottom
-        >
+        <SectionNumber color="textSecondary" gutterBottom>
           {section.reference}
-        </Typography>
+        </SectionNumber>
         <SectionText text={section.text} storyId={section.storyId} />
       </CardContent>
-      <CardActions className={classes.actions}>
+      <Actions>
         <List>
           {section.actions.map((action, index) => (
             <ActionListItem
@@ -58,7 +46,7 @@ export const SectionContent: FunctionComponent<SectionContentProps> = ({
             />
           ))}
         </List>
-      </CardActions>
+      </Actions>
     </>
   );
 };

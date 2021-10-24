@@ -1,31 +1,23 @@
-import { CardContent, makeStyles } from "@material-ui/core";
-import Skeleton from "@material-ui/lab/Skeleton";
+import { CardContent, Skeleton } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { FunctionComponent } from "react";
 
-const useStyles = makeStyles({
-  title: {
-    margin: "0 auto 15px",
-  },
-  paragraph: {
-    marginBottom: 15,
-  },
-});
+const SectionNumber = styled(Skeleton)`
+  margin: 0 auto 15px;
+`;
+
+const ParagraphEnd = styled(Skeleton)`
+  margin-bottom: 15px;
+`;
 
 export const LoadingSection: FunctionComponent<{}> = () => {
-  const classes = useStyles();
-
   return (
     <CardContent>
-      <Skeleton
-        variant="circle"
-        width={30}
-        height={30}
-        className={classes.title}
-      />
+      <SectionNumber variant="circular" width={30} height={30} />
       <Skeleton />
       <Skeleton />
       <Skeleton />
-      <Skeleton width="60%" className={classes.paragraph} />
+      <ParagraphEnd width="60%" />
 
       <Skeleton />
       <Skeleton />

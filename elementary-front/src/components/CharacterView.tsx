@@ -1,5 +1,4 @@
 import {
-  Card,
   CardContent,
   Container,
   Table,
@@ -8,17 +7,11 @@ import {
   TableCell,
   TableBody,
   Typography,
-  makeStyles,
-} from "@material-ui/core";
+} from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { Character, Money } from "../api";
-
-const useStyles = makeStyles({
-  root: {
-    minWidth: 275,
-  },
-});
+import { PageCard } from "./CardPage";
 
 type CharacterViewProps = {
   character: Character | null;
@@ -31,14 +24,12 @@ const getMoneyLabel = (money: Money): string => {
 export const CharacterView: FunctionComponent<CharacterViewProps> = ({
   character,
 }) => {
-  const classes = useStyles();
-
   if (!character) {
     return null;
   }
   return (
     <Container maxWidth="sm">
-      <Card className={classes.root} variant="outlined">
+      <PageCard variant="outlined">
         {/* {!character && <LoadingSection />} */}
         <CardContent>
           <Typography variant="h5" component="h2">
@@ -64,7 +55,7 @@ export const CharacterView: FunctionComponent<CharacterViewProps> = ({
             </TableBody>
           </Table>
         </CardContent>
-      </Card>
+      </PageCard>
     </Container>
   );
 };
