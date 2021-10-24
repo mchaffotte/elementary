@@ -4,8 +4,8 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   TextField,
-} from "@material-ui/core";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+} from "@mui/material";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { FunctionComponent, useState } from "react";
 
 import { Action } from "../../api";
@@ -48,6 +48,7 @@ export const ActionListItem: FunctionComponent<ActionListItemProps> = ({
           onClick={() => {
             onTurnTo(index, answer);
           }}
+          size="large"
         >
           <NavigateNextIcon />
         </IconButton>
